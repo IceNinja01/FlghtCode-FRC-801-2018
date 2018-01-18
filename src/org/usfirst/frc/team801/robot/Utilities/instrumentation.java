@@ -1,6 +1,6 @@
 package org.usfirst.frc.team801.robot.Utilities;
 
-import com.ctre.CANTalon.MotionProfileStatus;
+import com.ctre.phoenix.motion.MotionProfileStatus;
 
 public class instrumentation {
 
