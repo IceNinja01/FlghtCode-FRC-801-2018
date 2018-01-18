@@ -10,7 +10,7 @@ public class MotionProfile {
 	 Where V(t) is equal to the motors current velocity
 	 and where P(t) is equal to the motors current position
 	 */
-	public double[][] OneDimenisonMotion(double distance, double maxVel, double accel) {
+	public static double[][] OneDimenisonMotion(double distance, double maxVel, double accel) {
 		/* distance is units ft
 		 * MaxVelocity is ft/sec
 		 * accel is ft/sec^2
@@ -28,7 +28,7 @@ public class MotionProfile {
 	        pathTime = rampTime * 2 + (distance - accelDist * 2) / maxVel;
 	    }
 	    double dt = 0.01; // steps are equal to 10ms
-	    int segments = (int) (pathTime*(1/0.01));
+	    int segments = (int) (pathTime*(1/0.01)) + 1;
 	    // [position, velocity, time]
 		double[][] path = new double[segments][3];
 		path[0][0] = 0;
@@ -74,11 +74,15 @@ public class MotionProfile {
 			path[i][2] = dt;												 //time
 		}
 		
+		path[segments-1][0] = distance;
+		path[segments-1][1] = 0;
+		path[segments-1][2] = dt;
+		
 		return path;
 	    
 	}
 	
-	public void TwoDimensionMotion() {
+	public static void TwoDimensionMotion() {
 		
 		
 	}

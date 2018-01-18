@@ -15,8 +15,6 @@ package org.usfirst.frc.team801.robot.Utilities;
 	//import edu.wpi.first.wpilibj.communication.FRCNetworkCommunicationsLibrary.tResourceType;
 	//import edu.wpi.first.wpilibj.communication.UsageReporting;
 	import edu.wpi.first.wpilibj.interfaces.Gyro;
-	import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-	import edu.wpi.first.wpilibj.tables.ITable;
 	import edu.wpi.first.wpilibj.DigitalInput;
 	import edu.wpi.first.wpilibj.DriverStation;
 	import edu.wpi.first.wpilibj.GyroBase;
@@ -29,7 +27,6 @@ package org.usfirst.frc.team801.robot.Utilities;
 	/**
 	 * This class is for the ADIS16448 IMU that connects to the RoboRIO MXP port.
 	 */
-	@SuppressWarnings("deprecation")
 	public class Adis16448_IMU extends GyroBase implements Gyro, PIDSource, Sendable {
 	  private static final double kTimeout = 0.1;
 	  private static final double kCalibrationSampleTime = 5.0;
@@ -153,7 +150,7 @@ package org.usfirst.frc.team801.robot.Utilities;
 	    calibrate();
 
 	    //UsageReporting.report(tResourceType.kResourceType_ADIS16448, 0);
-	    LiveWindow.addSensor("ADIS16448_IMU", 0, this);
+	    //LiveWindow.addSensor("ADIS16448_IMU", 0, this);
 	  }
 
 	  /**
@@ -571,6 +568,7 @@ package org.usfirst.frc.team801.robot.Utilities;
 	  /**
 	   * {@inheritDoc}
 	   */
+	  /*
 	  @Override
 	  public void updateTable() {
 	    ITable table = getTable();
@@ -587,6 +585,7 @@ package org.usfirst.frc.team801.robot.Utilities;
 	      table.putNumber("AngleZ", getAngleZ());
 	    }
 	  }
+	  */
 	}
 
 

@@ -1,11 +1,9 @@
 package org.usfirst.frc.team801.robot.subsystems;
 
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
-
 /**
  *
  */
-public class Chassis extends PIDSubsystem {
+public class Chassis {
 
     // Initialize your subsystem here
     public Chassis() {
