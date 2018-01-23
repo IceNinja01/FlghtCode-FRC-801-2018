@@ -56,15 +56,15 @@ public class MotionProfile {
 			else
 			{
 				if(i <= rampTime/dt)
-				{
+				{// upwards on vel Ramp
 					accelCurrent = accel;
 				}
 				else if(i > rampTime/dt && i < segments-rampTime/dt)
-				{
+				{// at maxVelocity, no accel
 					accelCurrent = 0;
 				}
 				else if(i > segments-rampTime/dt)
-				{
+				{// downwards on vel ramp, deaccel
 					accelCurrent = -accel;
 				}
 			}

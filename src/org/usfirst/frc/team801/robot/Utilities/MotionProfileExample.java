@@ -265,7 +265,7 @@ public class MotionProfileExample {
 	/** Start filling the MPs to all of the involved Talons. */
 	private void startFilling() {
 		/* since this example only has one talon, just update that one */
-		startFilling(generatedMotionProfile, generatedMotionProfile.length);
+		startFilling(GeneratedMotionProfile.Points, GeneratedMotionProfile.kNumPoints);
 	}
 
 	private void startFilling(double[][] profile, int totalCnt) {

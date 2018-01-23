@@ -42,10 +42,10 @@ public class Robot extends IterativeRobot {
 	public static Subsystem kExampleSubsystem;
 
 	/** The Talon we want to motion profile. */
-	TalonSRX _talon = new TalonSRX(Constants.kTalonID);
+	TalonSRX _talon = new TalonSRX(1);
 	
 	/** some example logic on how one can manage an MP */
-	MotionProfileExample _example = new MotionProfileExample(_talon, MotionProfile.OneDimenisonMotion(5, 2, 1)); //ft, ft/sec,ft/sec^2
+	MotionProfileExample _example = new MotionProfileExample(_talon, MotionProfile.OneDimenisonMotion(50000, 10000, 1000)); //ft, ft/sec,ft/sec^2
 	
 	/** joystick for testing */
 	Joystick _joy= new Joystick(0);
@@ -54,17 +54,18 @@ public class Robot extends IterativeRobot {
 	 * but for this simple example, lets just do quick compares to prev-btn-states */
 	boolean [] _btnsLast = {false,false,false,false,false,false,false,false,false,false};
 
+	int j;
 	/** run once after booting/enter-disable */
 	public void disabledInit() { 
-		
+		j=0;
 		_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 		_talon.setSensorPhase(true); /* keep sensor and motor in phase */
 		_talon.configNeutralDeadband(Constants.kNeutralDeadband, Constants.kTimeoutMs);
 		
-		_talon.config_kF(0, 0.076, Constants.kTimeoutMs);
-		_talon.config_kP(0, 2.000, Constants.kTimeoutMs);
+		_talon.config_kF(0, 0.031, Constants.kTimeoutMs);
+		_talon.config_kP(0, 0.01, Constants.kTimeoutMs);
 		_talon.config_kI(0, 0.0, Constants.kTimeoutMs);
-		_talon.config_kD(0,20.0, Constants.kTimeoutMs);
+		_talon.config_kD(0, 00.0, Constants.kTimeoutMs);
 		
 		_talon.configMotionProfileTrajectoryPeriod(10, Constants.kTimeoutMs); //Our profile uses 10 ms timing
 		/* status 10 provides the trajectory target for motion profile AND motion magic */
@@ -112,6 +113,7 @@ public class Robot extends IterativeRobot {
 
 				//------------ We could start an MP if MP isn't already running ------------//
 				_example.startMotionProfile();
+
 			}
 		}
 		
