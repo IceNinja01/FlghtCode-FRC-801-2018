@@ -59,11 +59,11 @@ public class Robot extends IterativeRobot {
 	public void disabledInit() { 
 		j=0;
 		_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-		_talon.setSensorPhase(true); /* keep sensor and motor in phase */
+		_talon.setSensorPhase(false); /* keep sensor and motor in phase */
 		_talon.configNeutralDeadband(Constants.kNeutralDeadband, Constants.kTimeoutMs);
 		
 		_talon.config_kF(0, 0.031, Constants.kTimeoutMs);
-		_talon.config_kP(0, 0.01, Constants.kTimeoutMs);
+		_talon.config_kP(0, 0.001, Constants.kTimeoutMs);
 		_talon.config_kI(0, 0.0, Constants.kTimeoutMs);
 		_talon.config_kD(0, 00.0, Constants.kTimeoutMs);
 		

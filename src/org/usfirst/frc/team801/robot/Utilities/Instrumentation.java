@@ -78,10 +78,10 @@ public class Instrumentation {
 			System.out.format("%-9s\t", status.topBufferCnt);
 			System.out.format("%-9s\t", status.topBufferRem);
 			System.out.format("%-9s\t", status.btmBufferCnt);
-			System.out.format("%-9s\t", (status.activePointValid ? "1" : ""));
-			System.out.format("%-9s\t", (status.hasUnderrun ? "1" : ""));
-			System.out.format("%-9s\t", (status.isUnderrun ? "1" : ""));
-			System.out.format("%-9s\t", (status.isLast ? "1" : ""));
+			System.out.format("%-9s\t", (status.activePointValid ? "1" : "0"));
+			System.out.format("%-9s\t", (status.hasUnderrun ? "1" : "0"));
+			System.out.format("%-9s\t", (status.isUnderrun ? "1" : "0"));
+			System.out.format("%-9s\t", (status.isLast ? "1" : "0"));
 			System.out.format("%-9s\t", pos);
 			System.out.format("%-9s\t", vel);
 			System.out.format("%-9s\t", status.profileSlotSelect);
