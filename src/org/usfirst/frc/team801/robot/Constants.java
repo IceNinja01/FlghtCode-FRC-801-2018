@@ -1,6 +1,15 @@
 package org.usfirst.frc.team801.robot;
 
 public class Constants {
+	/*Work on using preferences tables
+	public static double FrontRightBias = Robot.prefs.getDouble("FrontRightBias", 0.0);
+	public static double FrontLeftBias = Robot.prefs.getDouble("FrontLeftBias", 0.0);
+	public static double BackLeftBias = Robot.prefs.getDouble("BackLeftBias", 0.0);
+	public static double BackRightBias = Robot.prefs.getDouble("BackRightBias", 0.0);
+	*/
+	public static final double[] AngleBias = {0.0,0.0,0.0,0.0};
+	
+	
 
 	/** which Talon on CANBus*/
 	public static final int kTalonID = 0;
