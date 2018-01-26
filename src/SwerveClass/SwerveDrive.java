@@ -4,7 +4,6 @@ import org.usfirst.frc.team801.robot.Constants;
 import org.usfirst.frc.team801.robot.Utilities.RollingAverage;
 import org.usfirst.frc.team801.robot.Utilities.Utils;
 
-import com.ctre.phoenix.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -34,8 +33,8 @@ public class SwerveDrive implements MotorSafety {
 
 	protected double temp, STR, FWD, RCW;
 	protected double A,B,C,D, max;
-	protected double L = 1;
-	protected double W = 1;
+	protected double L = 28;
+	protected double W = 33;
 	protected double R = Math.sqrt(L*L+W*W);
 	protected double kP = 0.005;
 	protected double kI = 0.00;
@@ -109,7 +108,7 @@ public class SwerveDrive implements MotorSafety {
 				}
 			};
 			
-			pidTurnController[i] = new PIDController(kP, kI, kD, pidTurnSource[i], (PIDOutput) turnMotors[i]);
+			pidTurnController[i] = new PIDController(kP, kI, kD, pidTurnSource[i], turnMotors[i]);
 			pidTurnController[i].setContinuous(true);
 			pidTurnController[i].setAbsoluteTolerance(deadBand);
 			pidTurnController[i].setInputRange(0, 360);
@@ -195,7 +194,7 @@ public class SwerveDrive implements MotorSafety {
 
 			    if(angleDiff[i] > 90){ //new angle is greater than a 90degree turn, so find shortest path
 			    	//reverse translational motors 
-			    	driveMotors[i].set(ControlMode.Velocity, wheelSpeeds[i]*maxDriveVoltage*5400);
+			    	driveMotors[i].set(ControlMode.Velocity, wheelSpeeds[i]*maxDriveVoltage*4800);
 			    	
 			    	//find new angle
 			    	wheelAngles[i] -= 180.0; //subtract 180 degrees
@@ -209,7 +208,7 @@ public class SwerveDrive implements MotorSafety {
 			    
 			    else{
 //			    	pidDriveController[i].setSetpoint(-wheelSpeeds[i]*maxDriveVoltage*100.0);
-			    	driveMotors[i].set(ControlMode.Velocity, -wheelSpeeds[i]*maxDriveVoltage*5400);
+			    	driveMotors[i].set(ControlMode.Velocity, -wheelSpeeds[i]*maxDriveVoltage*4800);
 
 			    }
 				//Turn Motors

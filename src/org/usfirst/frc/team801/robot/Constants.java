@@ -9,8 +9,6 @@ public class Constants {
 	*/
 	public static final double[] AngleBias = {0.0,0.0,0.0,0.0};
 	
-	
-
 	/** which Talon on CANBus*/
 	public static final int kTalonID = 0;
 
@@ -49,5 +47,11 @@ public class Constants {
 	 * Motor deadband, set to 1%.
 	 */
 	public static final double kNeutralDeadband  = 0.01;
+
+	public static double ultrakP = 0.01;
+
+	public static double ultrakI = 0.0;
+
+	public static double ultrakD = 0.0;
 	
 }
