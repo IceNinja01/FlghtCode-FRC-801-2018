@@ -1,135 +1,125 @@
-/**
- * This Java FRC robot application is meant to demonstrate an example using the Motion Profile control mode
- * in Talon SRX.  The CANTalon class gives us the ability to buffer up trajectory points and execute them
- * as the roboRIO streams them into the Talon SRX.
- * 
- * There are many valid ways to use this feature and this example does not sufficiently demonstrate every possible
- * method.  Motion Profile streaming can be as complex as the developer needs it to be for advanced applications,
- * or it can be used in a simple fashion for fire-and-forget actions that require precise timing.
- * 
- * This application is an IterativeRobot project to demonstrate a minimal implementation not requiring the command 
- * framework, however these code excerpts could be moved into a command-based project.
- * 
- * The project also includes instrumentation.java which simply has debug printfs, and a MotionProfile.java which is generated
- * in @link https://docs.google.com/spreadsheets/d/1PgT10EeQiR92LNXEOEe3VGn737P7WDP4t0CQxQgC8k0/edit#gid=1813770630&vpid=A1
- * 
- * Logitech Gamepad mapping, use left y axis to drive Talon normally.  
- * Press and hold top-left-shoulder-button5 to put Talon into motion profile control mode.
- * This will start sending Motion Profile to Talon while Talon is neutral. 
- * 
- * While holding top-left-shoulder-button5, tap top-right-shoulder-button6.
- * This will signal Talon to fire MP.  When MP is done, Talon will "hold" the last setpoint position
- * and wait for another button6 press to fire again.
- * 
- * Release button5 to allow OpenVoltage control with left y axis.
- */
+/*----------------------------------------------------------------------------*/
+/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+/* Open Source Software - may be modified and shared by FRC teams. The code   */
+/* must be accompanied by the FIRST BSD license file in the root directory of */
+/* the project.                                                               */
+/*----------------------------------------------------------------------------*/
 
 package org.usfirst.frc.team801.robot;
 
-import com.ctre.phoenix.motorcontrol.can.*;
+import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import org.usfirst.frc.team801.robot.commands.ExampleCommand;
+import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
 
-import org.usfirst.frc.team801.robot.Utilities.MotionProfile;
-import org.usfirst.frc.team801.robot.Utilities.MotionProfileExample;
+/**
+ * The VM is configured to automatically run this class, and to call the
+ * functions corresponding to each mode, as described in the TimedRobot
+ * documentation. If you change the name of this class or the package after
+ * creating this project, you must also update the build.properties file in the
+ * project.
+ */
+public class Robot extends TimedRobot {
+	public static final ExampleSubsystem kExampleSubsystem
+			= new ExampleSubsystem();
+	public static OI m_oi;
+	public static Object prefs;
 
-import com.ctre.phoenix.motion.*;
-import com.ctre.phoenix.motorcontrol.*;
-import edu.wpi.first.wpilibj.IterativeRobot;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.command.Subsystem;
+	Command m_autonomousCommand;
+	SendableChooser<Command> m_chooser = new SendableChooser<>();
 
-public class Robot extends IterativeRobot {
-
-	public static Subsystem kExampleSubsystem;
-
-	/** The Talon we want to motion profile. */
-	TalonSRX _talon = new TalonSRX(1);
-	
-	/** some example logic on how one can manage an MP */
-	MotionProfileExample _example = new MotionProfileExample(_talon, MotionProfile.OneDimenisonMotion(50000, 10000, 1000)); //ft, ft/sec,ft/sec^2
-	
-	/** joystick for testing */
-	Joystick _joy= new Joystick(0);
-
-	/** cache last buttons so we can detect press events.  In a command-based project you can leverage the on-press event
-	 * but for this simple example, lets just do quick compares to prev-btn-states */
-	boolean [] _btnsLast = {false,false,false,false,false,false,false,false,false,false};
-
-	int j;
-	/** run once after booting/enter-disable */
-	public void disabledInit() { 
-		j=0;
-		_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
-		_talon.setSensorPhase(false); /* keep sensor and motor in phase */
-		_talon.configNeutralDeadband(Constants.kNeutralDeadband, Constants.kTimeoutMs);
-		
-		_talon.config_kF(0, 0.031, Constants.kTimeoutMs);
-		_talon.config_kP(0, 0.001, Constants.kTimeoutMs);
-		_talon.config_kI(0, 0.0, Constants.kTimeoutMs);
-		_talon.config_kD(0, 00.0, Constants.kTimeoutMs);
-		
-		_talon.configMotionProfileTrajectoryPeriod(10, Constants.kTimeoutMs); //Our profile uses 10 ms timing
-		/* status 10 provides the trajectory target for motion profile AND motion magic */
-		_talon.setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
-		
+	/**
+	 * This function is run when the robot is first started up and should be
+	 * used for any initialization code.
+	 */
+	@Override
+	public void robotInit() {
+    	prefs = Preferences.getInstance();
+		m_oi = new OI();
+		m_chooser.addDefault("Default Auto", new ExampleCommand());
+		// chooser.addObject("My Auto", new MyAutoCommand());
+		SmartDashboard.putData("Auto mode", m_chooser);
 	}
-	/**  function is called periodically during operator control */
-    public void teleopPeriodic() {
-		/* get buttons */
-		boolean [] btns= new boolean [_btnsLast.length];
-		for(int i=1;i<_btnsLast.length;++i)
-			btns[i] = _joy.getRawButton(i);
-		
-		/* get the left joystick axis on Logitech Gampead */
-		double leftYjoystick = -1 * _joy.getY(); /* multiple by -1 so joystick forward is positive */
-		
-		/* call this periodically, and catch the output.  Only apply it if user wants to run MP. */
-		_example.control();
-		
-		if (btns[5] == false) { /* Check button 5 (top left shoulder on the logitech gamead). */
-			/*
-			 * If it's not being pressed, just do a simple drive.  This
-			 * could be a RobotDrive class or custom drivetrain logic.
-			 * The point is we want the switch in and out of MP Control mode.*/
-		
-			/* button5 is off so straight drive */
-			_talon.set(ControlMode.PercentOutput, leftYjoystick);
 
-			_example.reset();
-		} else {
-			/* Button5 is held down so switch to motion profile control mode => This is done in MotionProfileControl.
-			 * When we transition from no-press to press,
-			 * pass a "true" once to MotionProfileControl.
-			 */
-			
-			SetValueMotionProfile setOutput = _example.getSetValue();
-					
-			_talon.set(ControlMode.MotionProfile, setOutput.value);
+	/**
+	 * This function is called once each time the robot enters Disabled mode.
+	 * You can use it to reset any subsystem information you want to clear when
+	 * the robot is disabled.
+	 */
+	@Override
+	public void disabledInit() {
 
-			/* if btn is pressed and was not pressed last time,
-			 * In other words we just detected the on-press event.
-			 * This will signal the robot to start a MP */
-			if( (btns[6] == true) && (_btnsLast[6] == false) ) {
-				/* user just tapped button 6 */
-
-				//------------ We could start an MP if MP isn't already running ------------//
-				_example.startMotionProfile();
-
-			}
-		}
-		
-		/* save buttons states for on-press detection */
-		for(int i=1;i<10;++i)
-			_btnsLast[i] = btns[i];
-		
 	}
-	/**  function is called periodically during disable */
+
+	@Override
 	public void disabledPeriodic() {
-		/* it's generally a good idea to put motor controllers back
-		 * into a known state when robot is disabled.  That way when you
-		 * enable the robot doesn't just continue doing what it was doing before.
-		 * BUT if that's what the application/testing requires than modify this accordingly */
-		_talon.set(ControlMode.PercentOutput, 0);
-		/* clear our buffer and put everything into a known state */
-		_example.reset();
+		Scheduler.getInstance().run();
+
+	}
+
+	/**
+	 * This autonomous (along with the chooser code above) shows how to select
+	 * between different autonomous modes using the dashboard. The sendable
+	 * chooser code works with the Java SmartDashboard. If you prefer the
+	 * LabVIEW Dashboard, remove all of the chooser code and uncomment the
+	 * getString code to get the auto name from the text box below the Gyro
+	 *
+	 * <p>You can add additional auto modes by adding additional commands to the
+	 * chooser code above (like the commented example) or additional comparisons
+	 * to the switch structure below with additional strings & commands.
+	 */
+	@Override
+	public void autonomousInit() {
+		m_autonomousCommand = m_chooser.getSelected();
+
+		/*
+		 * String autoSelected = SmartDashboard.getString("Auto Selector",
+		 * "Default"); switch(autoSelected) { case "My Auto": autonomousCommand
+		 * = new MyAutoCommand(); break; case "Default Auto": default:
+		 * autonomousCommand = new ExampleCommand(); break; }
+		 */
+
+		// schedule the autonomous command (example)
+		if (m_autonomousCommand != null) {
+			m_autonomousCommand.start();
+		}
+	}
+
+	/**
+	 * This function is called periodically during autonomous.
+	 */
+	@Override
+	public void autonomousPeriodic() {
+		Scheduler.getInstance().run();
+	}
+
+	@Override
+	public void teleopInit() {
+		// This makes sure that the autonomous stops running when
+		// teleop starts running. If you want the autonomous to
+		// continue until interrupted by another command, remove
+		// this line or comment it out.
+		if (m_autonomousCommand != null) {
+			m_autonomousCommand.cancel();
+		}
+	}
+
+	/**
+	 * This function is called periodically during operator control.
+	 */
+	@Override
+	public void teleopPeriodic() {
+		Scheduler.getInstance().run();
+	}
+
+	/**
+	 * This function is called periodically during test mode.
+	 */
+	@Override
+	public void testPeriodic() {
 	}
 }
