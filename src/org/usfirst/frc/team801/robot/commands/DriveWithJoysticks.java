@@ -1,11 +1,13 @@
 package org.usfirst.frc.team801.robot.commands;
 
 import org.usfirst.frc.team801.robot.Robot;
+
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
+@SuppressWarnings("unused")
 public class DriveWithJoysticks extends Command {
 	private double x,y,z;
 	

@@ -12,23 +12,15 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
 import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+@SuppressWarnings("unused")
 public class SwerveDrive implements MotorSafety {
 	//Variables to be used are set to private
 	
 	protected MotorSafetyHelper m_safetyHelper;
-	PIDSource source;
-	PIDSource source1;
-	PIDSource source2;
-	PIDSource source3;
-	protected PIDController t_frontRightMotorController;
-	protected PIDController t_frontLeftMotorController;
-	protected PIDController t_rearLeftMotorController;
-	protected PIDController t_rearRightMotorController;
+
 	public static final double kDefaultExpirationTime = 0.1;
 	public static final double kDefaultMaxOutput = 1.0;
 
@@ -49,7 +41,6 @@ public class SwerveDrive implements MotorSafety {
 	private int deadBand = 12; //1 degree ~12native units error=4096/360, expressed in native units
 	private TalonSRX[] driveMotors  = new TalonSRX[4];
 	private TalonSRX[] turnMotors  = new TalonSRX[4];
-	private PIDController[] pidTurnController  = new PIDController[4];
     private double[] wheelAngles = new double[4];
 	private double[] wheelSpeeds = new double[4];
 	private double[] angleJoyStickDiff = new double[4];
@@ -69,7 +60,7 @@ public class SwerveDrive implements MotorSafety {
 		driveMotors[2]   = BackLeftDriveMotor;
 		driveMotors[3]  = BackRightDriveMotor;
 		/*Set the Current Limit of the Drive Motors	 */
-		setDriveCurrentLimit(10, 200, 20);
+//		setDriveCurrentLimit(10, 200, 20);
 
 		
 		turnMotors[0] = FrontRightTurnMotor;
@@ -109,7 +100,7 @@ public class SwerveDrive implements MotorSafety {
 		(blinking green), then use the setSensorPhase() routine/VI to multiply the sensor position by (-
 		1). Then retest to confirm Sensor Position moves in a positive direction with positive motor
 		drive.**/
-		turnMotors[i].setSensorPhase(true); 
+		turnMotors[i].setSensorPhase(false); 
 
 		driveMotors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
 //		driveMotors[i].setSensorPhase(true);
@@ -129,6 +120,7 @@ public class SwerveDrive implements MotorSafety {
 		driveMotors[i].setNeutralMode(NeutralMode.Coast);
 		//set Velocity Mode for drive motors
 		driveMotors[i].set(ControlMode.Velocity, 0.0);
+		driveMotors[i].setSensorPhase(false); 
 		}
 
 		
@@ -152,7 +144,6 @@ public class SwerveDrive implements MotorSafety {
 	   * @param gyroAngle 		The current angle reading from the gyro. Use this to implement field-oriented
 	   *                  		controls.
 	   */
-	@SuppressWarnings("ParameterName")
 	public void drive(double AxisX, double AxisY, double rotation, double gyroAngle){
 		xavg.add(AxisX);
 		yavg.add(AxisY);
@@ -211,7 +202,7 @@ public class SwerveDrive implements MotorSafety {
 
 			    if(Math.abs(angleJoyStickDiff[i]) > 90){ //new angle is greater than a 90degree turn, so find shortest path
 			    	//reverse translational motors 
-			    	driveMotors[i].set(ControlMode.Velocity, wheelSpeeds[i]*maxDriveVoltage*4800);
+			    	driveMotors[i].set(ControlMode.Velocity, wheelSpeeds[i]*4800*4096/600);
 			    	
 			    	//find new angle
 			    	wheelAngles[i] -= 180.0; //subtract 180 degrees
@@ -226,17 +217,16 @@ public class SwerveDrive implements MotorSafety {
 			    else
 			    {
 //			    	pidDriveController[i].setSetpoint(-wheelSpeeds[i]*maxDriveVoltage*100.0);
-			    	driveMotors[i].set(ControlMode.Velocity, -wheelSpeeds[i]*maxDriveVoltage*4800);
+			    	driveMotors[i].set(ControlMode.Velocity, -wheelSpeeds[i]*4800*4096/600);
 			    }
 				//Turn Motors
 			    if(wheelSpeeds[i]>0.1){
 //			    	pidTurnController[i].setSetpoint(wheelAngles[i]);
-			    	turnMotors[i].set(ControlMode.Position, wheelAngles[i]);
+			    	turnMotors[i].set(ControlMode.Position, 4096);
 			    	oldAngle[i] = wheelAngles[i];
 			    }
 		    
 		    currentSpeed(driveMotors[i], i);
-		    updateController(pidTurnController[i]);
 		    
 	    }
 
@@ -250,14 +240,12 @@ public class SwerveDrive implements MotorSafety {
 	
 	public void turnMotors(double angle_CMD){
 	    for(int i=0;i<4;i++){
-	    	pidTurnController[i].setSetpoint(angle_CMD);
 	    }
 		
 	}
 	
 	public void turnMotorsDrive(double angle_CMD , double speed){
 	    for(int i=0;i<4;i++){
-	    	pidTurnController[i].setSetpoint(angle_CMD);
 	    	driveMotors[i].set(ControlMode.Velocity, speed * 5400);
 	    }
 		
@@ -301,7 +289,6 @@ public class SwerveDrive implements MotorSafety {
 		    }
 		    
 		    for(int i=0;i<4;i++){
-		    	pidTurnController[i].setSetpoint(angle_CMD);
 		    	driveMotors[i].set(ControlMode.Velocity, wheelSpeeds[i] * 5400);
 		    }
 	}
@@ -408,13 +395,7 @@ private void setupMotorSafety() {
 		return speed;
 	}
 
-	void updateController(PIDController controller) {
-		SmartDashboard.putData("Angle PID", controller);
-	    // Comment following when done tuning PID
-	    SmartDashboard.putNumber("Angle Error", controller.getError());
-	    SmartDashboard.putNumber("Angle Setpoint", controller.getSetpoint());
-	    SmartDashboard.putBoolean("Angle On target", controller.onTarget());
-	}
+	
 	public void setMaxDriveVoltage(double setVoltage){
 		this.maxDriveVoltage = setVoltage;
 	}

@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team801.robot;
 
+import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.command.Command;
@@ -24,7 +25,7 @@ import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
  * creating this project, you must also update the build.properties file in the
  * project.
  */
-public class Robot extends TimedRobot {
+public class Robot extends IterativeRobot {
 	public static final ExampleSubsystem kExampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 	public static Object prefs;
@@ -40,12 +41,14 @@ public class Robot extends TimedRobot {
 	@Override
 	public void robotInit() {
     	prefs = Preferences.getInstance();
+    	RobotMap.init();
 		oi = new OI();
+		chassis = new Chassis();
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
-		chassis = new Chassis();
 	}
+
 
 	/**
 	 * This function is called once each time the robot enters Disabled mode.
@@ -59,9 +62,9 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledPeriodic() {
-		SmartDashboard.putNumber("Gyro Angle", Math.random());
 
 		Scheduler.getInstance().run();
+		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
 
 	}
 
