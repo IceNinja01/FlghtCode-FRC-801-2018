@@ -27,19 +27,31 @@ public class RobotMap {
 	public static TalonSRX frontRightTurn = new TalonSRX(5);
 	
 	public static TalonSRX frontLeftDrive = new TalonSRX(14);
-	public static TalonSRX frontLeftTurn = new TalonSRX(1);
+	public static TalonSRX frontLeftTurn = new TalonSRX(10);
 	
 	public static TalonSRX backRightDrive = new TalonSRX(0);
 	public static TalonSRX backRightTurn = new TalonSRX(4);
 	
 	public static TalonSRX backLeftDrive = new TalonSRX(15);
 	public static TalonSRX backLeftTurn = new TalonSRX(11);
-	
-	public static SwerveDrive swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backRightDrive,backLeftDrive,
-			frontRightTurn,frontLeftTurn,backRightTurn,backLeftTurn,
-			10);
+
 	public static AnalogInput ultraSonic;
 	public static Adis16448_IMU imu;
 	
+	public static SwerveDrive swerveDrive;
+	
+	
+	public static void init() {
+		//IMU setup
+		imu = new Adis16448_IMU();
+		imu.calibrate();
+		imu.reset();
+		
+		
+		swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backRightDrive,backLeftDrive,
+			frontRightTurn,frontLeftTurn,backRightTurn,backLeftTurn,
+			10);
+	
+	}
 	
 }

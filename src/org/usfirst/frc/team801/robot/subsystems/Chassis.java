@@ -1,58 +1,55 @@
 package org.usfirst.frc.team801.robot.subsystems;
 
-import org.usfirst.frc.team801.robot.Constants;
 import org.usfirst.frc.team801.robot.Robot;
 import org.usfirst.frc.team801.robot.RobotMap;
 import org.usfirst.frc.team801.robot.Utilities.Adis16448_IMU;
-import org.usfirst.frc.team801.robot.Utilities.RollingAverage;
 import org.usfirst.frc.team801.robot.Utilities.Utils;
 import org.usfirst.frc.team801.robot.commands.DriveWithJoysticks;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import SwerveClass.SwerveDrive;
-import edu.wpi.first.wpilibj.AnalogInput;
-import edu.wpi.first.wpilibj.PIDSource;
-import edu.wpi.first.wpilibj.command.PIDSubsystem;
+import edu.wpi.first.wpilibj.GenericHID.Hand;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Controls the movement of the robot
  */
-public class Chassis extends PIDSubsystem {
+@SuppressWarnings("unused")
+public class Chassis extends Subsystem {
 	Adis16448_IMU adis = RobotMap.imu;
-	AnalogInput ultraSonic = RobotMap.ultraSonic;
-	public static PIDSource ultraPidSource;
+//	AnalogInput ultraSonic = RobotMap.ultraSonic;
+//	public static PIDSource ultraPidSource;
 	// Put methods for controlling this subsystem
 	// here. Call these from Commands.
 
 	// private SwerveDriveTwoMotors chassisSwerveDrive =
 	// RobotMap.swerveDriveTwoMotors;
 	public SwerveDrive chassisSwerveDrive = RobotMap.swerveDrive;
-	public double distance;
+//	public double distance;
 	public double angle;
-	public double headingError;
-	public double headingCMD;
-	private double zRateCmd;
-	public boolean gottaGoFast = false;
+//	public double headingError;
+//	public double headingCMD;
+//	private double zRateCmd;
+//	public boolean gottaGoFast = false;
 	private double x;
 	private double y;
 	private double z;
-	private RollingAverage xAvg;
-	private RollingAverage yAvg;
-	private RollingAverage x_g;
-	private RollingAverage y_g;
-	private RollingAverage z_g;
-	private RollingAverage tilt;
+//	private RollingAverage xAvg;
+//	private RollingAverage yAvg;
+//	private RollingAverage x_g;
+//	private RollingAverage y_g;
+//	private RollingAverage z_g;
+//	private RollingAverage tilt;
 
 	public Chassis() {
 
-		super(Constants.ultrakP, Constants.ultrakI, Constants.ultrakD, 0.01);
-		getPIDController().setAbsoluteTolerance(1.0);
-		getPIDController().setContinuous(true);
-		getPIDController().setInputRange(0.0, 360.0);
-		getPIDController().setOutputRange(-0.6, 0.6);
-		enable();
+//		super(Constants.ultrakP, Constants.ultrakI, Constants.ultrakD, 0.01);
+//		getPIDController().setAbsoluteTolerance(1.0);
+//		getPIDController().setContinuous(true);
+//		getPIDController().setInputRange(0.0, 360.0);
+//		getPIDController().setOutputRange(-0.6, 0.6);
+//		enable();
 //		tilt = new RollingAverage(5);
 //		x_g = new RollingAverage(5);
 //		y_g = new RollingAverage(5);
@@ -64,14 +61,17 @@ public class Chassis extends PIDSubsystem {
 
 	@Override
 	public void initDefaultCommand() {
+		// Set the default command for the chassis subsystem here.
 		setDefaultCommand(new DriveWithJoysticks());
 	}
 
 	public void motorDrive(double angleCmd_Deg) {
-		RobotMap.frontRightDrive.set(ControlMode.Velocity, 1000);
-		x = Robot.oi.driver.getX();
-		y = Robot.oi.driver.getY();
-		chassisSwerveDrive.drive(0.5, 0.5, 0.0, 0.0);
+		x = Robot.oi.driver.getX(Hand.kLeft);
+		y = -Robot.oi.driver.getY(Hand.kLeft);
+		SmartDashboard.putNumber("Joystick X", x);
+		SmartDashboard.putNumber("Joystick Y", y);
+
+		chassisSwerveDrive.drive(x, y, 0.0, 0.0);
 		
 //		getTilt();
 //		// if(tilt.getAverage()>30) {
@@ -96,18 +96,8 @@ public class Chassis extends PIDSubsystem {
 		// else{chassisSwerveDrive.drive(0, 0, 0.0, angleCmd_Deg);}
 	}
 
-	@Override
-	protected double returnPIDInput() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	
 
-	@Override
-	protected void usePIDOutput(double output) {
-		// TODO Auto-generated method stub
-		
-	}
-}
 
 //	public void turnToHeading(double x, double y, double gyroCMD, double angleCmd) {
 //
@@ -146,11 +136,12 @@ public class Chassis extends PIDSubsystem {
 //		return distance;
 //	}
 //
-//	public double getGyroAngle() {
-//		angle = Utils.wrapAngle0To360Deg(adis.getAngleZ());
-//		SmartDashboard.putNumber("IMU", angle);
-//		return angle;
-//	}
+	public double getGyroAngle() {
+		angle = Utils.wrapAngle0To360Deg(adis.getAngleZ());
+		SmartDashboard.putNumber("IMU", angle);
+		return angle;
+	}
+}
 //
 //	public void getTilt() {
 //		x_g.add(adis.getAccelX());
