@@ -6,6 +6,7 @@ import org.usfirst.frc.team801.robot.Utilities.Utils;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.MotorSafety;
@@ -41,18 +42,14 @@ public class SwerveDrive implements MotorSafety {
 	protected double kD = 0.0;
 	protected double timeUs;
 	private String motorName[] = {"FrontRight","FrontLeft","BackLeft","BackRight"};
-	private double[] rightSet = {0,0,0,0};
-	private double[] leftSet = {0,0,0,0};
+
 	private double[] oldAngle = {0,0,0,0};
 	private double maxDriveVoltage = 0.7;
 	private double maxTurnVoltage = 0.5;
-	private double deadBand = 3.0;
+	private int deadBand = 12; //1 degree ~12native units error=4096/360, expressed in native units
 	private TalonSRX[] driveMotors  = new TalonSRX[4];
 	private TalonSRX[] turnMotors  = new TalonSRX[4];
 	private PIDController[] pidTurnController  = new PIDController[4];
-	private PIDSource[] pidTurnSource  = new PIDSource[4];
-	private PIDController[] pidDriveController  = new PIDController[4];
-	private PIDSource[] pidDriveSource  = new PIDSource[4];
     private double[] wheelAngles = new double[4];
 	private double[] wheelSpeeds = new double[4];
 	private double[] angleDiff = new double[4];
@@ -70,7 +67,9 @@ public class SwerveDrive implements MotorSafety {
 		driveMotors[1]  = FrontLeftDriveMotor;
 		driveMotors[2]   = BackLeftDriveMotor;
 		driveMotors[3]  = BackRightDriveMotor;
-		
+		/*Set the Current Limit of the Drive Motors	 */
+		setDriveCurrentLimit(10, 200, 20);
+
 		
 		turnMotors[0] = FrontRightTurnMotor;
 		turnMotors[1] = FrontLeftTurnMotor;
@@ -79,41 +78,55 @@ public class SwerveDrive implements MotorSafety {
 		
 		for(int i=0;i<4;i++){
 		turnMotors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, Constants.kTimeoutMs);
+		/* set the peak and nominal outputs, 12V means full */
+		turnMotors[i].configNominalOutputForward(0, Constants.kTimeoutMs);
+		turnMotors[i].configNominalOutputReverse(0, Constants.kTimeoutMs);
+		turnMotors[i].configPeakOutputForward(11.0, Constants.kTimeoutMs);
+		turnMotors[i].configPeakOutputReverse(-11.0, Constants.kTimeoutMs);
+		/* 0.001 represents 0.1% - default value is 0.04 or 4% */
+		turnMotors[i].configNeutralDeadband(0.001, Constants.kTimeoutMs);
+		
+		/* Set the motors PIDF constants**/
+		turnMotors[i].config_kF(0, .026, Constants.kTimeoutMs);
+		turnMotors[i].config_kP(0, .051, Constants.kTimeoutMs);
+		turnMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
+		turnMotors[i].config_kD(0, 0.0, Constants.kTimeoutMs);
+		turnMotors[i].configAllowableClosedloopError(0, deadBand, Constants.kTimeoutMs);//1 degree error=4096/360, expressed in native units
+
+		//set coast mode
+		driveMotors[i].setNeutralMode(NeutralMode.Coast);
+		//set Position Mode for turn motors
+		driveMotors[i].set(ControlMode.Position, 0.0);
+		
+		/*the sensor and motor must be
+		“in-phase”. This means that the sensor position must move in a positive direction as the motor
+		controller drives positive motor output. To test this, first drive the motor manually (using
+		gamepad axis for example). Watch the sensor position either in the roboRIO Web-based
+		Configuration Self-Test, or by calling GetSelectedSensorPosition() and printing it to console.
+		If the “Sensor Position” moves in a negative direction while Talon SRX motor output is positive
+		(blinking green), then use the setSensorPhase() routine/VI to multiply the sensor position by (-
+		1). Then retest to confirm “Sensor Position” moves in a positive direction with positive motor
+		drive.**/
+//		turnMotors[i].setSensorPhase(true); 
+
 		driveMotors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
+//		driveMotors[i].setSensorPhase(true);
         /* set the peak and nominal outputs, 12V means full */
 		driveMotors[i].configNominalOutputForward(0, Constants.kTimeoutMs);
 		driveMotors[i].configNominalOutputReverse(0, Constants.kTimeoutMs);
-		driveMotors[i].configPeakOutputForward(12.0, Constants.kTimeoutMs);
-		driveMotors[i].configPeakOutputReverse(-12.0, Constants.kTimeoutMs);
+		driveMotors[i].configPeakOutputForward(11.0, Constants.kTimeoutMs);
+		driveMotors[i].configPeakOutputReverse(-11.0, Constants.kTimeoutMs);
+		/* 0.001 represents 0.1% - default value is 0.04 or 4% */
+		driveMotors[i].configNeutralDeadband(0.001, Constants.kTimeoutMs);
+		/* Set the motors PIDF constants**/
 		driveMotors[i].config_kF(0, .026, Constants.kTimeoutMs);
 		driveMotors[i].config_kP(0, .051, Constants.kTimeoutMs);
 		driveMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
 		driveMotors[i].config_kD(0, 0.0, Constants.kTimeoutMs);
+		//set coast mode
+		driveMotors[i].setNeutralMode(NeutralMode.Coast);
+		//set Velocity Mode for drive motors
 		driveMotors[i].set(ControlMode.Velocity, 0.0);
-		
-		}
-		for(int i=0;i<4;i++){
-			int j =i;
-			pidTurnSource[i] = new PIDSource() {				
-				@Override
-				public void setPIDSourceType(PIDSourceType pidSource) {				
-				}
-				@Override
-				public double pidGet() {
-					return currentAngle(turnMotors[j],j);
-				}				
-				@Override
-				public PIDSourceType getPIDSourceType() {
-					return PIDSourceType.kDisplacement;
-				}
-			};
-			
-			pidTurnController[i] = new PIDController(kP, kI, kD, pidTurnSource[i], turnMotors[i]);
-			pidTurnController[i].setContinuous(true);
-			pidTurnController[i].setAbsoluteTolerance(deadBand);
-			pidTurnController[i].setInputRange(0, 360);
-			pidTurnController[i].setOutputRange(-maxTurnVoltage, maxTurnVoltage);
-			pidTurnController[i].enable();
 		}
 
 		
@@ -190,9 +203,9 @@ public class SwerveDrive implements MotorSafety {
 
 		    for(int i=0;i<4;i++){
 		    
-		    	angleDiff[i]= Math.abs(wheelAngles[i]- oldAngle[i]);
+		    	angleDiff[i]= wheelAngles[i]- oldAngle[i];
 
-			    if(angleDiff[i] > 90){ //new angle is greater than a 90degree turn, so find shortest path
+			    if(Math.abs(angleDiff[i]) > 90){ //new angle is greater than a 90degree turn, so find shortest path
 			    	//reverse translational motors 
 			    	driveMotors[i].set(ControlMode.Velocity, wheelSpeeds[i]*maxDriveVoltage*4800);
 			    	
@@ -322,9 +335,11 @@ public class SwerveDrive implements MotorSafety {
 	public void brakeOn() {
 		for(int i=0;i>4;i++){
 		    if (driveMotors[i] != null) {
+			  driveMotors[i].setNeutralMode(NeutralMode.Brake);
 		      driveMotors[i].neutralOutput();
 		    }
 		    if (turnMotors[i] != null) {
+		      turnMotors[i].setNeutralMode(NeutralMode.Brake);
 		      turnMotors[i].neutralOutput();
 		    }
 		}
@@ -335,9 +350,11 @@ public class SwerveDrive implements MotorSafety {
 	public void brakeOff() {
 		for(int i=0;i>4;i++){
 		    if (driveMotors[i] != null) {
+		    	  driveMotors[i].setNeutralMode(NeutralMode.Coast);
 			      driveMotors[i].set(ControlMode.Velocity, 0);
 			    }
 			    if (turnMotors[i] != null) {
+			      turnMotors[i].setNeutralMode(NeutralMode.Coast);
 			      turnMotors[i].set(ControlMode.Position, 0);
 		    }
 		}
@@ -370,8 +387,11 @@ private void setupMotorSafety() {
   
 	public double currentAngle(TalonSRX motor,int num) {
 		   int motorNumber = motor.getDeviceID();
+		   // Convert timeUs Pulse to angle
+		   /* get the period in us, rise-to-rise in microseconds */
+		   double timeUs = motor.getSensorCollection().getPulseWidthRiseToRiseUs();
 		   // Convert timeUs Pulse to angle	   
-		   double degs = motor.getSelectedSensorPosition(0);
+		   double degs = motor.getSensorCollection().getPulseWidthRiseToFallUs()*(360.0/timeUs);
 		   SmartDashboard.putNumber("RawAngle_"+motorName[num], degs);
 		   degs = Utils.wrapAngle0To360Deg(degs) - Constants.AngleBias[num];
 		   degs = Utils.wrapAngle0To360Deg(degs);
@@ -395,4 +415,17 @@ private void setupMotorSafety() {
 	public void setMaxDriveVoltage(double setVoltage){
 		this.maxDriveVoltage = setVoltage;
 	}
+	
+	public void setDriveCurrentLimit(int peakAmps, int durationMs, int continousAmps) {
+	/* Peak Current and Duration must be exceeded before current limit is activated.
+	When activated, current will be limited to Continuous Current.
+	Set Peak Current params to 0 if desired behavior is to immediately current-limit. */
+		for(int i=0;i>4;i++){
+			driveMotors[i].configPeakCurrentLimit(peakAmps, 10); /* 35 A */
+			driveMotors[i].configPeakCurrentDuration(durationMs, 10); /* 200ms */
+			driveMotors[i].configContinuousCurrentLimit(continousAmps, 10); /* 30A */
+			driveMotors[i].enableCurrentLimit(true); /* turn it on */
+		}
+	}
+	
 }
