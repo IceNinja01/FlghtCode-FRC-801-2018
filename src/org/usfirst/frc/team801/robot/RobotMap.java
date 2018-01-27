@@ -9,9 +9,8 @@ package org.usfirst.frc.team801.robot;
 
 import org.usfirst.frc.team801.robot.Utilities.Adis16448_IMU;
 
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-
 import SwerveClass.SwerveDrive;
+import SwerveClass.Team801TalonSRX;
 import edu.wpi.first.wpilibj.AnalogInput;
 
 /**
@@ -23,17 +22,17 @@ import edu.wpi.first.wpilibj.AnalogInput;
 public class RobotMap {
 	
 	//Make all the swerve drive talons here
-	public static TalonSRX frontRightDrive = new TalonSRX(1);
-	public static TalonSRX frontRightTurn = new TalonSRX(5);
+	public static Team801TalonSRX frontRightDrive = new Team801TalonSRX(1);
+	public static Team801TalonSRX frontRightTurn = new Team801TalonSRX(5);
 	
-	public static TalonSRX frontLeftDrive = new TalonSRX(14);
-	public static TalonSRX frontLeftTurn = new TalonSRX(10);
+	public static Team801TalonSRX frontLeftDrive = new Team801TalonSRX(14);
+	public static Team801TalonSRX frontLeftTurn = new Team801TalonSRX(8);
 	
-	public static TalonSRX backRightDrive = new TalonSRX(0);
-	public static TalonSRX backRightTurn = new TalonSRX(4);
+	public static Team801TalonSRX backRightDrive = new Team801TalonSRX(0);
+	public static Team801TalonSRX backRightTurn = new Team801TalonSRX(4);
 	
-	public static TalonSRX backLeftDrive = new TalonSRX(15);
-	public static TalonSRX backLeftTurn = new TalonSRX(11);
+	public static Team801TalonSRX backLeftDrive = new Team801TalonSRX(15);
+	public static Team801TalonSRX backLeftTurn = new Team801TalonSRX(11);
 
 	public static AnalogInput ultraSonic;
 	public static Adis16448_IMU imu;
@@ -50,7 +49,7 @@ public class RobotMap {
 		
 		swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backRightDrive,backLeftDrive,
 			frontRightTurn,frontLeftTurn,backRightTurn,backLeftTurn,
-			10);
+			20);
 	
 	}
 	

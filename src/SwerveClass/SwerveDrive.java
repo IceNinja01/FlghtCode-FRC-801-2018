@@ -7,12 +7,13 @@ import org.usfirst.frc.team801.robot.Utilities.Utils;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.MotorSafetyHelper;
 import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 @SuppressWarnings("unused")
@@ -20,7 +21,9 @@ public class SwerveDrive implements MotorSafety {
 	//Variables to be used are set to private
 	
 	protected MotorSafetyHelper m_safetyHelper;
-
+	protected PIDOutput[] pidOutput = new PIDOutput[4]; 
+	private PIDController[] pidTurnController  = new PIDController[4];
+	private PIDSource[] pidTurnSource  = new PIDSource[4];
 	public static final double kDefaultExpirationTime = 0.1;
 	public static final double kDefaultMaxOutput = 1.0;
 
@@ -38,9 +41,9 @@ public class SwerveDrive implements MotorSafety {
 	private double[] oldAngle = {0,0,0,0};
 	private double maxDriveVoltage = 0.7;
 	private double maxTurnVoltage = 0.5;
-	private int deadBand = 12; //1 degree ~12native units error=4096/360, expressed in native units
-	private TalonSRX[] driveMotors  = new TalonSRX[4];
-	private TalonSRX[] turnMotors  = new TalonSRX[4];
+	private int deadBand = 2; //
+	private Team801TalonSRX[] driveMotors  = new Team801TalonSRX[4];
+	private Team801TalonSRX[] turnMotors  = new Team801TalonSRX[4];
     private double[] wheelAngles = new double[4];
 	private double[] wheelSpeeds = new double[4];
 	private double[] angleJoyStickDiff = new double[4];
@@ -51,8 +54,8 @@ public class SwerveDrive implements MotorSafety {
 	private RollingAverage zavg;
 	
 	
-	public  SwerveDrive(final TalonSRX FrontRightDriveMotor,final TalonSRX FrontLeftDriveMotor,final TalonSRX BackLeftDriveMotor,final TalonSRX BackRightDriveMotor,
-			final TalonSRX FrontRightTurnMotor,final TalonSRX FrontLeftTurnMotor,final TalonSRX rearLeftTurnMotor,final TalonSRX rearRightTurnMotor,
+	public  SwerveDrive(final Team801TalonSRX FrontRightDriveMotor,final Team801TalonSRX FrontLeftDriveMotor,final Team801TalonSRX BackLeftDriveMotor,final Team801TalonSRX BackRightDriveMotor,
+			final Team801TalonSRX FrontRightTurnMotor,final Team801TalonSRX FrontLeftTurnMotor,final Team801TalonSRX rearLeftTurnMotor,final Team801TalonSRX rearRightTurnMotor,
 			int avgSize) {
 		
 		driveMotors[0] = FrontRightDriveMotor;
@@ -66,7 +69,7 @@ public class SwerveDrive implements MotorSafety {
 		turnMotors[0] = FrontRightTurnMotor;
 		turnMotors[1] = FrontLeftTurnMotor;
 		turnMotors[2] = rearLeftTurnMotor;
-		turnMotors[3] =rearRightTurnMotor;
+		turnMotors[3] = rearRightTurnMotor;
 		
 		for(int i=0;i<4;i++){
 			turnMotors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, Constants.kTimeoutMs);
@@ -78,18 +81,17 @@ public class SwerveDrive implements MotorSafety {
 			/* 0.001 represents 0.1% - default value is 0.04 or 4% */
 			turnMotors[i].configNeutralDeadband(0.001, Constants.kTimeoutMs);
 			
-			/* Set the motors PIDF constants**/
-			turnMotors[i].config_kF(0, .001, Constants.kTimeoutMs);
-			turnMotors[i].config_kP(0, .001, Constants.kTimeoutMs);
-			turnMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
-			turnMotors[i].config_kD(0, 0.0, Constants.kTimeoutMs);
-			turnMotors[i].configAllowableClosedloopError(0, deadBand, Constants.kTimeoutMs);//1 degree error=4096/360, expressed in native units
-	
+//			/* Set the motors PIDF constants**/
+//			turnMotors[i].config_kF(0, .001, Constants.kTimeoutMs);
+//			turnMotors[i].config_kP(0, .001, Constants.kTimeoutMs);
+//			turnMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
+//			turnMotors[i].config_kD(0, 0.0, Constants.kTimeoutMs);
+//			turnMotors[i].configAllowableClosedloopError(0, deadBand, Constants.kTimeoutMs);//1 degree error=4096/360, expressed in native units
+//	
 			//set coast mode
 			turnMotors[i].setNeutralMode(NeutralMode.Coast);
-			//set Position Mode for turn motors
-			turnMotors[i].setSelectedSensorPosition(0, 0, Constants.kTimeoutMs);
-			turnMotors[i].set(ControlMode.Position, 0.0);
+//			//set Voltage for turn motors
+			turnMotors[i].set(ControlMode.PercentOutput, 0.0);
 		
 		/*the sensor and motor must be
 		in-phase. This means that the sensor position must move in a positive direction as the motor
@@ -121,6 +123,31 @@ public class SwerveDrive implements MotorSafety {
 		//set Velocity Mode for drive motors
 		driveMotors[i].set(ControlMode.Velocity, 0.0);
 		driveMotors[i].setSensorPhase(false); 
+		}
+		
+		
+		for(int i=0;i<4;i++){
+			int j =i;
+			pidTurnSource[i] = new PIDSource() {				
+				@Override
+				public void setPIDSourceType(PIDSourceType pidSource) {				
+				}
+				@Override
+				public double pidGet() {
+					return currentAngle(turnMotors[j],j);
+				}				
+				@Override
+				public PIDSourceType getPIDSourceType() {
+					return PIDSourceType.kDisplacement;
+				}
+			};
+			
+			pidTurnController[i] = new PIDController(kP, kI, kD, pidTurnSource[i], turnMotors[i]);
+			pidTurnController[i].setContinuous(true);
+			pidTurnController[i].setAbsoluteTolerance(deadBand);
+			pidTurnController[i].setInputRange(0, 360);
+			pidTurnController[i].setOutputRange(-maxTurnVoltage, maxTurnVoltage);
+			pidTurnController[i].enable();
 		}
 
 		
@@ -216,13 +243,11 @@ public class SwerveDrive implements MotorSafety {
 			    
 			    else
 			    {
-//			    	pidDriveController[i].setSetpoint(-wheelSpeeds[i]*maxDriveVoltage*100.0);
 			    	driveMotors[i].set(ControlMode.Velocity, -wheelSpeeds[i]*4800*4096/600);
 			    }
 				//Turn Motors
 			    if(wheelSpeeds[i]>0.1){
-//			    	pidTurnController[i].setSetpoint(wheelAngles[i]);
-			    	turnMotors[i].set(ControlMode.Position, 4096);
+			    	pidTurnController[i].setSetpoint(wheelAngles[i]);
 			    	oldAngle[i] = wheelAngles[i];
 			    }
 		    
@@ -289,7 +314,7 @@ public class SwerveDrive implements MotorSafety {
 		    }
 		    
 		    for(int i=0;i<4;i++){
-		    	driveMotors[i].set(ControlMode.Velocity, wheelSpeeds[i] * 5400);
+		    	driveMotors[i].set(ControlMode.Velocity, wheelSpeeds[i] * 4800 * 4096/600);
 		    }
 	}
 	@Override
@@ -375,7 +400,7 @@ private void setupMotorSafety() {
 	    m_safetyHelper.setSafetyEnabled(true);
 	  }
   
-	public double currentAngle(TalonSRX motor,int num) {
+	public double currentAngle(Team801TalonSRX motor,int num) {
 		   int motorNumber = motor.getDeviceID();
 		   // Convert timeUs Pulse to angle
 		   /* get the period in us, rise-to-rise in microseconds */
@@ -389,7 +414,7 @@ private void setupMotorSafety() {
 		   return degrees;
 	}
 	
-	public double currentSpeed(TalonSRX motor, int num){
+	public double currentSpeed(Team801TalonSRX motor, int num){
 		double speed = motor.getSelectedSensorVelocity(0);
 		SmartDashboard.putNumber("Speed"+motorName[num], speed);
 		return speed;

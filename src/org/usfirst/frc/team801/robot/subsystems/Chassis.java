@@ -67,7 +67,7 @@ public class Chassis extends Subsystem {
 
 	public void motorDrive(double angleCmd_Deg) {
 		x = Robot.oi.driver.getX(Hand.kLeft);
-		y = -Robot.oi.driver.getY(Hand.kLeft);
+		y = Robot.oi.driver.getY(Hand.kLeft);
 		SmartDashboard.putNumber("Joystick X", x);
 		SmartDashboard.putNumber("Joystick Y", y);
 
