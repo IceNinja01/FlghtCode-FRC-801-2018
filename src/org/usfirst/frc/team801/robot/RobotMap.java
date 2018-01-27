@@ -26,7 +26,7 @@ public class RobotMap {
 	public static Team801TalonSRX frontRightTurn = new Team801TalonSRX(5);
 	
 	public static Team801TalonSRX frontLeftDrive = new Team801TalonSRX(14);
-	public static Team801TalonSRX frontLeftTurn = new Team801TalonSRX(8);
+	public static Team801TalonSRX frontLeftTurn = new Team801TalonSRX(10);
 	
 	public static Team801TalonSRX backRightDrive = new Team801TalonSRX(0);
 	public static Team801TalonSRX backRightTurn = new Team801TalonSRX(4);
@@ -49,7 +49,7 @@ public class RobotMap {
 		
 		swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backRightDrive,backLeftDrive,
 			frontRightTurn,frontLeftTurn,backRightTurn,backLeftTurn,
-			20);
+			10);
 	
 	}
 	
