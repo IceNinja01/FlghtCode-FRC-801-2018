@@ -101,15 +101,15 @@ public class SwerveDrive implements MotorSafety {
 			turnMotors[i].set(ControlMode.Position, 0.0);
 		
 		/*the sensor and motor must be
-		“in-phase”. This means that the sensor position must move in a positive direction as the motor
+		in-phase. This means that the sensor position must move in a positive direction as the motor
 		controller drives positive motor output. To test this, first drive the motor manually (using
 		gamepad axis for example). Watch the sensor position either in the roboRIO Web-based
 		Configuration Self-Test, or by calling GetSelectedSensorPosition() and printing it to console.
-		If the “Sensor Position” moves in a negative direction while Talon SRX motor output is positive
+		If the Sensor Position moves in a negative direction while Talon SRX motor output is positive
 		(blinking green), then use the setSensorPhase() routine/VI to multiply the sensor position by (-
-		1). Then retest to confirm “Sensor Position” moves in a positive direction with positive motor
+		1). Then retest to confirm Sensor Position moves in a positive direction with positive motor
 		drive.**/
-//		turnMotors[i].setSensorPhase(true); 
+		turnMotors[i].setSensorPhase(true); 
 
 		driveMotors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
 //		driveMotors[i].setSensorPhase(true);

@@ -59,6 +59,8 @@ public class Robot extends TimedRobot {
 
 	@Override
 	public void disabledPeriodic() {
+		SmartDashboard.putNumber("Gyro Angle", Math.random());
+
 		Scheduler.getInstance().run();
 
 	}
@@ -105,6 +107,7 @@ public class Robot extends TimedRobot {
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
+//		SmartDashboard.putNumber("Gyro Angle", Robot.chassis.getGyroAngle());
 		if (m_autonomousCommand != null) {
 			m_autonomousCommand.cancel();
 		}
