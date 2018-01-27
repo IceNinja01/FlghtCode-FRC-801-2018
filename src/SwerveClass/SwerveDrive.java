@@ -52,7 +52,8 @@ public class SwerveDrive implements MotorSafety {
 	private PIDController[] pidTurnController  = new PIDController[4];
     private double[] wheelAngles = new double[4];
 	private double[] wheelSpeeds = new double[4];
-	private double[] angleDiff = new double[4];
+	private double[] angleJoyStickDiff = new double[4];
+	private double[] angleError = new double[4];
 
 	private RollingAverage xavg;
 	private RollingAverage yavg;
@@ -77,26 +78,27 @@ public class SwerveDrive implements MotorSafety {
 		turnMotors[3] =rearRightTurnMotor;
 		
 		for(int i=0;i<4;i++){
-		turnMotors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, Constants.kTimeoutMs);
-		/* set the peak and nominal outputs, 12V means full */
-		turnMotors[i].configNominalOutputForward(0, Constants.kTimeoutMs);
-		turnMotors[i].configNominalOutputReverse(0, Constants.kTimeoutMs);
-		turnMotors[i].configPeakOutputForward(11.0, Constants.kTimeoutMs);
-		turnMotors[i].configPeakOutputReverse(-11.0, Constants.kTimeoutMs);
-		/* 0.001 represents 0.1% - default value is 0.04 or 4% */
-		turnMotors[i].configNeutralDeadband(0.001, Constants.kTimeoutMs);
-		
-		/* Set the motors PIDF constants**/
-		turnMotors[i].config_kF(0, .026, Constants.kTimeoutMs);
-		turnMotors[i].config_kP(0, .051, Constants.kTimeoutMs);
-		turnMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
-		turnMotors[i].config_kD(0, 0.0, Constants.kTimeoutMs);
-		turnMotors[i].configAllowableClosedloopError(0, deadBand, Constants.kTimeoutMs);//1 degree error=4096/360, expressed in native units
-
-		//set coast mode
-		driveMotors[i].setNeutralMode(NeutralMode.Coast);
-		//set Position Mode for turn motors
-		driveMotors[i].set(ControlMode.Position, 0.0);
+			turnMotors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Absolute, 0, Constants.kTimeoutMs);
+			/* set the peak and nominal outputs, 12V means full */
+			turnMotors[i].configNominalOutputForward(0, Constants.kTimeoutMs);
+			turnMotors[i].configNominalOutputReverse(0, Constants.kTimeoutMs);
+			turnMotors[i].configPeakOutputForward(11.0, Constants.kTimeoutMs);
+			turnMotors[i].configPeakOutputReverse(-11.0, Constants.kTimeoutMs);
+			/* 0.001 represents 0.1% - default value is 0.04 or 4% */
+			turnMotors[i].configNeutralDeadband(0.001, Constants.kTimeoutMs);
+			
+			/* Set the motors PIDF constants**/
+			turnMotors[i].config_kF(0, .001, Constants.kTimeoutMs);
+			turnMotors[i].config_kP(0, .001, Constants.kTimeoutMs);
+			turnMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
+			turnMotors[i].config_kD(0, 0.0, Constants.kTimeoutMs);
+			turnMotors[i].configAllowableClosedloopError(0, deadBand, Constants.kTimeoutMs);//1 degree error=4096/360, expressed in native units
+	
+			//set coast mode
+			turnMotors[i].setNeutralMode(NeutralMode.Coast);
+			//set Position Mode for turn motors
+			turnMotors[i].setSelectedSensorPosition(0, 0, Constants.kTimeoutMs);
+			turnMotors[i].set(ControlMode.Position, 0.0);
 		
 		/*the sensor and motor must be
 		“in-phase”. This means that the sensor position must move in a positive direction as the motor
@@ -200,12 +202,14 @@ public class SwerveDrive implements MotorSafety {
 	    	wheelSpeeds[3]/=max;
 	    }
 
-
+	    	double[] degs = new double[4];
 		    for(int i=0;i<4;i++){
-		    
-		    	angleDiff[i]= wheelAngles[i]- oldAngle[i];
+		    	degs[i] = currentAngle(turnMotors[i],i);
+		    	
+		    	angleJoyStickDiff[i]= wheelAngles[i]- oldAngle[i];
+		    	angleError[i] = wheelAngles[i] - degs[i];
 
-			    if(Math.abs(angleDiff[i]) > 90){ //new angle is greater than a 90degree turn, so find shortest path
+			    if(Math.abs(angleJoyStickDiff[i]) > 90){ //new angle is greater than a 90degree turn, so find shortest path
 			    	//reverse translational motors 
 			    	driveMotors[i].set(ControlMode.Velocity, wheelSpeeds[i]*maxDriveVoltage*4800);
 			    	
@@ -219,25 +223,24 @@ public class SwerveDrive implements MotorSafety {
 			    	
 			    }    
 			    
-			    else{
+			    else
+			    {
 //			    	pidDriveController[i].setSetpoint(-wheelSpeeds[i]*maxDriveVoltage*100.0);
 			    	driveMotors[i].set(ControlMode.Velocity, -wheelSpeeds[i]*maxDriveVoltage*4800);
-
 			    }
 				//Turn Motors
 			    if(wheelSpeeds[i]>0.1){
-			    	pidTurnController[i].setSetpoint(wheelAngles[i]);
+//			    	pidTurnController[i].setSetpoint(wheelAngles[i]);
+			    	turnMotors[i].set(ControlMode.Position, wheelAngles[i]);
 			    	oldAngle[i] = wheelAngles[i];
 			    }
 		    
-	    
-		    currentAngle(turnMotors[i],i);
 		    currentSpeed(driveMotors[i], i);
 		    updateController(pidTurnController[i]);
 		    
 	    }
 
-	    	SmartDashboard.putNumber("Angle", angleDiff[0]);
+	    	SmartDashboard.putNumber("Angle", angleJoyStickDiff[0]);
 
 		if (m_safetyHelper != null) {
 			m_safetyHelper.feed();
@@ -391,12 +394,12 @@ private void setupMotorSafety() {
 		   /* get the period in us, rise-to-rise in microseconds */
 		   double timeUs = motor.getSensorCollection().getPulseWidthRiseToRiseUs();
 		   // Convert timeUs Pulse to angle	   
-		   double degs = motor.getSensorCollection().getPulseWidthRiseToFallUs()*(360.0/timeUs);
-		   SmartDashboard.putNumber("RawAngle_"+motorName[num], degs);
-		   degs = Utils.wrapAngle0To360Deg(degs) - Constants.AngleBias[num];
-		   degs = Utils.wrapAngle0To360Deg(degs);
-		   SmartDashboard.putNumber(motorName[num], degs);
-		   return degs;
+		   double degrees = motor.getSensorCollection().getPulseWidthRiseToFallUs()*(360.0/timeUs);
+		   SmartDashboard.putNumber("RawAngle_"+motorName[num], degrees);
+		   degrees = Utils.wrapAngle0To360Deg(degrees) - Constants.AngleBias[num];
+		   degrees = Utils.wrapAngle0To360Deg(degrees);
+		   SmartDashboard.putNumber(motorName[num], degrees);
+		   return degrees;
 	}
 	
 	public double currentSpeed(TalonSRX motor, int num){
@@ -421,9 +424,9 @@ private void setupMotorSafety() {
 	When activated, current will be limited to Continuous Current.
 	Set Peak Current params to 0 if desired behavior is to immediately current-limit. */
 		for(int i=0;i>4;i++){
-			driveMotors[i].configPeakCurrentLimit(peakAmps, 10); /* 35 A */
-			driveMotors[i].configPeakCurrentDuration(durationMs, 10); /* 200ms */
-			driveMotors[i].configContinuousCurrentLimit(continousAmps, 10); /* 30A */
+			driveMotors[i].configPeakCurrentLimit(peakAmps, Constants.kTimeoutMs); /* 35 A */
+			driveMotors[i].configPeakCurrentDuration(durationMs, Constants.kTimeoutMs); /* 200ms */
+			driveMotors[i].configContinuousCurrentLimit(continousAmps, Constants.kTimeoutMs); /* 30A */
 			driveMotors[i].enableCurrentLimit(true); /* turn it on */
 		}
 	}

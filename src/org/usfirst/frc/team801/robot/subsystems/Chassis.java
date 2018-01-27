@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
- *
+ * Controls the movement of the robot
  */
 public class Chassis extends PIDSubsystem {
 	Adis16448_IMU adis = RobotMap.imu;
