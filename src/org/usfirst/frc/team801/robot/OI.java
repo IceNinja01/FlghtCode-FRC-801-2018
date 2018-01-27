@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.XboxController;
  */
 public class OI {
 	
-    public static XboxController driver = new XboxController(0);
+    public XboxController driver = new XboxController(0);
 
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
