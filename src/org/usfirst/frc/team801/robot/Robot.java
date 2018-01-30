@@ -7,15 +7,18 @@
 
 package org.usfirst.frc.team801.robot;
 
+import org.usfirst.frc.team801.robot.commands.ExampleCommand;
+import org.usfirst.frc.team801.robot.subsystems.Chassis;
+import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
+
+import com.ctre.phoenix.motion.TrajectoryPoint;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team801.robot.commands.ExampleCommand;
-import org.usfirst.frc.team801.robot.subsystems.Chassis;
-import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -47,6 +50,8 @@ public class Robot extends IterativeRobot {
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
+		TrajectoryPoint point = new TrajectoryPoint();
+		RobotMap.backLeftDrive.pushMotionProfileTrajectory(point);
 	}
 
 
@@ -56,8 +61,11 @@ public class Robot extends IterativeRobot {
 	 * the robot is disabled.
 	 */
 	@Override
-	public void disabledInit() {
-
+	public void disabledInit()
+	{
+		
+		
+		
 	}
 
 	@Override

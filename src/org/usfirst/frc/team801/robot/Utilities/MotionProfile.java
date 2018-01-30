@@ -1,6 +1,30 @@
 package org.usfirst.frc.team801.robot.Utilities;
 
+import org.usfirst.frc.team801.robot.Utilities.MotionProfileExample.PeriodicRunnable;
+
+import com.ctre.phoenix.motion.MotionProfileStatus;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+
+import edu.wpi.first.wpilibj.Notifier;
+
 public class MotionProfile {
+	
+	private Notifier _notifer = new Notifier(new PeriodicRunnable());
+	private TalonSRX[] motionProfileMotors;
+	private MotionProfileStatus status = new MotionProfileStatus();
+	private double[][] profile;
+	
+	public MotionProfile(TalonSRX[] motors, double distance, double maxVel, double accel)
+	{
+		for(int i = 0; i < motors.length; i++)
+		{
+			motors[i].changeMotionControlFramePeriod(5);
+			_notifer.startPeriodic(0.005);
+		}
+		_notifer.startPeriodic(0.005);
+		motionProfileMotors = motors;
+		profile = OneDimensionMotion(distance, maxVel, accel);
+	}
 	
 	/*
 	This method outputs a 3 column array, [position, velocity, ms], is used for a 1D motion control
@@ -10,7 +34,7 @@ public class MotionProfile {
 	 Where V(t) is equal to the motors current velocity
 	 and where P(t) is equal to the motors current position
 	 */
-	public static double[][] OneDimenisonMotion(double distance, double maxVel, double accel) {
+	private double[][] OneDimensionMotion(double distance, double maxVel, double accel) {
 		/* distance is units ft
 		 * MaxVelocity is ft/sec
 		 * accel is ft/sec^2
