@@ -29,8 +29,8 @@ public class SwerveDrive implements MotorSafety {
 
 	protected double temp, STR, FWD, RCW;
 	protected double A,B,C,D, max;
-	protected double L = 28;
-	protected double W = 33;
+	protected double L = 33.5;
+	protected double W = 28.25;
 	protected double R = Math.sqrt(L*L+W*W);
 	protected double kP = 0.005;
 	protected double kI = 0.00;
@@ -39,7 +39,7 @@ public class SwerveDrive implements MotorSafety {
 	private String motorName[] = {"FrontRight","FrontLeft","BackLeft","BackRight"};
 
 	private double[] oldAngle = {0,0,0,0};
-	private double maxDriveVoltage = 0.7;
+	private double maxDriveVoltage = 0.4;
 	private double maxTurnVoltage = 0.5;
 	private int deadBand = 2; //
 	private Team801TalonSRX[] driveMotors  = new Team801TalonSRX[4];
@@ -229,7 +229,7 @@ public class SwerveDrive implements MotorSafety {
 
 			    if(Math.abs(angleJoyStickDiff[i]) > 90){ //new angle is greater than a 90degree turn, so find shortest path
 			    	//reverse translational motors 
-			    	driveMotors[i].set(ControlMode.Velocity, wheelSpeeds[i]*4800*4096/600);
+			    	driveMotors[i].set(ControlMode.Velocity, maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);
 			    	
 			    	//find new angle
 			    	wheelAngles[i] -= 180.0; //subtract 180 degrees
@@ -243,7 +243,7 @@ public class SwerveDrive implements MotorSafety {
 			    
 			    else
 			    {
-			    	driveMotors[i].set(ControlMode.Velocity, -wheelSpeeds[i]*4800*4096/600);
+			    	driveMotors[i].set(ControlMode.Velocity, -maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);
 			    }
 				//Turn Motors
 			    if(wheelSpeeds[i]>0.1){

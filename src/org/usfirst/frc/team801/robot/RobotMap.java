@@ -46,9 +46,8 @@ public class RobotMap {
 		imu.calibrate();
 		imu.reset();
 		
-		
-		swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backRightDrive,backLeftDrive,
-			frontRightTurn,frontLeftTurn,backRightTurn,backLeftTurn,
+		swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backLeftDrive,backRightDrive,
+			frontRightTurn,frontLeftTurn,backLeftTurn,backRightTurn,
 			10);
 	
 	}
