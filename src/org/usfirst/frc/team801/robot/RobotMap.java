@@ -40,7 +40,8 @@ public class RobotMap {
 	public static SwerveDrive swerveDrive;
 	
 	
-	public static void init() {
+	public static void init() 
+	{
 		//IMU setup
 		imu = new Adis16448_IMU();
 		imu.calibrate();
