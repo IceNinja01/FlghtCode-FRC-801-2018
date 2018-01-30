@@ -48,10 +48,8 @@ public class Constants {
 	 */
 	public static final double kNeutralDeadband  = 0.01;
 
-	public static double ultrakP = 0.01;
-
-	public static double ultrakI = 0.0;
-
-	public static double ultrakD = 0.0;
+	public static double ultrakP = 0.017;
+	public static double ultrakI = 0.000001;
+	public static double ultrakD = 0.00015;
 	
 }
