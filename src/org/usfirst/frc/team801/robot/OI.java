@@ -24,9 +24,9 @@ public class OI {
 	
     public XboxController driver = new XboxController(0);
 
-    public Button turnFront = new JoystickButton(driver,3);
+    public Button turnFront = new JoystickButton(driver,4);
     public Button turnRight = new JoystickButton(driver,2);
-    public Button turnLeft = new JoystickButton(driver,4);
+    public Button turnLeft = new JoystickButton(driver,3);
     public Button turnBack = new JoystickButton(driver,1);
 
 	//// CREATING BUTTONS
@@ -59,9 +59,9 @@ public class OI {
     
     public OI(){
         	
-//    	turnFront.whileHeld(new TurnFront());
-//    	turnBack.whileHeld(new TurnBack());
-//    	turnRight.whileHeld(new TurnRight());
-//    	turnLeft.whileHeld(new TurnLeft());
+    	turnFront.whileHeld(new TurnFront());
+    	turnBack.whileHeld(new TurnBack());
+    	turnRight.whileHeld(new TurnRight());
+    	turnLeft.whileHeld(new TurnLeft());
     }
 }
