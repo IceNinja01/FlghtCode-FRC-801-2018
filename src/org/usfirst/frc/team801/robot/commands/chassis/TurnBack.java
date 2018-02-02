@@ -8,17 +8,17 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class TurnLeft extends Command {
+public class TurnBack extends Command {
 
     private double angleCMD;
 
-	public TurnLeft() {
+	public TurnBack() {
         requires(Robot.chassis);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	angleCMD = 270;
+    	angleCMD = 180;
     }
 
     // Called repeatedly when this Command is scheduled to run

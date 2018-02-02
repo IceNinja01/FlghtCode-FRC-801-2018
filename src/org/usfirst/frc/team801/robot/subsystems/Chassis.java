@@ -99,11 +99,10 @@ public class Chassis extends PIDSubsystem {
 		// else{chassisSwerveDrive.drive(0, 0, 0.0, angleCmd_Deg);}
 	}
 
-	
 
-
-	public void turnToHeading(double x, double y, double gyroCMD, double angleCmd) {
-
+	public void turnToHeading(double gyroCMD, double angleCmd) {
+		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(Hand.kLeft), 1.5), 0.01, 1.0);
+		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(Hand.kLeft), 1.5), 0.01, 1.0);
 		headingCMD = gyroCMD;
 		headingError = Robot.chassis.getGyroAngle() - headingCMD;
 		chassisSwerveDrive.drive(x, y, zRateCmd, angleCmd);

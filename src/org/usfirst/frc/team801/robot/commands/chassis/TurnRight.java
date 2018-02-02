@@ -18,13 +18,13 @@ public class TurnRight extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	angleCMD = Utils.wrapAngle0To360Deg(90 + Robot.chassis.getGyroAngle());
+    	angleCMD = 90;
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
-    	Robot.chassis.turnToHeading(0.0, 0.0, angleCMD, Robot.chassis.getGyroAngle());
+    	Robot.chassis.turnToHeading(angleCMD, Robot.chassis.getGyroAngle());
     	
     }
 

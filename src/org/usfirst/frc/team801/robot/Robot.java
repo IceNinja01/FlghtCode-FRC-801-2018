@@ -42,7 +42,6 @@ public class Robot extends IterativeRobot {
 	{
     	prefs = Preferences.getInstance();
     	RobotMap.init();
-		
 		chassis = new Chassis();
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());

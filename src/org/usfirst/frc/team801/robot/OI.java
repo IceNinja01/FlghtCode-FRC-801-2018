@@ -7,6 +7,8 @@
 
 package org.usfirst.frc.team801.robot;
 
+import org.usfirst.frc.team801.robot.commands.chassis.TurnBack;
+import org.usfirst.frc.team801.robot.commands.chassis.TurnFront;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnLeft;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnRight;
 
@@ -22,8 +24,11 @@ public class OI {
 	
     public XboxController driver = new XboxController(0);
 
-    public Button turnRight = new JoystickButton(driver,6);
-    public Button turnLeft = new JoystickButton(driver,5);
+    public Button turnFront = new JoystickButton(driver,3);
+    public Button turnRight = new JoystickButton(driver,2);
+    public Button turnLeft = new JoystickButton(driver,4);
+    public Button turnBack = new JoystickButton(driver,1);
+
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.
@@ -54,7 +59,9 @@ public class OI {
     
     public OI(){
         	
-    	turnRight.whileHeld(new TurnRight());
-    	turnLeft.whileHeld(new TurnLeft());
+//    	turnFront.whileHeld(new TurnFront());
+//    	turnBack.whileHeld(new TurnBack());
+//    	turnRight.whileHeld(new TurnRight());
+//    	turnLeft.whileHeld(new TurnLeft());
     }
 }
