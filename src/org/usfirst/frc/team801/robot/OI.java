@@ -29,6 +29,25 @@ public class OI {
     public Button turnLeft = new JoystickButton(driver,4);
     public Button turnBack = new JoystickButton(driver,1);
 
+    //
+    //	      	    _                            _
+    //	       _.-'` `-._                    _,-' `'-._
+    //	    ,-'          `-.,____________,.-'    .-.   `-.
+    //	   /   .---.             ___            ( Y )     \
+    //	  /  ,' ,-. `.     __   / X \   __   .-. `-` .-.   \
+    //	 /   | |   | |    (__) | / \ | (__) ( X )   ( B )   \
+    //	/    `. `-' ,'    __    \___/        `-` ,-. `-`     \
+    //	|      `---`   ,-`  `-.       .---.     ( A )        |
+    //	|             / -'  `- \    ,'  .  `.    `-`         |
+    //	|            |          |   | -   - |                |
+    //	!             \ -.  ,- /    `.  '  ,'                |
+    //	|              `-.__,-'       `---`                  |
+    //	|                  ________________                  |
+    //	|             _,-'`                ``-._             |
+    //	|          ,-'                          `-.          |
+    //	 \       ,'                                `.       /
+    //	  `.__,-'                                    `-.__,'
+    //
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.
