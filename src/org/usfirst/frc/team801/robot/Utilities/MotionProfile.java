@@ -1,17 +1,29 @@
 package org.usfirst.frc.team801.robot.Utilities;
 
-import org.usfirst.frc.team801.robot.Utilities.MotionProfileExample.PeriodicRunnable;
+import org.usfirst.frc.team801.robot.Constants;
 
-import com.ctre.phoenix.motion.MotionProfileStatus;
+import com.ctre.phoenix.motion.TrajectoryPoint;
+import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 
 public class MotionProfile {
 	
-	private Notifier _notifer = new Notifier(new PeriodicRunnable());
 	private TalonSRX[] motionProfileMotors;
-	private MotionProfileStatus status = new MotionProfileStatus();
+	
+	class PeriodicRunnable implements java.lang.Runnable {
+	    public void run()
+	    {
+	    	for(int i = 0; i < motionProfileMotors.length; i++)
+	    	{
+	    		motionProfileMotors[i].processMotionProfileBuffer();
+	    	}
+	    }
+	}
+	private boolean started = false;
+	private Notifier _notifer = new Notifier(new PeriodicRunnable());
 	private double[][] profile;
 	
 	public MotionProfile(TalonSRX[] motors, double distance, double maxVel, double accel)
@@ -24,6 +36,86 @@ public class MotionProfile {
 		_notifer.startPeriodic(0.005);
 		motionProfileMotors = motors;
 		profile = OneDimensionMotion(distance, maxVel, accel);
+	}
+	
+	public void start()
+	{
+		started = true;
+		startFilling();
+	}
+	
+	public void stop()
+	{
+		started = false;
+	}
+	
+	/**
+	 * Called to clear Motion profile buffer and reset state info during
+	 * disabled and when Talon is not in MP control mode.
+	 */
+	public void reset()
+	{
+		for(int i = 0; i < motionProfileMotors.length; i++)
+		{
+			/*
+			 * Let's clear the buffer just in case user decided to disable in the
+			 * middle of an MP, and now we have the second half of a profile just
+			 * sitting in memory.
+			 */
+			motionProfileMotors[i].clearMotionProfileTrajectories();
+		}
+	}
+	
+	private void startFilling() {
+		
+		TrajectoryPoint[] pointArray = new TrajectoryPoint[motionProfileMotors.length];
+		
+		for(int i = 0; i < motionProfileMotors.length; i++)
+		{
+			pointArray[i] = new TrajectoryPoint();
+			motionProfileMotors[i].clearMotionProfileTrajectories();
+			motionProfileMotors[i].configMotionProfileTrajectoryPeriod(Constants.kBaseTrajPeriodMs, Constants.kTimeoutMs);
+			/* This is fast since it's just into our TOP buffer */
+			for (int j = 0; j < profile.length; ++j) {
+				double positionRot = profile[j][0];
+				double velocityRPM = profile[j][1];
+				/* for each point, fill our structure and pass it to API */
+				pointArray[i].position = positionRot * Constants.kSensorUnitsPerRotation; //Convert Revolutions to Units
+				pointArray[i].velocity = velocityRPM * Constants.kSensorUnitsPerRotation / 600.0; //Convert RPM to Units/100ms
+				pointArray[i].headingDeg = 0; /* future feature - not used in this example*/
+				pointArray[i].profileSlotSelect0 = 0; /* which set of gains would you like to use [0,3]? */
+				pointArray[i].profileSlotSelect1 = 0; /* future feature  - not used in this example - cascaded PID [0,1], leave zero */
+				pointArray[i].timeDur = GetTrajectoryDuration((int)profile[i][2]);
+				pointArray[i].zeroPos = false;
+				if (i == 0)
+					pointArray[i].zeroPos = true; /* set this to true on the first point */
+
+				pointArray[i].isLastPoint = false;
+				if ((i + 1) == profile.length)
+					pointArray[i].isLastPoint = true; /* set this to true on the last point  */
+
+				motionProfileMotors[i].pushMotionProfileTrajectory(pointArray[i]);
+			}
+		}
+	}
+	
+	/**
+	 * Find enum value if supported.
+	 * @param durationMs
+	 * @return enum equivalent of durationMs
+	 */
+	private TrajectoryDuration GetTrajectoryDuration(int durationMs)
+	{	 
+		/* create return value */
+		TrajectoryDuration retval = TrajectoryDuration.Trajectory_Duration_0ms;
+		/* convert duration to supported type */
+		retval = retval.valueOf(durationMs);
+		/* check that it is valid */
+		if (retval.value != durationMs) {
+			DriverStation.reportError("Trajectory Duration not supported - use configMotionProfileTrajectoryPeriod instead", false);		
+		}
+		/* pass to caller */
+		return retval;
 	}
 	
 	/*

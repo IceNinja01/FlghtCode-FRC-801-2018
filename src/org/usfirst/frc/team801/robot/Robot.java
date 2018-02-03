@@ -7,11 +7,12 @@
 
 package org.usfirst.frc.team801.robot;
 
+import org.usfirst.frc.team801.robot.Utilities.MotionProfile;
 import org.usfirst.frc.team801.robot.commands.ExampleCommand;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
 
-import com.ctre.phoenix.motion.TrajectoryPoint;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
@@ -35,6 +36,7 @@ public class Robot extends IterativeRobot {
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
+	MotionProfile profile = new MotionProfile(new TalonSRX[] {RobotMap.backRightTurn}, 5.0, 68.0, 0.5);
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -45,13 +47,11 @@ public class Robot extends IterativeRobot {
 	{
     	prefs = Preferences.getInstance();
     	RobotMap.init();
-		oi = new OI();
 		chassis = new Chassis();
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
-		TrajectoryPoint point = new TrajectoryPoint();
-		RobotMap.backLeftDrive.pushMotionProfileTrajectory(point);
+		oi = new OI();
 	}
 
 
@@ -69,7 +69,8 @@ public class Robot extends IterativeRobot {
 	}
 
 	@Override
-	public void disabledPeriodic() {
+	public void disabledPeriodic()
+	{
 
 		Scheduler.getInstance().run();
 		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
@@ -113,7 +114,9 @@ public class Robot extends IterativeRobot {
 	}
 
 	@Override
-	public void teleopInit() {
+	public void teleopInit()
+	{
+		profile.start();
 		// This makes sure that the autonomous stops running when
 		// teleop starts running. If you want the autonomous to
 		// continue until interrupted by another command, remove
