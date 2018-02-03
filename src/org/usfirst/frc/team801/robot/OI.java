@@ -8,6 +8,9 @@
 
 package org.usfirst.frc.team801.robot;
 
+import org.usfirst.frc.team801.robot.commands.LiftMotorExtend;
+import org.usfirst.frc.team801.robot.commands.LiftMotorShrink;
+
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
@@ -20,7 +23,9 @@ public class OI {
 	
     public XboxController driver = new XboxController(0);
     
-    public Button lifter = new JoystickButton(driver, 6);
+    public Button extend = new JoystickButton(driver, 6);
+    public Button shrink = new JoystickButton(driver, 5);
+
 
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
@@ -49,4 +54,9 @@ public class OI {
 	// Start the command when the button is released and let it run the command
 	// until it is finished as determined by it's isFinished method.
 	// button.whenReleased(new ExampleCommand());
+    
+    public OI() {
+    	extend.whileHeld(new LiftMotorExtend());
+    	shrink.whileHeld(new LiftMotorShrink());
+    }
 }

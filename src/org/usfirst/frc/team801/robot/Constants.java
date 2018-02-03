@@ -53,5 +53,9 @@ public class Constants {
 	public static double ultrakI = 0.0;
 
 	public static double ultrakD = 0.0;
+
+	public static double liftMotorBottomLimit = 0.0;
+
+	public static double liftMotorTopLimit = 4096*2;
 	
 }
