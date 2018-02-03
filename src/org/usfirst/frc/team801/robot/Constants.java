@@ -50,6 +50,6 @@ public class Constants {
 
 	public static double ultrakP = 0.02;
 	public static double ultrakI = 0.0000001;
-	public static double ultrakD = 1.0;
+	public static double ultrakD = 1.4;
 	
 }
