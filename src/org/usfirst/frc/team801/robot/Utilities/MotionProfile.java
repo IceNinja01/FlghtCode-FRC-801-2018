@@ -2,6 +2,7 @@ package org.usfirst.frc.team801.robot.Utilities;
 
 import org.usfirst.frc.team801.robot.Constants;
 
+import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -10,7 +11,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 
 public class MotionProfile {
-	
+	private MotionProfileStatus _status = new MotionProfileStatus();
+
 	private TalonSRX[] motionProfileMotors;
 	
 	class PeriodicRunnable implements java.lang.Runnable {
@@ -69,10 +71,21 @@ public class MotionProfile {
 	private void startFilling() {
 		
 		TrajectoryPoint[] pointArray = new TrajectoryPoint[motionProfileMotors.length];
-		
+		System.out.print("Array Lenght");
+		System.out.println(profile.length);
 		for(int i = 0; i < motionProfileMotors.length; i++)
 		{
 			pointArray[i] = new TrajectoryPoint();
+			/* did we get an underrun condition since last time we checked ? */
+			if (_status.hasUnderrun) {
+				/* better log it so we know about it */
+				Instrumentation.OnUnderrun();
+				/*
+				 * clear the error. This flag does not auto clear, this way 
+				 * we never miss logging it.
+				 */
+				motionProfileMotors[i].clearMotionProfileHasUnderrun(0);
+			}
 			motionProfileMotors[i].clearMotionProfileTrajectories();
 			motionProfileMotors[i].configMotionProfileTrajectoryPeriod(Constants.kBaseTrajPeriodMs, Constants.kTimeoutMs);
 			/* This is fast since it's just into our TOP buffer */

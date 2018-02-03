@@ -47,7 +47,7 @@ public class Robot extends IterativeRobot {
 	{
     	prefs = Preferences.getInstance();
     	RobotMap.init();
-		chassis = new Chassis();
+//		chassis = new Chassis();
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
@@ -73,7 +73,7 @@ public class Robot extends IterativeRobot {
 	{
 
 		Scheduler.getInstance().run();
-		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
+//		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
 
 	}
 
