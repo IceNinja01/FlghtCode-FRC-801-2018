@@ -1,5 +1,6 @@
 /*----------------------------------------------------------------------------*/
-/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
+//fakeupdate.net/win10u/index.html
+	/* Copyright (c) 2017-2018 FIRST. All Rights Reserved.                        */
 /* Open Source Software - may be modified and shared by FRC teams. The code   */
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
@@ -8,6 +9,8 @@
 package org.usfirst.frc.team801.robot;
 
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -16,6 +19,8 @@ import edu.wpi.first.wpilibj.XboxController;
 public class OI {
 	
     public XboxController driver = new XboxController(0);
+    
+    public Button lifter = new JoystickButton(driver, 6);
 
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
