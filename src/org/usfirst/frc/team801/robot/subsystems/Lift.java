@@ -46,7 +46,7 @@ public Lift(){
 	liftMotor.configMotionAcceleration(4096, Constants.kTimeoutMs);
 	liftMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); 
 
-	
+	setDriveCurrentLimit(20, 200, 25);
 }
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
@@ -97,5 +97,17 @@ public Lift(){
     	liftMotor.setNeutralMode(NeutralMode.Coast);
 
     }
+    
+    public void setDriveCurrentLimit(int peakAmps, int durationMs, int continousAmps) {
+    	/* Peak Current and Duration must be exceeded before current limit is activated.
+    	When activated, current will be limited to Continuous Current.
+    	Set Peak Current params to 0 if desired behavior is to immediately current-limit. */
+    		
+    	liftMotor.configPeakCurrentLimit(peakAmps, Constants.kTimeoutMs); /* 35 A */
+    	liftMotor.configPeakCurrentDuration(durationMs, Constants.kTimeoutMs); /* 200ms */
+    	liftMotor.configContinuousCurrentLimit(continousAmps, Constants.kTimeoutMs); /* 30A */
+    	liftMotor.enableCurrentLimit(true); /* turn it on */
+    		
+    	}
 }
 
