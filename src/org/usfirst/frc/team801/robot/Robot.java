@@ -16,7 +16,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team801.robot.commands.ExampleCommand;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
-import org.usfirst.frc.team801.robot.subsystems.Lift;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -28,26 +27,27 @@ import org.usfirst.frc.team801.robot.subsystems.Lift;
 public class Robot extends IterativeRobot {
 	public static final ExampleSubsystem kExampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
-	public static Object prefs;
+	public static Preferences prefs;
 	public static Chassis chassis;
-	public static Lift lift;
+
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
-
 
 	/**
 	 * This function is run when the robot is first started up and should be
 	 * used for any initialization code.
 	 */
 	@Override
-	public void robotInit() {
+	public void robotInit()
+	{
     	prefs = Preferences.getInstance();
     	RobotMap.init();
-//		chassis = new Chassis();
-		lift = new Lift();
+		chassis = new Chassis();
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
+		SmartDashboard.putData(Scheduler.getInstance()); //Displaying the Scheduler status
+
 		oi = new OI();
 	}
 
@@ -66,7 +66,7 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() {
 
 		Scheduler.getInstance().run();
-//		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
+		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
 
 	}
 
