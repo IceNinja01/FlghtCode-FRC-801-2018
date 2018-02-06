@@ -5,6 +5,8 @@ import org.usfirst.frc.team801.robot.Constants;
 import com.ctre.phoenix.motion.MotionProfileStatus;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -31,7 +33,30 @@ public class MotionProfile {
 	public MotionProfile(TalonSRX[] motors, double distance, double maxVel, double accel)
 	{
 		for(int i = 0; i < motors.length; i++)
-		{
+		{	
+			/* set the peak and nominal outputs */
+			motors[i].configNominalOutputForward(0, Constants.kTimeoutMs);
+			motors[i].configNominalOutputReverse(0, Constants.kTimeoutMs);
+			motors[i].configPeakOutputForward(11, Constants.kTimeoutMs);
+			motors[i].configPeakOutputReverse(-11, Constants.kTimeoutMs);
+
+			/* set closed loop gains in slot0 - see documentation */
+			motors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
+			motors[i].setSensorPhase(false); /* keep sensor and motor in phase */
+			motors[i].configNeutralDeadband(Constants.kNeutralDeadband, Constants.kTimeoutMs);
+	
+			motors[i].config_kF(0, 0.076, Constants.kTimeoutMs);
+			motors[i].config_kP(0, 0.020, Constants.kTimeoutMs);
+			motors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
+			motors[i].config_kD(0, 20.0, Constants.kTimeoutMs);
+	
+			/* Our profile uses 10ms timing */
+			motors[i].configMotionProfileTrajectoryPeriod(10, Constants.kTimeoutMs); 
+			/*
+			 * status 10 provides the trajectory target for motion profile AND
+			 * motion magic
+			 */
+			motors[i].setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
 			motors[i].changeMotionControlFramePeriod(5);
 			_notifer.startPeriodic(0.005);
 		}
