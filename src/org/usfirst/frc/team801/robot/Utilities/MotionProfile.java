@@ -3,8 +3,10 @@ package org.usfirst.frc.team801.robot.Utilities;
 import org.usfirst.frc.team801.robot.Constants;
 
 import com.ctre.phoenix.motion.MotionProfileStatus;
+import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -29,11 +31,15 @@ public class MotionProfile {
 	private boolean started = false;
 	private Notifier _notifer = new Notifier(new PeriodicRunnable());
 	private double[][] profile;
+
+	private SetValueMotionProfile _setValue;
 	
 	public MotionProfile(TalonSRX[] motors, double distance, double maxVel, double accel)
 	{
 		for(int i = 0; i < motors.length; i++)
 		{	
+			
+			
 			/* set the peak and nominal outputs */
 			motors[i].configNominalOutputForward(0, Constants.kTimeoutMs);
 			motors[i].configNominalOutputReverse(0, Constants.kTimeoutMs);
@@ -45,10 +51,10 @@ public class MotionProfile {
 			motors[i].setSensorPhase(false); /* keep sensor and motor in phase */
 			motors[i].configNeutralDeadband(Constants.kNeutralDeadband, Constants.kTimeoutMs);
 	
-			motors[i].config_kF(0, 0.076, Constants.kTimeoutMs);
-			motors[i].config_kP(0, 0.020, Constants.kTimeoutMs);
+			motors[i].config_kF(0, 0.2, Constants.kTimeoutMs);
+			motors[i].config_kP(0, 0.2, Constants.kTimeoutMs);
 			motors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
-			motors[i].config_kD(0, 20.0, Constants.kTimeoutMs);
+			motors[i].config_kD(0, 0.0, Constants.kTimeoutMs);
 	
 			/* Our profile uses 10ms timing */
 			motors[i].configMotionProfileTrajectoryPeriod(10, Constants.kTimeoutMs); 
@@ -131,8 +137,22 @@ public class MotionProfile {
 				pointArray[i].isLastPoint = false;
 				if ((i + 1) == profile.length)
 					pointArray[i].isLastPoint = true; /* set this to true on the last point  */
-
+				
 				motionProfileMotors[i].pushMotionProfileTrajectory(pointArray[i]);
+				
+				if(_status.btmBufferCnt == 0) { //buffer is empty do nothing
+					_setValue = SetValueMotionProfile.Disable;
+					motionProfileMotors[i].set(ControlMode.MotionProfile, _setValue.value);
+				}
+				if(_status.btmBufferCnt == 1) { //buffer has something goahead and go
+					_setValue = SetValueMotionProfile.Enable;
+					motionProfileMotors[i].set(ControlMode.MotionProfile, _setValue.value);
+				}
+				
+				if(_status.isLast) {
+					_setValue = SetValueMotionProfile.Hold;
+					motionProfileMotors[i].set(ControlMode.MotionProfile, _setValue.value);
+				}
 			}
 		}
 	}
