@@ -56,6 +56,6 @@ public class Constants {
 
 	public static double liftMotorBottomLimit = 0.0;
 
-	public static double liftMotorTopLimit = 4096*2;
+	public static double liftMotorTopLimit = 4096*10;
 	
 }

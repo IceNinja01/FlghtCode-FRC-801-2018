@@ -18,16 +18,8 @@ public class LiftMotorShrink extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	System.out.print("Shrink:   ");
-    	Robot.lift.setBottomLimit();
-//    	Robot.lift.getCurrentPosition() ;
-    	if(Robot.lift.getCurrentPosition() > 500) {
-    		Robot.lift.setZeroPos();
-//    		Robot.lift.setBottomLimit();
-
-    	}
-    	Robot.lift.setInvert(true);
-    	
-    	
+    	Robot.lift.getCurrentPosition();
+    	Robot.lift.coastMotor();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -49,5 +41,7 @@ public class LiftMotorShrink extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	Robot.lift.stopMotor();
+
     }
 }

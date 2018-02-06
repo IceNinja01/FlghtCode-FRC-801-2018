@@ -6,6 +6,7 @@ import org.usfirst.frc.team801.robot.commands.LiftMotorInt;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
 import SwerveClass.Team801TalonSRX;
@@ -32,17 +33,17 @@ public Lift(){
 	liftMotor.setSensorPhase(false);
 	liftMotor.configNominalOutputForward(0, Constants.kTimeoutMs);
 	liftMotor.configNominalOutputReverse(0, Constants.kTimeoutMs);
-	liftMotor.configPeakOutputForward(2, Constants.kTimeoutMs);
-	liftMotor.configPeakOutputReverse(-2, Constants.kTimeoutMs);
+	liftMotor.configPeakOutputForward(11, Constants.kTimeoutMs);
+	liftMotor.configPeakOutputReverse(-11, Constants.kTimeoutMs);
 
 	liftMotor.selectProfileSlot(0, 0);
-	liftMotor.config_kF(0, 0.1, Constants.kTimeoutMs);
-	liftMotor.config_kP(0, 0.1, Constants.kTimeoutMs);
+	liftMotor.config_kF(0, 0.2, Constants.kTimeoutMs);
+	liftMotor.config_kP(0, 0.5, Constants.kTimeoutMs);
 	liftMotor.config_kI(0, 0, Constants.kTimeoutMs);
-	liftMotor.config_kD(0, 0, Constants.kTimeoutMs);
+	liftMotor.config_kD(0, 0.2, Constants.kTimeoutMs);
 	/* set acceleration and vcruise velocity - see documentation */
-	liftMotor.configMotionCruiseVelocity(600, Constants.kTimeoutMs);
-	liftMotor.configMotionAcceleration(600, Constants.kTimeoutMs);
+	liftMotor.configMotionCruiseVelocity(4096, Constants.kTimeoutMs);
+	liftMotor.configMotionAcceleration(4096, Constants.kTimeoutMs);
 	liftMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); 
 
 	
@@ -58,28 +59,17 @@ public Lift(){
     
     public void shrink() {
 //    	setPosition = getCurrentPosition() - Constants.liftMotorTopLimit;
-    	liftMotor.set(ControlMode.MotionMagic, setPosition);
-    	
+    	liftMotor.set(ControlMode.MotionMagic, Constants.liftMotorBottomLimit);
+    	 getCurrentPosition();
     	//compress to lift
     }
     
     public void extend() {
-    	liftMotor.set(ControlMode.MotionMagic, setPosition);
+    	liftMotor.set(ControlMode.MotionMagic, Constants.liftMotorTopLimit);
+    	getCurrentPosition();
     	//extend to grab rung
     }
-    
-    public void setTopLimit() {
-    	setPosition = (Constants.liftMotorTopLimit - liftMotor.getSelectedSensorPosition(0));
-    	System.out.print("setPos:");
-    	System.out.print(setPosition);
-    }
-    
-    public void setBottomLimit() {
-    	setPosition = Math.abs((Constants.liftMotorBottomLimit - liftMotor.getSelectedSensorPosition(0)));
-    	System.out.print("setPos:");
-    	System.out.print(setPosition);
-    }
-    
+       
     public void setZeroPos() {
     	
     	/* zero the sensor */
@@ -92,10 +82,20 @@ public Lift(){
     }
     
     public double getCurrentPosition() {
+    	System.out.print(liftMotor.getSelectedSensorPosition(0));
     	System.out.print("\terr:");
     	System.out.println(liftMotor.getClosedLoopError(0));
     	return liftMotor.getClosedLoopError(0);
     	
+    }
+    
+    public void stopMotor() {
+    	liftMotor.setNeutralMode(NeutralMode.Brake);
+    }
+    
+    public void coastMotor() {
+    	liftMotor.setNeutralMode(NeutralMode.Coast);
+
     }
 }
 

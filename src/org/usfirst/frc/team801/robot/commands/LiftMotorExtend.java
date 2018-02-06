@@ -17,16 +17,8 @@ public class LiftMotorExtend extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	System.out.print("Extend:   ");
-    	Robot.lift.setTopLimit();
-//    	Robot.lift.getCurrentPosition() ;
-    	if(Robot.lift.getCurrentPosition() > 500.0) {
-    		Robot.lift.setZeroPos();
-//    		Robot.lift.setTopLimit();
-    	}
-    	Robot.lift.setInvert(false);
-    	
-    	
-
+    	Robot.lift.getCurrentPosition() ;
+    	Robot.lift.coastMotor();
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -50,5 +42,6 @@ public class LiftMotorExtend extends Command {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	Robot.lift.stopMotor();
     }
 }
