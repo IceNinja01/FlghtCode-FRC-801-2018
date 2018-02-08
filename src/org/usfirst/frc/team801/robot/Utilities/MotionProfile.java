@@ -122,6 +122,8 @@ public class MotionProfile {
 					started = false;
 				}
 			}
+			/* Get the motion profile status every loop */
+			motionProfileMotors[i].getMotionProfileStatus(status[i]);
 		}
 	}
 	
@@ -198,7 +200,8 @@ public class MotionProfile {
 		/* convert duration to supported type */
 		retval = retval.valueOf(durationMs);
 		/* check that it is valid */
-		if (retval.value != durationMs) {
+		if (retval.value != durationMs)
+		{
 			DriverStation.reportError("Trajectory Duration not supported - use configMotionProfileTrajectoryPeriod instead", false);		
 		}
 		/* pass to caller */
