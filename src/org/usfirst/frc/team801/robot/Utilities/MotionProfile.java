@@ -3,8 +3,10 @@ package org.usfirst.frc.team801.robot.Utilities;
 import org.usfirst.frc.team801.robot.Constants;
 
 import com.ctre.phoenix.motion.MotionProfileStatus;
+import com.ctre.phoenix.motion.SetValueMotionProfile;
 import com.ctre.phoenix.motion.TrajectoryPoint;
 import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
@@ -13,8 +15,8 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 
 public class MotionProfile {
-	private MotionProfileStatus _status = new MotionProfileStatus();
-
+	private static final int kMinPointsInTalon = 5;
+	
 	private TalonSRX[] motionProfileMotors;
 	
 	class PeriodicRunnable implements java.lang.Runnable {
@@ -27,19 +29,23 @@ public class MotionProfile {
 	    }
 	}
 	private boolean started = false;
-	private Notifier _notifer = new Notifier(new PeriodicRunnable());
+	private MotionProfileStatus[] status;
+	private SetValueMotionProfile[] setValue;
+	private Notifier notifer = new Notifier(new PeriodicRunnable());
 	private double[][] profile;
 	
 	public MotionProfile(TalonSRX[] motors, double distance, double maxVel, double accel)
 	{
+		status = new MotionProfileStatus[motors.length];
+		setValue = new SetValueMotionProfile[motors.length];
 		for(int i = 0; i < motors.length; i++)
-		{	
+		{
 			/* set the peak and nominal outputs */
 			motors[i].configNominalOutputForward(0, Constants.kTimeoutMs);
 			motors[i].configNominalOutputReverse(0, Constants.kTimeoutMs);
 			motors[i].configPeakOutputForward(11, Constants.kTimeoutMs);
 			motors[i].configPeakOutputReverse(-11, Constants.kTimeoutMs);
-
+			
 			/* set closed loop gains in slot0 - see documentation */
 			motors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 			motors[i].setSensorPhase(false); /* keep sensor and motor in phase */
@@ -49,7 +55,7 @@ public class MotionProfile {
 			motors[i].config_kP(0, 0.020, Constants.kTimeoutMs);
 			motors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
 			motors[i].config_kD(0, 20.0, Constants.kTimeoutMs);
-	
+			
 			/* Our profile uses 10ms timing */
 			motors[i].configMotionProfileTrajectoryPeriod(10, Constants.kTimeoutMs); 
 			/*
@@ -58,16 +64,18 @@ public class MotionProfile {
 			 */
 			motors[i].setStatusFramePeriod(StatusFrameEnhanced.Status_10_MotionMagic, 10, Constants.kTimeoutMs);
 			motors[i].changeMotionControlFramePeriod(5);
-			_notifer.startPeriodic(0.005);
+			motors[i].set(ControlMode.PercentOutput, 70);
+			
+			status[i] = new MotionProfileStatus();
+			setValue[i] = SetValueMotionProfile.Disable;
 		}
-		_notifer.startPeriodic(0.005);
+		notifer.startPeriodic(0.005);
 		motionProfileMotors = motors;
 		profile = OneDimensionMotion(distance, maxVel, accel);
 	}
 	
 	public void start()
 	{
-		started = true;
 		startFilling();
 	}
 	
@@ -93,16 +101,39 @@ public class MotionProfile {
 		}
 	}
 	
-	private void startFilling() {
-		
+	public void control()
+	{
+		for(int i = 0; i < motionProfileMotors.length; i++)
+		{
+			motionProfileMotors[i].getMotionProfileStatus(status[i]);
+			if(motionProfileMotors[i].getControlMode() == ControlMode.MotionProfile)
+			{
+				if(status[i].btmBufferCnt > kMinPointsInTalon)
+				{
+					setValue[i] = SetValueMotionProfile.Enable;
+					started = true;
+				}
+				if (status[i].activePointValid && status[i].isLast) {
+					/*
+					 * because we set the last point's isLast to true, we will
+					 * get here when the MP is done
+					 */
+					setValue[i] = SetValueMotionProfile.Hold;
+					started = false;
+				}
+			}
+		}
+	}
+	
+	private void startFilling()
+	{
 		TrajectoryPoint[] pointArray = new TrajectoryPoint[motionProfileMotors.length];
-		System.out.print("Array Lenght");
-		System.out.println(profile.length);
 		for(int i = 0; i < motionProfileMotors.length; i++)
 		{
 			pointArray[i] = new TrajectoryPoint();
 			/* did we get an underrun condition since last time we checked ? */
-			if (_status.hasUnderrun) {
+			if (status[i].hasUnderrun)
+			{
 				/* better log it so we know about it */
 				Instrumentation.OnUnderrun();
 				/*

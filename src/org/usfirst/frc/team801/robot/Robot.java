@@ -89,7 +89,8 @@ public class Robot extends IterativeRobot {
 	 * to the switch structure below with additional strings & commands.
 	 */
 	@Override
-	public void autonomousInit() {
+	public void autonomousInit()
+	{
 		m_autonomousCommand = m_chooser.getSelected();
 
 		/*
@@ -100,16 +101,18 @@ public class Robot extends IterativeRobot {
 		 */
 
 		// schedule the autonomous command (example)
-		if (m_autonomousCommand != null) {
+		if (m_autonomousCommand != null)
+		{
 			m_autonomousCommand.start();
 		}
 	}
-
+	
 	/**
 	 * This function is called periodically during autonomous.
 	 */
 	@Override
-	public void autonomousPeriodic() {
+	public void autonomousPeriodic()
+	{
 		Scheduler.getInstance().run();
 	}
 
