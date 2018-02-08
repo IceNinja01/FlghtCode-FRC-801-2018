@@ -33,21 +33,13 @@ public class MotionProfile {
 	private SetValueMotionProfile[] setValue;
 	private Notifier notifer = new Notifier(new PeriodicRunnable());
 	private double[][] profile;
-
-	private SetValueMotionProfile _setValue;
 	
 	public MotionProfile(TalonSRX[] motors, double distance, double maxVel, double accel)
 	{
 		status = new MotionProfileStatus[motors.length];
 		setValue = new SetValueMotionProfile[motors.length];
 		for(int i = 0; i < motors.length; i++)
-<<<<<<< HEAD
 		{
-=======
-		{	
-			
-			
->>>>>>> b747e9454988fddc2bfbc59769e7176c6ee457ba
 			/* set the peak and nominal outputs */
 			motors[i].configNominalOutputForward(0, Constants.kTimeoutMs);
 			motors[i].configNominalOutputReverse(0, Constants.kTimeoutMs);
@@ -62,13 +54,8 @@ public class MotionProfile {
 			motors[i].config_kF(0, 0.2, Constants.kTimeoutMs);
 			motors[i].config_kP(0, 0.2, Constants.kTimeoutMs);
 			motors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
-<<<<<<< HEAD
-			motors[i].config_kD(0, 20.0, Constants.kTimeoutMs);
 			
-=======
-			motors[i].config_kD(0, 0.0, Constants.kTimeoutMs);
-	
->>>>>>> b747e9454988fddc2bfbc59769e7176c6ee457ba
+			motors[i].config_kD(0, 20.0, Constants.kTimeoutMs);
 			/* Our profile uses 10ms timing */
 			motors[i].configMotionProfileTrajectoryPeriod(10, Constants.kTimeoutMs); 
 			/*
@@ -158,7 +145,8 @@ public class MotionProfile {
 			motionProfileMotors[i].clearMotionProfileTrajectories();
 			motionProfileMotors[i].configMotionProfileTrajectoryPeriod(Constants.kBaseTrajPeriodMs, Constants.kTimeoutMs);
 			/* This is fast since it's just into our TOP buffer */
-			for (int j = 0; j < profile.length; ++j) {
+			for (int j = 0; j < profile.length; ++j)
+			{
 				double positionRot = profile[j][0];
 				double velocityRPM = profile[j][1];
 				/* for each point, fill our structure and pass it to API */
@@ -178,18 +166,21 @@ public class MotionProfile {
 				
 				motionProfileMotors[i].pushMotionProfileTrajectory(pointArray[i]);
 				
-				if(_status.btmBufferCnt == 0) { //buffer is empty do nothing
-					_setValue = SetValueMotionProfile.Disable;
-					motionProfileMotors[i].set(ControlMode.MotionProfile, _setValue.value);
+				if(status[i].btmBufferCnt == 0)
+				{ //buffer is empty do nothing
+					setValue[i] = SetValueMotionProfile.Disable;
+					motionProfileMotors[i].set(ControlMode.MotionProfile, setValue[i].value);
 				}
-				if(_status.btmBufferCnt == 1) { //buffer has something goahead and go
-					_setValue = SetValueMotionProfile.Enable;
-					motionProfileMotors[i].set(ControlMode.MotionProfile, _setValue.value);
+				if(status[i].btmBufferCnt == 1)
+				{ //buffer has something goahead and go
+					setValue[i] = SetValueMotionProfile.Enable;
+					motionProfileMotors[i].set(ControlMode.MotionProfile, setValue[i].value);
 				}
 				
-				if(_status.isLast) {
-					_setValue = SetValueMotionProfile.Hold;
-					motionProfileMotors[i].set(ControlMode.MotionProfile, _setValue.value);
+				if(status[i].isLast)
+				{
+					setValue[i] = SetValueMotionProfile.Hold;
+					motionProfileMotors[i].set(ControlMode.MotionProfile, setValue[i].value);
 				}
 			}
 		}

@@ -71,10 +71,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void disabledPeriodic()
 	{
-
 		Scheduler.getInstance().run();
 //		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
-
 	}
 
 	/**
@@ -125,7 +123,8 @@ public class Robot extends IterativeRobot {
 		// continue until interrupted by another command, remove
 		// this line or comment it out.
 //		SmartDashboard.putNumber("Gyro Angle", Robot.chassis.getGyroAngle());
-		if (m_autonomousCommand != null) {
+		if (m_autonomousCommand != null)
+		{
 			m_autonomousCommand.cancel();
 		}
 	}
