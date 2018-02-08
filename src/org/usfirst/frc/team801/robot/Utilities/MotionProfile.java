@@ -33,13 +33,21 @@ public class MotionProfile {
 	private SetValueMotionProfile[] setValue;
 	private Notifier notifer = new Notifier(new PeriodicRunnable());
 	private double[][] profile;
+
+	private SetValueMotionProfile _setValue;
 	
 	public MotionProfile(TalonSRX[] motors, double distance, double maxVel, double accel)
 	{
 		status = new MotionProfileStatus[motors.length];
 		setValue = new SetValueMotionProfile[motors.length];
 		for(int i = 0; i < motors.length; i++)
+<<<<<<< HEAD
 		{
+=======
+		{	
+			
+			
+>>>>>>> b747e9454988fddc2bfbc59769e7176c6ee457ba
 			/* set the peak and nominal outputs */
 			motors[i].configNominalOutputForward(0, Constants.kTimeoutMs);
 			motors[i].configNominalOutputReverse(0, Constants.kTimeoutMs);
@@ -51,11 +59,16 @@ public class MotionProfile {
 			motors[i].setSensorPhase(false); /* keep sensor and motor in phase */
 			motors[i].configNeutralDeadband(Constants.kNeutralDeadband, Constants.kTimeoutMs);
 	
-			motors[i].config_kF(0, 0.076, Constants.kTimeoutMs);
-			motors[i].config_kP(0, 0.020, Constants.kTimeoutMs);
+			motors[i].config_kF(0, 0.2, Constants.kTimeoutMs);
+			motors[i].config_kP(0, 0.2, Constants.kTimeoutMs);
 			motors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
+<<<<<<< HEAD
 			motors[i].config_kD(0, 20.0, Constants.kTimeoutMs);
 			
+=======
+			motors[i].config_kD(0, 0.0, Constants.kTimeoutMs);
+	
+>>>>>>> b747e9454988fddc2bfbc59769e7176c6ee457ba
 			/* Our profile uses 10ms timing */
 			motors[i].configMotionProfileTrajectoryPeriod(10, Constants.kTimeoutMs); 
 			/*
@@ -162,8 +175,22 @@ public class MotionProfile {
 				pointArray[i].isLastPoint = false;
 				if ((i + 1) == profile.length)
 					pointArray[i].isLastPoint = true; /* set this to true on the last point  */
-
+				
 				motionProfileMotors[i].pushMotionProfileTrajectory(pointArray[i]);
+				
+				if(_status.btmBufferCnt == 0) { //buffer is empty do nothing
+					_setValue = SetValueMotionProfile.Disable;
+					motionProfileMotors[i].set(ControlMode.MotionProfile, _setValue.value);
+				}
+				if(_status.btmBufferCnt == 1) { //buffer has something goahead and go
+					_setValue = SetValueMotionProfile.Enable;
+					motionProfileMotors[i].set(ControlMode.MotionProfile, _setValue.value);
+				}
+				
+				if(_status.isLast) {
+					_setValue = SetValueMotionProfile.Hold;
+					motionProfileMotors[i].set(ControlMode.MotionProfile, _setValue.value);
+				}
 			}
 		}
 	}
