@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 
 public class MotionProfile {
-	private static final int kMinPointsInTalon = 2;
+	private static final int kMinPointsInTalon = 1;
 	
 	private TalonSRX[] motionProfileMotors;
 	
@@ -130,56 +130,57 @@ public class MotionProfile {
 	private void startFilling()
 	{
 		TrajectoryPoint point = new TrajectoryPoint();
-		for(int k = 0; k < profile.length; k++)
+		for(int p = 0; p < profile.length; p++)
 		{
 			// This is fast since it's just into our TOP buffer
-			for (int p = 0; p < motionProfileMotors.length; ++p)
+			for (int m = 0; m < motionProfileMotors.length; ++m)
 			{
 				// did we get an underrun condition since last time we checked ?
-				if (status[p].hasUnderrun)
+				if (status[m].hasUnderrun)
 				{
 					Instrumentation.OnUnderrun();
-					motionProfileMotors[p].clearMotionProfileHasUnderrun(0);
+					motionProfileMotors[m].clearMotionProfileHasUnderrun(0);
 				}
-				motionProfileMotors[p].clearMotionProfileTrajectories();
-				motionProfileMotors[p].configMotionProfileTrajectoryPeriod(Constants.kBaseTrajPeriodMs, Constants.kTimeoutMs);
-				double positionRot = profile[k][0];
-				double velocityRPM = profile[k][1];
+				motionProfileMotors[m].clearMotionProfileTrajectories();
+				motionProfileMotors[m].configMotionProfileTrajectoryPeriod(Constants.kBaseTrajPeriodMs, Constants.kTimeoutMs);
+				double positionRot = profile[p][0];
+				double velocityRPM = profile[p][1];
 				// for each point, fill our structure and pass it to API
 				point.position = positionRot * Constants.kSensorUnitsPerRotation; //Convert Revolutions to Units
 				point.velocity = velocityRPM * Constants.kSensorUnitsPerRotation / 600.0; //Convert RPM to Units/100ms
 				point.headingDeg = 0; // future feature - not used in this example
 				point.profileSlotSelect0 = 0; // which set of gains would you like to use [0,3]?
 				point.profileSlotSelect1 = 0; // future feature  - not used in this example - cascaded PID [0,1], leave zero
-				point.timeDur = GetTrajectoryDuration((int)profile[k][2]);
+				point.timeDur = GetTrajectoryDuration((int)profile[p][2]);
 				point.zeroPos = false;
-				if (k == 0)
+				if (p == 0)
 					point.zeroPos = true; // set this to true on the first point
-
+				
 				point.isLastPoint = false;
-				if ((k + 1) == profile.length)
+				if ((p + 1) == profile.length)
 					point.isLastPoint = true; // set this to true on the last point
 				
-				motionProfileMotors[p].pushMotionProfileTrajectory(point);
+				motionProfileMotors[m].pushMotionProfileTrajectory(point);
 				
-				if(status[p].btmBufferCnt == 0)
+				if(status[m].btmBufferCnt == 0)
 				{ //buffer is empty do nothing
-					setValue[p] = SetValueMotionProfile.Disable;
-					motionProfileMotors[p].set(ControlMode.MotionProfile, setValue[p].value);
-				}
-				if(status[p].btmBufferCnt == kMinPointsInTalon)
-				{ //buffer has something goahead and go
-					setValue[p] = SetValueMotionProfile.Enable;
-					motionProfileMotors[p].set(ControlMode.MotionProfile, setValue[p].value);
+					setValue[m] = SetValueMotionProfile.Disable;
+					motionProfileMotors[m].set(ControlMode.MotionProfile, setValue[m].value);
 				}
 				
-				if(status[p].isLast)
+				if(status[m].btmBufferCnt == kMinPointsInTalon)
+				{ //buffer has something goahead and go
+					setValue[m] = SetValueMotionProfile.Enable;
+					motionProfileMotors[m].set(ControlMode.MotionProfile, setValue[m].value);
+				}
+				
+				if(status[m].isLast)
 				{
-					setValue[p] = SetValueMotionProfile.Hold;
-					motionProfileMotors[p].set(ControlMode.MotionProfile, setValue[p].value);
+					setValue[m] = SetValueMotionProfile.Hold;
+					motionProfileMotors[m].set(ControlMode.MotionProfile, setValue[m].value);
 				}
 				// Get the motion profile status every loop
-				motionProfileMotors[p].getMotionProfileStatus(status[p]);
+				motionProfileMotors[m].getMotionProfileStatus(status[m]);
 			}
 		}
 		/*
