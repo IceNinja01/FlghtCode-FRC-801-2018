@@ -32,8 +32,6 @@ public class ExtendHigh extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	System.out.print("  ");
-
     	Robot.elevator.getCurrentPosition();
     }
 

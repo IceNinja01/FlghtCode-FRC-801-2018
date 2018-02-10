@@ -43,12 +43,12 @@ public class Robot extends IterativeRobot {
 	public void robotInit() {
     	prefs = Preferences.getInstance();
     	RobotMap.init();
-		oi = new OI();
 		chassis = new Chassis();
 		elevator = new Elevator();
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
+		oi = new OI();
 	}
 
 

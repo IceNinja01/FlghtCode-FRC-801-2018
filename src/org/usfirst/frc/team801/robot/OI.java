@@ -30,9 +30,9 @@ public class OI {
 	// number it is.
 	// Joystick stick = new Joystick(port);
 	// Button button = new JoystickButton(stick, buttonNumber);
-    public Button extendH = new JoystickButton(manip,1);
-    public Button extendM = new JoystickButton(manip,2);
-    public Button shrink = new JoystickButton(manip,3);
+    public Button extendH = new JoystickButton(driver,1);
+    public Button extendM = new JoystickButton(driver,2);
+    public Button shrink = new JoystickButton(driver,3);
 	// There are a few additional built in buttons you can use. Additionally,
 	// by subclassing Button you can create custom triggers and bind those to
 	// commands the same as any other Button.
@@ -54,8 +54,8 @@ public class OI {
 	// button.whenReleased(new ExampleCommand());
     
     public OI() {
-    	extendH.whenPressed(new ExtendHigh());
-    	extendM.whenPressed(new ExtendMid());
+    	
     	shrink.whenPressed(new Shrink());
+    	extendH.whenPressed(new ExtendHigh());
     }
 }
