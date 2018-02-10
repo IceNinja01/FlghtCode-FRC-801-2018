@@ -54,8 +54,10 @@ public class Constants {
 
 	public static double ultrakD = 0.0;
 	
-	public static double elevatorMotorBottomLimit = 0.0;
+	public static double elevatorMotorBottomPos = 0.0;
 
-	public static double elevatorMotorTopLimit = 55; //inches
+	public static double elevatorMotorTopPos = 55; //inches
+
+	public static double elevatorMotorMidPos = 25;
 	
 }

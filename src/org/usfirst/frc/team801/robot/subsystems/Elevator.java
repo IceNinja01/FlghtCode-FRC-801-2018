@@ -23,6 +23,8 @@ public class Elevator extends Subsystem {
 	private double maxPosition = 110;
 	private double rotPerinch = 1/2;
 	private double min = 0;
+	private double vel = 1;
+	private double acc = 1;
 	
 	
     public void initDefaultCommand() {
@@ -51,27 +53,27 @@ public class Elevator extends Subsystem {
     		elevaMotor.config_kI(0, 0, Constants.kTimeoutMs);
     		elevaMotor.config_kD(0, 0.2, Constants.kTimeoutMs);
 			/* set acceleration and vcruise velocity - see documentation */
-    		elevaMotor.configMotionCruiseVelocity(4096, Constants.kTimeoutMs);
-    		elevaMotor.configMotionAcceleration(4096, Constants.kTimeoutMs);
+    		elevaMotor.configMotionCruiseVelocity((int) (4096*rotPerinch*vel/10) , Constants.kTimeoutMs);
+    		elevaMotor.configMotionAcceleration((int) (4096*rotPerinch*acc/10), Constants.kTimeoutMs);
     		elevaMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
     	}
     }
     
     public void shrink() {
 //    	setPosition = getCurrentPosition() - Constants.liftMotorTopLimit;
-    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevatorMotorBottomLimit);
+    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevatorMotorBottomPos*rotPerinch*4096);
     	 getCurrentPosition();
     	//compress elevator
     }
     
     public void extendMid() {
-    	
+    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevatorMotorMidPos*rotPerinch*4096);
     	getCurrentPosition();
     	//extend to Lower Switch
     }
     
     public void extendHigh() {
-    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevatorMotorTopLimit);
+    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevatorMotorTopPos*rotPerinch*4096);
     	getCurrentPosition();
     	//extend to High Switch
     }
