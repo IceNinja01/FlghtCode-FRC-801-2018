@@ -2,7 +2,9 @@ package org.usfirst.frc.team801.robot.elevator.commands;
 
 import org.usfirst.frc.team801.robot.Robot;
 
-public class Shrink {
+import edu.wpi.first.wpilibj.command.Command;
+
+public class Shrink extends Command {
 
 	
 	public Shrink() {

@@ -2,7 +2,9 @@ package org.usfirst.frc.team801.robot.elevator.commands;
 
 import org.usfirst.frc.team801.robot.Robot;
 
-public class ExtendHigh {
+import edu.wpi.first.wpilibj.command.Command;
+
+public class ExtendHigh extends Command {
 	
 	
 	public ExtendHigh() {
