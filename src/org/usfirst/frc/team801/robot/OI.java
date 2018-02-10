@@ -7,7 +7,13 @@
 
 package org.usfirst.frc.team801.robot;
 
+import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
+import org.usfirst.frc.team801.robot.commands.elevator.ExtendMid;
+import org.usfirst.frc.team801.robot.elevator.commands.Shrink;
+
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.buttons.Button;
+import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * This class is the glue that binds the controls on the physical operator
@@ -16,7 +22,7 @@ import edu.wpi.first.wpilibj.XboxController;
 public class OI {
 	
     public XboxController driver = new XboxController(0);
-
+    public XboxController manip = new XboxController(1);
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.
@@ -24,7 +30,9 @@ public class OI {
 	// number it is.
 	// Joystick stick = new Joystick(port);
 	// Button button = new JoystickButton(stick, buttonNumber);
-
+    public Button extendH = new JoystickButton(manip,1);
+    public Button extendM = new JoystickButton(manip,2);
+    public Button shrink = new JoystickButton(manip,3);
 	// There are a few additional built in buttons you can use. Additionally,
 	// by subclassing Button you can create custom triggers and bind those to
 	// commands the same as any other Button.
@@ -44,4 +52,10 @@ public class OI {
 	// Start the command when the button is released and let it run the command
 	// until it is finished as determined by it's isFinished method.
 	// button.whenReleased(new ExampleCommand());
+    
+    public OI() {
+    	extendH.whenPressed(new ExtendHigh());
+    	extendM.whenPressed(new ExtendMid());
+    	shrink.whenPressed(new Shrink());
+    }
 }
