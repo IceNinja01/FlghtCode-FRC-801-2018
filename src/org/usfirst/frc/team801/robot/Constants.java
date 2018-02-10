@@ -56,6 +56,6 @@ public class Constants {
 	
 	public static double elevatorMotorBottomLimit = 0.0;
 
-	public static double elevatorMotorTopLimit = 4096*10;
+	public static double elevatorMotorTopLimit = 55; //inches
 	
 }

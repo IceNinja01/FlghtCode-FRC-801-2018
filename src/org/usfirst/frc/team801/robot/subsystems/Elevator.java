@@ -18,9 +18,11 @@ public class Elevator extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 	Team801TalonSRX elevaMotor= RobotMap.elevator;
-	
-	double maxPosition = 12000;
-	double min= 0;
+	private int edgesPerRotation = 7;
+	private int filterWindowSize = 1;
+	private double maxPosition = 110;
+	private double rotPerinch = 1/2;
+	private double min = 0;
 	
 	
     public void initDefaultCommand() {
@@ -32,6 +34,11 @@ public class Elevator extends Subsystem {
 	public Elevator() {
     	for(int i=0;i<4;i++){
     		elevaMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, Constants.kTimeoutMs);
+    		elevaMotor.configSetParameter(430, edgesPerRotation, 0x00, 0x00, 0);
+    		elevaMotor.configSetParameter(431, filterWindowSize, 0x00, 0x00, 0);
+    		//Soft limit
+    		elevaMotor.configReverseSoftLimitThreshold((int) (-57*4096*rotPerinch), Constants.kTimeoutMs);
+    		elevaMotor.configForwardSoftLimitThreshold((int) (+57*4096*rotPerinch), Constants.kTimeoutMs);
 			/* set the peak and nominal outputs, 12V means full */
     		elevaMotor.configNominalOutputForward(0, Constants.kTimeoutMs);
     		elevaMotor.configNominalOutputReverse(0, Constants.kTimeoutMs);
