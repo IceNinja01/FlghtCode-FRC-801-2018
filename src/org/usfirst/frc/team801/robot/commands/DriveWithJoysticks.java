@@ -8,41 +8,48 @@ import edu.wpi.first.wpilibj.command.Command;
  *
  */
 @SuppressWarnings("unused")
-public class DriveWithJoysticks extends Command {
-	private double x,y,z;
-	
-    public DriveWithJoysticks() {
-    	requires(Robot.chassis);
-    }
+public class DriveWithJoysticks extends Command
+{
+	private double x, y, z;
 
-    // Called just before this Command runs the first time
-    @Override
-	protected void initialize() {
-    }
+	public DriveWithJoysticks()
+	{
+		requires(Robot.chassis);
+	}
 
-    // Called repeatedly when this Command is scheduled to run
-    @Override
-	protected void execute() {
-    			
-    	Robot.chassis.motorDrive(0.0);
-    }
+	// Called just before this Command runs the first time
+	@Override
+	protected void initialize()
+	{
+	}
 
-    // Make this return true when this Command no longer needs to run execute()
-    @Override
-	protected boolean isFinished() {
-        return false;
-    }
+	// Called repeatedly when this Command is scheduled to run
+	@Override
+	protected void execute()
+	{
 
-    // Called once after isFinished returns true
-    @Override
-	protected void end() {
-//    	Robot.chassis.stop();
-    }
+		Robot.chassis.motorDrive(0.0);
+	}
 
-    // Called when another command which requires one or more of the same
-    // subsystems is scheduled to run
-    @Override
-	protected void interrupted() {
-    	end();
-    }
+	// Make this return true when this Command no longer needs to run execute()
+	@Override
+	protected boolean isFinished()
+	{
+		return false;
+	}
+
+	// Called once after isFinished returns true
+	@Override
+	protected void end()
+	{
+		// Robot.chassis.stop();
+	}
+
+	// Called when another command which requires one or more of the same
+	// subsystems is scheduled to run
+	@Override
+	protected void interrupted()
+	{
+		end();
+	}
 }

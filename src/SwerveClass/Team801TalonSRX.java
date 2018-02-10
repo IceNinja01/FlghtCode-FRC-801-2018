@@ -7,7 +7,8 @@ import edu.wpi.first.wpilibj.PIDOutput;
 public class Team801TalonSRX extends TalonSRX implements PIDOutput
 {
 
-	public Team801TalonSRX(int deviceNumber) {
+	public Team801TalonSRX(int deviceNumber)
+	{
 		super(deviceNumber);
 	}
 
@@ -16,5 +17,5 @@ public class Team801TalonSRX extends TalonSRX implements PIDOutput
 	{
 		this.set(getControlMode(), output);
 	}
-	
+
 }
