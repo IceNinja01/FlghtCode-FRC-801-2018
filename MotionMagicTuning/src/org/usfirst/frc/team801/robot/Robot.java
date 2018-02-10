@@ -33,7 +33,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Robot extends IterativeRobot {
 
-	TalonSRX _talon = new TalonSRX(4);
+	TalonSRX _talon = new TalonSRX(0);
 	XboxController _joy = new XboxController(0);
 	StringBuilder _sb = new StringBuilder();
 	int _loops = 0;
@@ -47,11 +47,25 @@ public class Robot extends IterativeRobot {
 	private double maxPosition;
 	private double minPosition;
 	private boolean _lastButton2;
-	private int maxVel;
-	private int accel;
+	private double maxVel;
+	private double accel;
 
 	public void robotInit() {
 		prefs = Preferences.getInstance();
+		 /* set closed loop gains in slot0 */
+        kf = prefs.getDouble("Kf", 0.2);
+        kp = prefs.getDouble("Kp", 0.5);
+        ki = prefs.getDouble("Ki", 0.00);
+        kd = prefs.getDouble("Kd", 0.2);
+    	//Setup for Motion Magic
+    	maxVel = prefs.getInt("CrusieVelocity", 1); //RPSec input
+    	maxVel *= (7.5*4096)/125;; //convert to native units
+    	accel = prefs.getInt("Acceleration", 1); //RPSec input
+    	accel *= (7.5*4096)/125;; //convert to native units
+    	minPosition = prefs.getDouble("MinPosition", 0.00);
+    	maxPosition = prefs.getDouble("MaxPosition", 0.0); //Rotations 12.5in per wheel rotation; 7.5 is equal to 1 full rotation
+    	minPosition *= 7.5*4096/12.5;
+    	maxPosition *= 7.5*4096/12.5;	               
 		SmartDashboard.putData(Scheduler.getInstance()); //Displaying the Scheduler status
 		/* choose the sensor and sensor direction */
 		_talon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, Constants.kPIDLoopIdx,
@@ -80,37 +94,37 @@ public class Robot extends IterativeRobot {
 		
 	}
 	public void disabledPeriodic() {
-		commonLoop();
 
 	}
 	public void teleopInit() {
         /* set closed loop gains in slot0 */
-        kf = prefs.getDouble("Kf", 0.01);
-        kp = prefs.getDouble("Kp", 0.01);
+        kf = prefs.getDouble("Kf", 0.2);
+        kp = prefs.getDouble("Kp", 0.2);
         ki = prefs.getDouble("Ki", 0.00);
-        kd = prefs.getDouble("Kd", 0.01);
+        kd = prefs.getDouble("Kd", 0.2);
         _talon.config_kF(0, kf, 10);
         _talon.config_kP(0, kp, 10);
         _talon.config_kI(0, ki, 10);
         _talon.config_kD(0, kd, 10);
        	//Setup for Motion Magic
-    	maxVel = prefs.getInt("Crusie Velocity", 1); //RPSec input
-    	maxVel *= 4096; //convert to native units
-    	accel = prefs.getInt("Acceleration", 1); //RPSec input
-    	accel *= 4096; //convert to native units
-    	_talon.configMotionCruiseVelocity(maxVel, Constants.kTimeoutMs);
-    	_talon.configMotionAcceleration(accel, Constants.kTimeoutMs);
+    	maxVel = prefs.getDouble("Cruise Velocity", 1.0); //RPSec input
+    	maxVel *= (7.5*4096)/125; //convert to native units
+    	accel = prefs.getDouble("Acceleration", 1.0); //RPSec input
+    	accel *= (7.5*4096)/125; //convert to native units
+    	_talon.configMotionCruiseVelocity((int) maxVel, Constants.kTimeoutMs);
+    	_talon.configMotionAcceleration((int)accel, Constants.kTimeoutMs);
     	minPosition = prefs.getDouble("Min Position", 0.00);
-    	maxPosition = prefs.getDouble("Max Position", 10); //Rotations
-    	maxPosition *= 4096;	
+    	maxPosition = prefs.getDouble("Max Position", 0.0); //Rotations
+    	minPosition *= 7.5*4096/12.5;
+    	maxPosition *= 7.5*4096/12.5;
+    	_talon.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); 
+
 	}
 	/**
 	 * This function is called periodically during operator control
 	 */
 	public void teleopPeriodic() {
-		commonLoop();
-	}
-	void commonLoop() {
+	
 		/* get gamepad axis */
 		double leftYstick = _joy.getY(Hand.kLeft);
 		double motorOutput = _talon.getMotorOutputPercent();
@@ -133,29 +147,30 @@ public class Robot extends IterativeRobot {
 		_sb.append("u"); /* units */
 
 		/* on button1 press enter closed-loop mode on target position */
-		if (!_lastButton1 && button1) {
+		if (_lastButton1 && button1) {
 			/* Position mode - button just pressed */
-
+	    	_talon.configMotionCruiseVelocity((int) maxVel, Constants.kTimeoutMs);
+	    	_talon.configMotionAcceleration((int)accel, Constants.kTimeoutMs);
 			targetPositionRotations = maxPosition;
-			_talon.set(ControlMode.Position, targetPositionRotations);
+			_talon.set(ControlMode.MotionMagic, targetPositionRotations);
 
 		}
 		/* on button1 press enter closed-loop mode on target position */
-		if (!_lastButton2 && button2) {
+		if (_lastButton2 && button2) {
 			/* Position mode - button just pressed */
-
+	    	_talon.configMotionCruiseVelocity((int) maxVel, Constants.kTimeoutMs);
+	    	_talon.configMotionAcceleration((int)accel, Constants.kTimeoutMs);
 			/* 10 Rotations * 4096 u/rev in either direction */
 			targetPositionRotations = minPosition;
-			_talon.set(ControlMode.Position, targetPositionRotations);
+			_talon.set(ControlMode.MotionMagic, targetPositionRotations);
 
 		}
-		/* on button2 just straight drive */
-		else {
-			/* Percent voltage mode */
-			_talon.set(ControlMode.PercentOutput, leftYstick);
-		}
+//		else {
+//			/* Percent voltage mode */
+//			_talon.set(ControlMode.PercentOutput, leftYstick);
+//		}
 		/* if Talon is in position closed-loop, print some more info */
-		if (_talon.getControlMode() == ControlMode.Position) {
+		if (_talon.getControlMode() == ControlMode.MotionMagic) {
 			/* append more signals to print when in speed mode. */
 			_sb.append("\terr:");
 			_sb.append(_talon.getClosedLoopError(0));
@@ -182,9 +197,9 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Position", _talon.getSelectedSensorVelocity(0));
 		SmartDashboard.putNumber("Current", _talon.getOutputCurrent());
 		SmartDashboard.putNumber("Voltage", _talon.getMotorOutputVoltage());
-		SmartDashboard.putNumber("Kp", kp);
-		SmartDashboard.putNumber("Kf", kf);
-		SmartDashboard.putNumber("Ki", ki);
-		SmartDashboard.putNumber("Kd", kd);
+		SmartDashboard.putNumber("k_p", kp);
+		SmartDashboard.putNumber("k_f", kf);
+		SmartDashboard.putNumber("k_i", ki);
+		SmartDashboard.putNumber("k_d", kd);
 	 }
 }
