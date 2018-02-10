@@ -1,10 +1,11 @@
 package org.usfirst.frc.team801.robot.subsystems;
 
 import org.usfirst.frc.team801.robot.Constants;
+import org.usfirst.frc.team801.robot.RobotMap;
 
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import SwerveClass.Team801TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
 
 /**
@@ -14,7 +15,10 @@ public class Elevator extends Subsystem {
 	
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
-	private TalonSRX elevaMotor = new TalonSRX(9);
+	Team801TalonSRX elevaMotor= RobotMap.elevator;
+	
+	double maxPosition = 12000;
+	double min= 0;
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
