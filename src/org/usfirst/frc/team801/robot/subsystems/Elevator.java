@@ -36,7 +36,7 @@ public class Elevator extends Subsystem {
 
 	public Elevator() {
     	for(int i=0;i<4;i++){
-    		elevaMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, Constants.kTimeoutMs);
+    		elevaMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
     		elevaMotor.configSetParameter(430, edgesPerRotation, 0x00, 0x00, 0);
     		elevaMotor.configSetParameter(431, filterWindowSize, 0x00, 0x00, 0);
     		//Soft limit
