@@ -112,12 +112,14 @@ public class SwerveDrive implements MotorSafety {
 		driveMotors[i].configPeakOutputForward(11.0, Constants.kTimeoutMs);
 		driveMotors[i].configPeakOutputReverse(-11.0, Constants.kTimeoutMs);
 		/* 0.001 represents 0.1% - default value is 0.04 or 4% */
-		driveMotors[i].configNeutralDeadband(0.001, Constants.kTimeoutMs);
+		driveMotors[i].configNeutralDeadband(0.01, Constants.kTimeoutMs);
 		/* Set the motors PIDF constants**/
 		driveMotors[i].config_kF(0, .026, Constants.kTimeoutMs);
 		driveMotors[i].config_kP(0, .051, Constants.kTimeoutMs);
+//		driveMotors[i].config_kF(0, .01, Constants.kTimeoutMs);
+//		driveMotors[i].config_kP(0, .01, Constants.kTimeoutMs);
 		driveMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
-		driveMotors[i].config_kD(0, 0.0, Constants.kTimeoutMs);
+		driveMotors[i].config_kD(0, 0.02, Constants.kTimeoutMs);
 		//set coast mode
 		driveMotors[i].setNeutralMode(NeutralMode.Coast);
 		//set Velocity Mode for drive motors

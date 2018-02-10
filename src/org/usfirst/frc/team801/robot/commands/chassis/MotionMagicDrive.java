@@ -29,11 +29,14 @@ public class MotionMagicDrive extends Command {
     	Robot.chassis.pointWheels(Robot.chassis.getGyroAngle()); //point wheels strait
     	Timer.delay(0.3);
     	Robot.chassis.setMotionMagic(3.0, 1.0);
+    	Robot.chassis.driveMotionMagic(48.0);
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.chassis.driveMotionMagic(48.0);
+
 
 //    	Robot.chassis.getTurnAngles(turnAngle);
     	
