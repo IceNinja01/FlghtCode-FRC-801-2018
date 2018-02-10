@@ -50,19 +50,19 @@ public class Elevator extends Subsystem {
 //    	setPosition = getCurrentPosition() - Constants.liftMotorTopLimit;
     	elevaMotor.set(ControlMode.MotionMagic, Constants.elevaMotorBottomLimit);
     	 getCurrentPosition();
-    	//compress to lift
+    	//compress elevator
     }
     
     public void extendMid() {
-    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevaMotorTopLimit);
+    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevaMotorMidLimit);
     	getCurrentPosition();
-    	//extend to grab rung
+    	//extend to Lower Switch
     }
     
     public void extendHigh() {
     	elevaMotor.set(ControlMode.MotionMagic, Constants.elevaMotorTopLimit);
     	getCurrentPosition();
-    	//extend to grab rung
+    	//extend to High Switch
     }
     public void setZeroPos() {
     	
