@@ -25,7 +25,7 @@ public class Elevator extends Subsystem {
 	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        setDefaultCommand(new ElevatorMotorInt());
+        //setDefaultCommand(new ElevatorMotorInt());
     }
 
 
