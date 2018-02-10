@@ -22,7 +22,7 @@ public class Elevator extends Subsystem {
 	double min= 0;
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-        //setDefaultCommand(new MySpecialCommand());
+        setDefaultCommand(new ElevatorMotorInt());
     }
     
     public Elevator() {
