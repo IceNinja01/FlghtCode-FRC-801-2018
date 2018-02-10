@@ -6,6 +6,7 @@ import org.usfirst.frc.team801.robot.commands.ElevatorMotorInt;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import SwerveClass.Team801TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -86,6 +87,15 @@ public class Elevator extends Subsystem {
     
     public void setInvert(boolean b) {
     	elevaMotor.setInverted(b);
+    }
+    
+    public void stopMotor() {
+    	elevaMotor.setNeutralMode(NeutralMode.Brake);
+    }
+    
+    public void coastMotor() {
+    	elevaMotor.setNeutralMode(NeutralMode.Coast);
+
     }
     
     public double getCurrentPosition() {
