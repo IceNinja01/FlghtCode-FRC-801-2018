@@ -57,5 +57,17 @@ public class Elevator extends Subsystem {
     public void extendHigh() {
     	
     }
+    
+    public void setDriveCurrentLimit(int peakAmps, int durationMs, int continousAmps) {
+    	/* Peak Current and Duration must be exceeded before current limit is activated.
+    	When activated, current will be limited to Continuous Current.
+    	Set Peak Current params to 0 if desired behavior is to immediately current-limit. */
+    		
+    	elevaMotor.configPeakCurrentLimit(peakAmps, Constants.kTimeoutMs); /* 35 A */
+    	elevaMotor.configPeakCurrentDuration(durationMs, Constants.kTimeoutMs); /* 200ms */
+    	elevaMotor.configContinuousCurrentLimit(continousAmps, Constants.kTimeoutMs); /* 30A */
+    	elevaMotor.enableCurrentLimit(true); /* turn it on */
+    		
+    	}
 }
 
