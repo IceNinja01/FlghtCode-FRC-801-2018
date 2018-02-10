@@ -2,6 +2,7 @@ package org.usfirst.frc.team801.robot.subsystems;
 
 import org.usfirst.frc.team801.robot.Constants;
 import org.usfirst.frc.team801.robot.RobotMap;
+import org.usfirst.frc.team801.robot.commands.ElevatorMotorInt;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -20,12 +21,15 @@ public class Elevator extends Subsystem {
 	
 	double maxPosition = 12000;
 	double min= 0;
+	
+	
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
         setDefaultCommand(new ElevatorMotorInt());
     }
-    
-    public Elevator() {
+
+
+	public Elevator() {
     	for(int i=0;i<4;i++){
     		elevaMotor.configSelectedFeedbackSensor(FeedbackDevice.QuadEncoder, 0, Constants.kTimeoutMs);
 			/* set the peak and nominal outputs, 12V means full */
@@ -48,19 +52,19 @@ public class Elevator extends Subsystem {
     
     public void shrink() {
 //    	setPosition = getCurrentPosition() - Constants.liftMotorTopLimit;
-    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevaMotorBottomLimit);
+    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevatorMotorBottomLimit);
     	 getCurrentPosition();
     	//compress elevator
     }
     
     public void extendMid() {
-    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevaMotorMidLimit);
+    	
     	getCurrentPosition();
     	//extend to Lower Switch
     }
     
     public void extendHigh() {
-    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevaMotorTopLimit);
+    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevatorMotorTopLimit);
     	getCurrentPosition();
     	//extend to High Switch
     }
