@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 
 public class MotionProfile {
-	private static final int kMinPointsInTalon = 5;
+	private static final int kMinPointsInTalon = 10;
 	
 	private TalonSRX[] motors;
 	
@@ -156,8 +156,8 @@ public class MotionProfile {
 				double positionRot = profile[p][0];
 				double velocityRPM = profile[p][1];
 				// for each point, fill our structure and pass it to API
-				point.position = positionRot; //Convert Revolutions to Units
-				point.velocity = velocityRPM; //Convert RPM to Units/100ms
+				point.position = positionRot *Constants.kSensorUnitsPerRotation; //Convert Revolutions to Units
+				point.velocity = velocityRPM * Constants.kSensorUnitsPerRotation / 600; //Convert RPM to Units/100ms
 				System.out.print("Target Rotations: "+(positionRot)+"\t");
 				System.out.print("Target Velocity: "+(velocityRPM)+"\t");
 				point.headingDeg = 0; // future feature - not used in this example
@@ -180,13 +180,13 @@ public class MotionProfile {
 					motors[m].set(ControlMode.MotionProfile, setValue[m].value);
 				}
 				
-				if(status[m].btmBufferCnt == kMinPointsInTalon)
+				if(status[m].btmBufferCnt > kMinPointsInTalon)
 				{ //buffer has something goahead and go
 					setValue[m] = SetValueMotionProfile.Enable;
 					motors[m].set(ControlMode.MotionProfile, setValue[m].value);
 				}
 				
-				if(status[m].isLast)
+				if(status[m].activePointValid && status[m].isLast)
 				{
 					setValue[m] = SetValueMotionProfile.Hold;
 					motors[m].set(ControlMode.MotionProfile, setValue[m].value);
