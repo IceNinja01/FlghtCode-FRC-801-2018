@@ -3,6 +3,7 @@ package org.usfirst.frc.team801.robot.subsystems;
 import org.usfirst.frc.team801.robot.Constants;
 import org.usfirst.frc.team801.robot.RobotMap;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 
 import SwerveClass.Team801TalonSRX;
@@ -46,15 +47,39 @@ public class Elevator extends Subsystem {
     }
     
     public void shrink() {
+//    	setPosition = getCurrentPosition() - Constants.liftMotorTopLimit;
+    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevaMotorBottomLimit);
+    	 getCurrentPosition();
     	//compress to lift
-    	
     }
     
     public void extendMid() {
+    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevaMotorTopLimit);
+    	getCurrentPosition();
     	//extend to grab rung
     }
     
     public void extendHigh() {
+    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevaMotorTopLimit);
+    	getCurrentPosition();
+    	//extend to grab rung
+    }
+    public void setZeroPos() {
+    	
+    	/* zero the sensor */
+    	elevaMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); 
+
+    }
+    
+    public void setInvert(boolean b) {
+    	elevaMotor.setInverted(b);
+    }
+    
+    public double getCurrentPosition() {
+    	System.out.print(elevaMotor.getSelectedSensorPosition(0));
+    	System.out.print("\terr:");
+    	System.out.println(elevaMotor.getClosedLoopError(0));
+    	return elevaMotor.getClosedLoopError(0);
     	
     }
     
