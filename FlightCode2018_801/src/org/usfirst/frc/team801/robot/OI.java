@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team801.robot;
 
+import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnBack;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnFront;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnLeft;
@@ -21,9 +22,11 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
+	double commandTurns[][] = { {12, 90, 45} , {24, 90, 45}, {36, 90, 45} }; //turns as a square 12"x12"
 	
     public XboxController driver = new XboxController(0);
 
+    public Button driveSquare = new JoystickButton(driver,6);
     public Button turnFront = new JoystickButton(driver,4);
     public Button turnRight = new JoystickButton(driver,2);
     public Button turnLeft = new JoystickButton(driver,3);
@@ -82,5 +85,6 @@ public class OI {
     	turnBack.whileHeld(new TurnBack());
     	turnRight.whileHeld(new TurnRight());
     	turnLeft.whileHeld(new TurnLeft());
+    	driveSquare.whenReleased(new MotionMagicDrive(48, 5, 2.5, commandTurns));
     }
 }

@@ -37,12 +37,17 @@ public class Chassis extends PIDSubsystem {
 	private double x;
 	private double y;
 	private double z;
+	private double[] turnDistance;
+	private double turnRadius = 3;
+	private double cruiseVelocity;
 //	private RollingAverage xAvg;
 //	private RollingAverage yAvg;
 //	private RollingAverage x_g;
 //	private RollingAverage y_g;
 //	private RollingAverage z_g;
 //	private RollingAverage tilt;
+
+	private double acceleration;
 
 	public Chassis() {
 
@@ -158,6 +163,49 @@ public class Chassis extends PIDSubsystem {
 	public double getHeadingCmd() {
 		return headingCMD;
 	}
+	
+	public void setMotionMagic(double cruiseVelocity, double acceleration) {
+		this.cruiseVelocity = cruiseVelocity;
+		this.acceleration = acceleration;
+		chassisSwerveDrive.motionMagicInit(cruiseVelocity, acceleration);
+	}
+	
+	public void driveMotionMagic(double distance) {
+		chassisSwerveDrive.motionMagicDrive(distance);
+	}
+
+	public void getTurnAngles(double[][] turnAngle) {
+		// This method calculates the angle to turn the turn motors while driving a motion magic profile at some 
+		// drive position
+		double angularTime;
+		double pos = getChassisPosition();
+		int j = 0;
+		for(int i=0; i<turnAngle.length; i++) {
+			double newAngle = turnAngle[i-1][1];
+			if(turnAngle[i][0] - getChassisPosition() < 0.5){ //distance is less than one inch to turn point
+				angularTime = (turnAngle[i][1] - turnAngle[i-1][1])/ turnAngle[i][2]  ;// angluar speed[i][2]
+				j = (int) (angularTime / Constants.kTimeoutMs);
+				double dA = turnAngle[i][1] / j;
+//				dA *= turnAngle[i][3];
+				for(int k=0; k<j; k++) {//start turning
+					newAngle += dA;
+					newAngle = Utils.wrapAngle0To360Deg(newAngle);
+					chassisSwerveDrive.turnMotors(newAngle);
+				}
+			}
+			else{
+				chassisSwerveDrive.turnMotors(newAngle);
+			}
+		}
+		
+	}
+	
+	public double getChassisPosition() {
+		return chassisSwerveDrive.getTraveledDistance();
+		
+	}
+	
+	
 	
 }
 //

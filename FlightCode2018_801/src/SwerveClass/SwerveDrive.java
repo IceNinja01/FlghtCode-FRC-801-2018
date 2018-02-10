@@ -265,13 +265,14 @@ public class SwerveDrive implements MotorSafety {
 	
 	public void turnMotors(double angle_CMD){
 	    for(int i=0;i<4;i++){
+	    	pidTurnController[i].setSetpoint(angle_CMD);
 	    }
-		
 	}
 	
 	public void turnMotorsDrive(double angle_CMD , double speed){
 	    for(int i=0;i<4;i++){
-	    	driveMotors[i].set(ControlMode.Velocity, speed * 5400);
+	    	pidTurnController[i].setSetpoint(angle_CMD);
+	    	driveMotors[i].set(ControlMode.Velocity, maxDriveVoltage*speed*4800*4096/600);
 	    }
 		
 	}
@@ -435,6 +436,44 @@ private void setupMotorSafety() {
 			driveMotors[i].configContinuousCurrentLimit(continousAmps, Constants.kTimeoutMs); /* 30A */
 			driveMotors[i].enableCurrentLimit(true); /* turn it on */
 		}
+	}
+	
+	public void motionMagicInit(double cruiseVelocity, double acceleration){
+		/*This is called one time during to setup motion magic on the drive motors.
+		 Convert velocity and acceleration to from inches/sec to native units/100msec
+		 */
+		int velocity = (int) ((cruiseVelocity*7.5*4096)/125);
+		int accel = (int) ((acceleration*7.5*4096)/125);
+		for(int i=0;i>4;i++){
+			driveMotors[i].configMotionCruiseVelocity(velocity, Constants.kTimeoutMs);
+			driveMotors[i].configMotionAcceleration(accel, Constants.kTimeoutMs);
+			driveMotors[i].setSelectedSensorPosition(0,  0, Constants.kTimeoutMs);
+		}
+	}
+	
+	public void motionMagicDrive(double distance) {
+		/*
+		 * This is used after the motionMagicInit is called
+		 */
+		//convert distance to shaft rotations, drive inches to shaft rotations is 7.5 shaftRotations / 1 wheel rotation ~ 12.5inches
+		int position = (int) ((distance*7.5*4096)/12.5);
+		for(int i=0;i>4;i++){
+			driveMotors[i].set(ControlMode.MotionMagic, position);
+		}
+	}
+	
+	public double getTraveledDistance() {
+		//Used during Motion Magic Profile to find the robots distance traveled
+		double distance =0;
+
+		for(int i=0;i>4;i++){
+			distance +=driveMotors[i].getSelectedSensorPosition(0);
+		}
+		distance /=driveMotors.length;
+		distance *= 12.5/(7.5*4096); //convert to inches
+		SmartDashboard.putNumber("TraveledDistance", distance);
+		return distance;
+
 	}
 	
 }
