@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 
 public class MotionProfile {
-	private static final int kMinPointsInTalon = 10;
+	private static final int kMinPointsInTalon = 5;
 	
 	private TalonSRX[] motors;
 	
@@ -55,7 +55,7 @@ public class MotionProfile {
 			motors[i].config_kP(0, 0.5, Constants.kTimeoutMs);
 			motors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
 			
-			motors[i].config_kD(0, 0.2, Constants.kTimeoutMs);
+			motors[i].config_kD(0, 0.002, Constants.kTimeoutMs);
 			/* Our profile uses 10ms timing */
 			motors[i].configMotionProfileTrajectoryPeriod(10, Constants.kTimeoutMs); 
 			/*
@@ -111,26 +111,30 @@ public class MotionProfile {
 	
 	public void control()
 	{
-		for(int i = 0; i < motors.length; i++)
+		for(int m = 0; m < motors.length; m++)
 		{
-			motors[i].getMotionProfileStatus(status[i]);
-			if(motors[i].getControlMode() == ControlMode.MotionProfile)
-			{
-				/*
-				if(status[i].btmBufferCnt > kMinPointsInTalon)
-				{
-					setValue[i] = SetValueMotionProfile.Enable;
-					started = true;
-				}
-				if (status[i].activePointValid && status[i].isLast) {
-					// because we set the last point's isLast to true, we will get here when the MP is done
-					setValue[i] = SetValueMotionProfile.Hold;
-					started = false;
-				}
-				*/
+			motors[m].getMotionProfileStatus(status[m]);
+			if(status[m].btmBufferCnt == 0)
+			{ //buffer is empty do nothing
+				setValue[m] = SetValueMotionProfile.Disable;
+				motors[m].set(ControlMode.MotionProfile, setValue[m].value);
 			}
-			/* Get the motion profile status every loop */
-			motors[i].getMotionProfileStatus(status[i]);
+			
+			if(status[m].btmBufferCnt > kMinPointsInTalon)
+			{ //buffer has something goahead and go
+				setValue[m] = SetValueMotionProfile.Enable;
+				motors[m].set(ControlMode.MotionProfile, setValue[m].value);
+			}
+			
+			if(status[m].activePointValid && status[m].isLast)
+			{
+				setValue[m] = SetValueMotionProfile.Hold;
+				motors[m].set(ControlMode.MotionProfile, setValue[m].value);
+			}
+			// Get the motion profile status every loop
+			motors[m].getMotionProfileStatus(status[m]);
+			System.out.print("Actual Rotations: "+(motors[m].getSelectedSensorPosition(0))+"\t");
+			System.out.println("Actual Velocity: "+(motors[m].getSelectedSensorVelocity(0)));
 		}
 	}
 	
@@ -174,27 +178,7 @@ public class MotionProfile {
 				
 				motors[m].pushMotionProfileTrajectory(point);
 				
-				if(status[m].btmBufferCnt == 0)
-				{ //buffer is empty do nothing
-					setValue[m] = SetValueMotionProfile.Disable;
-					motors[m].set(ControlMode.MotionProfile, setValue[m].value);
-				}
-				
-				if(status[m].btmBufferCnt > kMinPointsInTalon)
-				{ //buffer has something goahead and go
-					setValue[m] = SetValueMotionProfile.Enable;
-					motors[m].set(ControlMode.MotionProfile, setValue[m].value);
-				}
-				
-				if(status[m].activePointValid && status[m].isLast)
-				{
-					setValue[m] = SetValueMotionProfile.Hold;
-					motors[m].set(ControlMode.MotionProfile, setValue[m].value);
-				}
-				// Get the motion profile status every loop
-				motors[m].getMotionProfileStatus(status[m]);
-				System.out.print("Actual Rotations: "+(motors[m].getSelectedSensorPosition(0))+"\t");
-				System.out.println("Actual Velocity: "+(motors[m].getSelectedSensorVelocity(0)));
+
 			}
 		}
 		/*
