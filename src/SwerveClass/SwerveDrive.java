@@ -105,6 +105,7 @@ public class SwerveDrive implements MotorSafety {
 		turnMotors[i].setSensorPhase(false); 
 
 		driveMotors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
+		
 //		driveMotors[i].setSensorPhase(true);
         /* set the peak and nominal outputs, 12V means full */
 		driveMotors[i].configNominalOutputForward(0, Constants.kTimeoutMs);
@@ -114,15 +115,22 @@ public class SwerveDrive implements MotorSafety {
 		/* 0.001 represents 0.1% - default value is 0.04 or 4% */
 		driveMotors[i].configNeutralDeadband(0.01, Constants.kTimeoutMs);
 		/* Set the motors PIDF constants**/
+		//index 0
 		driveMotors[i].config_kF(0, .026, Constants.kTimeoutMs);
 		driveMotors[i].config_kP(0, .051, Constants.kTimeoutMs);
-//		driveMotors[i].config_kF(0, .01, Constants.kTimeoutMs);
-//		driveMotors[i].config_kP(0, .01, Constants.kTimeoutMs);
 		driveMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
-		driveMotors[i].config_kD(0, 0.02, Constants.kTimeoutMs);
+		driveMotors[i].config_kD(0, 1.0, Constants.kTimeoutMs);
+		
+		//index 1
+		driveMotors[i].config_kF(1, 10.0, Constants.kTimeoutMs);
+		driveMotors[i].config_kP(1, 10.0, Constants.kTimeoutMs);
+		driveMotors[i].config_kI(1, 0.0, Constants.kTimeoutMs);
+		driveMotors[i].config_kD(1, 0.2, Constants.kTimeoutMs);
+		
 		//set coast mode
 		driveMotors[i].setNeutralMode(NeutralMode.Coast);
 		//set Velocity Mode for drive motors
+		driveMotors[i].selectProfileSlot(0, 0);
 		driveMotors[i].set(ControlMode.Velocity, 0.0);
 		driveMotors[i].setSensorPhase(false); 
 		}
@@ -231,6 +239,7 @@ public class SwerveDrive implements MotorSafety {
 
 			    if(Math.abs(angleJoyStickDiff[i]) > 90){ //new angle is greater than a 90degree turn, so find shortest path
 			    	//reverse translational motors 
+					driveMotors[i].selectProfileSlot(0, 0);
 			    	driveMotors[i].set(ControlMode.Velocity, maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);
 			    	
 			    	//find new angle
@@ -245,6 +254,7 @@ public class SwerveDrive implements MotorSafety {
 			    
 			    else
 			    {
+					driveMotors[i].selectProfileSlot(0, 0);
 			    	driveMotors[i].set(ControlMode.Velocity, -maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);
 			    }
 				//Turn Motors
@@ -447,6 +457,7 @@ private void setupMotorSafety() {
 		int velocity = (int) ((cruiseVelocity*7.5*4096)/125);
 		int accel = (int) ((acceleration*7.5*4096)/125);
 		for(int i=0;i>4;i++){
+			driveMotors[i].selectProfileSlot(1, 0);
 			driveMotors[i].configMotionCruiseVelocity(velocity, Constants.kTimeoutMs);
 			driveMotors[i].configMotionAcceleration(accel, Constants.kTimeoutMs);
 			driveMotors[i].setSelectedSensorPosition(0,  0, Constants.kTimeoutMs);
@@ -460,6 +471,7 @@ private void setupMotorSafety() {
 		//convert distance to shaft rotations, drive inches to shaft rotations is 7.5 shaftRotations / 1 wheel rotation ~ 12.5inches
 		int position = (int) ((distance*7.5*4096)/12.5);
 		for(int i=0;i>4;i++){
+			driveMotors[i].selectProfileSlot(1, 0);
 			driveMotors[i].set(ControlMode.MotionMagic, position);
 		}
 	}
@@ -469,7 +481,7 @@ private void setupMotorSafety() {
 		double distance =0;
 
 		for(int i=0;i>4;i++){
-			distance +=driveMotors[i].getSelectedSensorPosition(0);
+			distance += driveMotors[i].getSelectedSensorPosition(0);
 		}
 		distance /=driveMotors.length;
 		distance *= 12.5/(7.5*4096); //convert to inches

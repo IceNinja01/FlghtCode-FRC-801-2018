@@ -47,6 +47,7 @@ public class Robot extends IterativeRobot {
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
 		SmartDashboard.putData(Scheduler.getInstance());
+		SmartDashboard.putBoolean("Start Motion", false);
 		oi = new OI();
 	}
 
@@ -63,6 +64,7 @@ public class Robot extends IterativeRobot {
 
 	@Override
 	public void disabledPeriodic() {
+		SmartDashboard.putBoolean("Start Motion", false);
 
 		Scheduler.getInstance().run();
 		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());

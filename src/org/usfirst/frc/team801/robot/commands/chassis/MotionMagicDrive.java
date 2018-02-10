@@ -4,6 +4,7 @@ import org.usfirst.frc.team801.robot.Robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -15,7 +16,7 @@ public class MotionMagicDrive extends Command {
 	private double acceleration;
 	private double[][] turnAngle;
 	private int i;
-	public MotionMagicDrive(double distance,double cruiseVelocity, double acceleration, double[][] turnAngle) {
+	public MotionMagicDrive(double distance,double cruiseVelocity, double acceleration) {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.chassis);
         this.distance = distance;
@@ -27,15 +28,17 @@ public class MotionMagicDrive extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.chassis.pointWheels(Robot.chassis.getGyroAngle()); //point wheels strait
-    	Timer.delay(0.3);
-    	Robot.chassis.setMotionMagic(3.0, 1.0);
-    	Robot.chassis.driveMotionMagic(48.0);
+//    	Timer.delay(0.3);
+    	Robot.chassis.chassisSwerveDrive.motionMagicInit(cruiseVelocity, acceleration);
+    	Robot.chassis.chassisSwerveDrive.motionMagicDrive(distance);
 
+    	SmartDashboard.putBoolean("Start Motion", true);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.chassis.driveMotionMagic(48.0);
+
+    	Robot.chassis.chassisSwerveDrive.getTraveledDistance();
 
 
 //    	Robot.chassis.getTurnAngles(turnAngle);
@@ -49,6 +52,8 @@ public class MotionMagicDrive extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+		SmartDashboard.putBoolean("Start Motion", false);
+
     }
 
     // Called when another command which requires one or more of the same
