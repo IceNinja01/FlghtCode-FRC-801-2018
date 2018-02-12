@@ -37,7 +37,11 @@ public class Robot extends IterativeRobot
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
+<<<<<<< HEAD
 	MotionProfile profile = new MotionProfile(new TalonSRX[] { RobotMap.backRightDrive }, 1, 1, 1);
+=======
+	MotionProfile profile = new MotionProfile(new TalonSRX[] {RobotMap.backRightDrive}, 5, 1, 1);
+>>>>>>> 22bee8f980a33173208c1ea4ba4fe1caa3b1e437
 
 	/**
 	 * This function is run when the robot is first started up and should be used
@@ -135,6 +139,7 @@ public class Robot extends IterativeRobot
 	public void teleopPeriodic()
 	{
 		Scheduler.getInstance().run();
+		profile.control();
 	}
 
 	/**
