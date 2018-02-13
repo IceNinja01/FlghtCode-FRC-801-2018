@@ -38,7 +38,7 @@ public class Robot extends IterativeRobot
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 	
-	MotionProfile profile = new MotionProfile(new TalonSRX[] { RobotMap.backRightDrive }, 1, 1, 1);
+	MotionProfile profile = new MotionProfile(new TalonSRX[] { RobotMap.backRightDrive }, 100, 50, 10);
 	
 	/**
 	 * This function is run when the robot is first started up and should be used

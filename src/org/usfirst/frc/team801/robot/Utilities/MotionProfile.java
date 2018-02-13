@@ -2,32 +2,28 @@ package org.usfirst.frc.team801.robot.Utilities;
 
 import org.usfirst.frc.team801.robot.Constants;
 
-import com.ctre.phoenix.motion.MotionProfileStatus;
-import com.ctre.phoenix.motion.SetValueMotionProfile;
-import com.ctre.phoenix.motion.TrajectoryPoint.TrajectoryDuration;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 
 public class MotionProfile
 {
-	private static final int kMinPointsInTalon = 10;
 	private TalonSRX[] motors;
-
-	class PeriodicRunnable implements java.lang.Runnable
+	
+	class PeriodicRunnable implements Runnable
 	{
 		public void run()
 		{
 			control();
 		}
 	}
-
+	
 	private boolean started = false;
 	private Notifier notifer = new Notifier(new PeriodicRunnable());
 	private double[][] profile;
+	private int position = 0;
 
 	public MotionProfile(TalonSRX[] motors, double distance, double maxVel, double accel)
 	{
@@ -43,12 +39,12 @@ public class MotionProfile
 			motors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, 10);
 			motors[i].setSensorPhase(false); /* keep sensor and motor in phase */
 			motors[i].configNeutralDeadband(Constants.kNeutralDeadband, Constants.kTimeoutMs);
-
+			/*
 			motors[i].config_kF(0, 0.2, Constants.kTimeoutMs);
-			motors[i].config_kP(0, 0.5, Constants.kTimeoutMs);
+			motors[i].config_kP(0, 0.02, Constants.kTimeoutMs);
 			motors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
 			motors[i].config_kD(0, 0.002, Constants.kTimeoutMs);
-			motors[i].set(ControlMode.Velocity, 0);
+			*/
 
 			motors[i].setSelectedSensorPosition(0, 0, 10);
 		}
@@ -56,7 +52,7 @@ public class MotionProfile
 		this.motors = motors;
 		profile = OneDimensionMotion(distance, maxVel, accel);
 	}
-
+	
 	public void start()
 	{
 		started = true;
@@ -65,6 +61,7 @@ public class MotionProfile
 	public void stop()
 	{
 		started = false;
+		position = 0;
 	}
 
 	/**
@@ -73,23 +70,25 @@ public class MotionProfile
 	 */
 	public void reset()
 	{
-		for (int i = 0; i < motors.length; i++)
-		{
-			/*
-			 * Let's clear the buffer just in case user decided to disable in the middle of
-			 * an MP, and now we have the second half of a profile just sitting in memory.
-			 */
-			motors[i].clearMotionProfileTrajectories();
-		}
+		started = false;
+		start();
 	}
-
+	
 	public void control()
 	{
 		if(started)
-		{
-			for (int i = 0; i < motors.length; i++)
+		{	
+			if(position < profile.length-1)
 			{
-				
+				for (int i = 0; i < motors.length; i++)
+				{
+					motors[i].set(ControlMode.PercentOutput, profile[position][1]/4800);
+				}
+				position++;
+			}
+			else
+			{
+				started = false;
 			}
 		}
 	}
@@ -162,28 +161,6 @@ public class MotionProfile
 		}
 	}
 	*/
-	/**
-	 * Find enum value if supported.
-	 * 
-	 * @param durationMs
-	 * @return enum equivalent of durationMs
-	 */
-	private TrajectoryDuration GetTrajectoryDuration(int durationMs)
-	{
-		/* create return value */
-		TrajectoryDuration retval = TrajectoryDuration.Trajectory_Duration_0ms;
-		/* convert duration to supported type */
-		retval = retval.valueOf(durationMs);
-		/* check that it is valid */
-		if (retval.value != durationMs)
-		{
-			DriverStation.reportError(
-					"Trajectory Duration not supported - use configMotionProfileTrajectoryPeriod instead", false);
-		}
-		/* pass to caller */
-		return retval;
-	}
-
 	/*
 	 * This method outputs a 3 column array, [position, velocity, ms], is used for a
 	 * 1D motion control Uses a trapezoidal method for ramp on and ramp on. 1. v =
@@ -257,9 +234,8 @@ public class MotionProfile
 		path[segments - 1][0] = distance;
 		path[segments - 1][1] = 0;
 		path[segments - 1][2] = dt;
-
+		
 		return path;
-
 	}
 
 	public static void TwoDimensionMotion()
