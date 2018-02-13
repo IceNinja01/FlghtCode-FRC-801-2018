@@ -8,12 +8,14 @@
 package org.usfirst.frc.team801.robot;
 
 import org.usfirst.frc.team801.robot.Utilities.MotionProfile;
+import org.usfirst.frc.team801.robot.Utilities.PathBuilder;
 import org.usfirst.frc.team801.robot.commands.ExampleCommand;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
@@ -31,6 +33,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot
 {
 	public static final ExampleSubsystem kExampleSubsystem = new ExampleSubsystem();
+	private static final String LOCATION = null;
 	public static OI oi;
 	public static Object prefs;
 	public static Chassis chassis;
@@ -88,6 +91,8 @@ public class Robot extends IterativeRobot
 	@Override
 	public void autonomousInit()
 	{
+		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
+		PathBuilder logic = new PathBuilder(LOCATION, fieldLayout);
 		m_autonomousCommand = m_chooser.getSelected();
 
 		/*
