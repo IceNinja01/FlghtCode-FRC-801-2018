@@ -28,15 +28,15 @@ public class MotionMagicDrive extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	Robot.chassis.pointWheels(Robot.chassis.getGyroAngle()); //point wheels strait
-//    	Timer.delay(0.3);
-    	Robot.chassis.chassisSwerveDrive.motionMagicInit(cruiseVelocity, acceleration);
-    	Robot.chassis.chassisSwerveDrive.motionMagicDrive(distance);
+    	Timer.delay(0.3);
+//    	Robot.chassis.chassisSwerveDrive.motionMagicInit(cruiseVelocity, acceleration);
 
     	SmartDashboard.putBoolean("Start Motion", true);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.chassis.chassisSwerveDrive.motionMagicDrive(distance);
 
     	Robot.chassis.chassisSwerveDrive.getTraveledDistance();
 

@@ -457,10 +457,13 @@ private void setupMotorSafety() {
 		int velocity = (int) ((cruiseVelocity*7.5*4096)/125);
 		int accel = (int) ((acceleration*7.5*4096)/125);
 		for(int i=0;i>4;i++){
-			driveMotors[i].selectProfileSlot(1, 0);
+			driveMotors[i].selectProfileSlot(0, 0);
+			driveMotors[i].clearMotionProfileHasUnderrun(Constants.kTimeoutMs);
+			driveMotors[i].clearMotionProfileTrajectories();
 			driveMotors[i].configMotionCruiseVelocity(velocity, Constants.kTimeoutMs);
 			driveMotors[i].configMotionAcceleration(accel, Constants.kTimeoutMs);
 			driveMotors[i].setSelectedSensorPosition(0,  0, Constants.kTimeoutMs);
+			driveMotors[i].set(ControlMode.Position, 0);
 		}
 	}
 	
@@ -470,9 +473,10 @@ private void setupMotorSafety() {
 		 */
 		//convert distance to shaft rotations, drive inches to shaft rotations is 7.5 shaftRotations / 1 wheel rotation ~ 12.5inches
 		int position = (int) ((distance*7.5*4096)/12.5);
+		SmartDashboard.putNumber("Target", position);
 		for(int i=0;i>4;i++){
-			driveMotors[i].selectProfileSlot(1, 0);
-			driveMotors[i].set(ControlMode.MotionMagic, position);
+			driveMotors[i].selectProfileSlot(0, 0);
+			driveMotors[i].set(ControlMode.Position, position);
 		}
 	}
 	

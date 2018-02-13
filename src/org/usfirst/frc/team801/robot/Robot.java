@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team801.robot.commands.ExampleCommand;
+import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
+import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
 
@@ -31,6 +33,7 @@ public class Robot extends IterativeRobot {
 	public static Chassis chassis;
 
 	Command m_autonomousCommand;
+	
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 
 	/**
@@ -84,7 +87,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		m_autonomousCommand = m_chooser.getSelected();
+		m_autonomousCommand = new CMD_Drive();
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
