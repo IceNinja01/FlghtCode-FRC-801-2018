@@ -34,15 +34,12 @@ public class Robot extends IterativeRobot
 	public static OI oi;
 	public static Object prefs;
 	public static Chassis chassis;
-
+	
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
-<<<<<<< HEAD
+	
 	MotionProfile profile = new MotionProfile(new TalonSRX[] { RobotMap.backRightDrive }, 1, 1, 1);
-=======
-	MotionProfile profile = new MotionProfile(new TalonSRX[] {RobotMap.backRightDrive}, 5, 1, 1);
->>>>>>> 22bee8f980a33173208c1ea4ba4fe1caa3b1e437
-
+	
 	/**
 	 * This function is run when the robot is first started up and should be used
 	 * for any initialization code.
@@ -74,7 +71,6 @@ public class Robot extends IterativeRobot
 	public void disabledPeriodic()
 	{
 		Scheduler.getInstance().run();
-		// SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
 	}
 
 	/**
@@ -139,7 +135,6 @@ public class Robot extends IterativeRobot
 	public void teleopPeriodic()
 	{
 		Scheduler.getInstance().run();
-		profile.control();
 	}
 
 	/**
