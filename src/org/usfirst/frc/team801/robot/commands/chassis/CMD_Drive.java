@@ -2,8 +2,9 @@ package org.usfirst.frc.team801.robot.commands.chassis;
 
 import org.usfirst.frc.team801.robot.Robot;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
-
+import org.usfirst.frc.team801.robot.Utilities.*;
 /**
  *
  */
@@ -11,6 +12,7 @@ public class CMD_Drive extends Command {
 
     private double[] x = new double[2000];
 	private int j=0;
+	private double[][] x_y;
     
 	public CMD_Drive() {
         // Use requires() here to declare subsystem dependencies
@@ -19,25 +21,30 @@ public class CMD_Drive extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	x[0] =0.01;
-    	for(int i=1; i<1000; i++) {
-    		x[i] = 0.01 + x[i-1];
-    	}
-    	for(int i=0; i<1000; i++) {
-    		x[i+1000] = 0.01 - x[i-1];
-    	}
+    	x_y = MotionProfile.XYCoord();
+    	Robot.chassis.pointWheels(0); //point wheels strait
+    	Timer.delay(0.3);
+    	
+    	
+//    	x[0] =0.01;
+//    	for(int i=1; i<1000; i++) {
+//    		x[i] = 0.01 + x[i-1];
+//    	}
+//    	for(int i=0; i<1000; i++) {
+//    		x[i+1000] = 0.01 - x[i-1];
+//    	}
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
-    	Robot.chassis.chassisSwerveDrive.drive(x[j],0,0,0);
+    	Robot.chassis.chassisSwerveDrive.CMDdrive(x_y[j][0],x_y[j][1],0,Robot.chassis.getGyroAngle());
     	j++;
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (j>=2000);
+        return (j>=x_y.length);
     }
 
     // Called once after isFinished returns true

@@ -131,7 +131,7 @@ public class SwerveDrive implements MotorSafety {
 		driveMotors[i].setNeutralMode(NeutralMode.Coast);
 		//set Velocity Mode for drive motors
 		driveMotors[i].selectProfileSlot(0, 0);
-		driveMotors[i].set(ControlMode.Velocity, 0.0);
+//		driveMotors[i].set(ControlMode.Velocity, 0.0);
 		driveMotors[i].setSensorPhase(false); 
 		}
 		
@@ -189,6 +189,98 @@ public class SwerveDrive implements MotorSafety {
 		FWD = -yavg.getAverage();
 		STR = xavg.getAverage();
 		RCW = zavg.getAverage();
+		double radians = gyroAngle *Math.PI/180.00;
+		temp = FWD*Math.cos(radians) + STR*Math.sin(radians);
+		STR = -FWD*Math.sin(radians) + STR*Math.cos(radians);
+		FWD = temp;
+		//Perform the following calculations for each new set of FWD, STR, and RCW commands:
+		A = STR - RCW*(L/R);
+		B = STR + RCW*(L/R);
+		C = FWD - RCW*(W/R);
+		D = FWD + RCW*(W/R);
+		
+	    wheelSpeeds[0] = Math.sqrt(B*B + C*C);
+	    wheelSpeeds[1] = Math.sqrt(B*B + D*D);
+	    wheelSpeeds[2] = Math.sqrt(A*A + D*D);
+	    wheelSpeeds[3] = Math.sqrt(A*A + C*C);
+	    
+	    //TODO threshold the arctan2 function inputs
+	    wheelAngles[0] = Utils.wrapAngle0To360Deg(Math.atan2(B,C)*180/Math.PI);
+	    wheelAngles[1] = Utils.wrapAngle0To360Deg(Math.atan2(B,D)*180/Math.PI);
+	    wheelAngles[2] = Utils.wrapAngle0To360Deg(Math.atan2(A,D)*180/Math.PI);
+	    wheelAngles[3] = Utils.wrapAngle0To360Deg(Math.atan2(A,C)*180/Math.PI);
+		
+	    //Normalize wheelSpeeds
+	    //determine max motor speed
+	    max=wheelSpeeds[0]; 
+	    if(wheelSpeeds[1]>max){
+	    	max=wheelSpeeds[1]; 
+	    }
+	    if(wheelSpeeds[2]>max){
+	    	max=wheelSpeeds[2]; 
+	    }
+	    if(wheelSpeeds[3]>max){
+	    	max=wheelSpeeds[3];
+	    }
+	    //Divide by max motor speeds
+	    if(max>1){
+	    	wheelSpeeds[0]/=max; 
+	    	wheelSpeeds[1]/=max; 
+	    	wheelSpeeds[2]/=max; 
+	    	wheelSpeeds[3]/=max;
+	    }
+
+	    	double[] degs = new double[4];
+		    for(int i=0;i<4;i++){
+		    	degs[i] = currentAngle(turnMotors[i],i);
+		    	
+		    	angleJoyStickDiff[i]= wheelAngles[i]- oldAngle[i];
+		    	angleError[i] = wheelAngles[i] - degs[i];
+
+			    if(Math.abs(angleJoyStickDiff[i]) > 90){ //new angle is greater than a 90degree turn, so find shortest path
+			    	//reverse translational motors 
+					driveMotors[i].selectProfileSlot(0, 0);
+			    	driveMotors[i].set(ControlMode.Velocity, maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);
+			    	
+			    	//find new angle
+			    	wheelAngles[i] -= 180.0; //subtract 180 degrees
+			    	if(wheelAngles[i] < 0){ //wrap to new angle between 0-360
+			    		wheelAngles[i] += 360.0;
+			    	}
+			    	//now the angle is set to move to the shortest path, which is just 180 degrees 
+			    	//from the current heading
+			    	
+			    }    
+			    
+			    else
+			    {
+					driveMotors[i].selectProfileSlot(0, 0);
+			    	driveMotors[i].set(ControlMode.Velocity, -maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);
+			    }
+				//Turn Motors
+			    if(wheelSpeeds[i]>0.1){
+			    	pidTurnController[i].setSetpoint(wheelAngles[i]);
+			    	oldAngle[i] = wheelAngles[i];
+			    }
+		    
+		    currentSpeed(driveMotors[i], i);
+		    
+	    }
+
+	    	SmartDashboard.putNumber("Angle", angleJoyStickDiff[0]);
+
+		if (m_safetyHelper != null) {
+			m_safetyHelper.feed();
+      	}
+
+	}
+	
+	public void CMDdrive(double AxisX, double AxisY, double rotation, double gyroAngle){
+		
+		//Calculate Angles and Magnitudes for each motor
+		FWD = -AxisY;
+		STR = AxisX;
+		RCW = rotation;
 		double radians = gyroAngle *Math.PI/180.00;
 		temp = FWD*Math.cos(radians) + STR*Math.sin(radians);
 		STR = -FWD*Math.sin(radians) + STR*Math.cos(radians);

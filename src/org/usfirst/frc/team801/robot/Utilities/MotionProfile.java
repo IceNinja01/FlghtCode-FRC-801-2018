@@ -78,11 +78,26 @@ public class MotionProfile {
 		path[segments-1][1] = 0;
 		path[segments-1][2] = dt;
 		
+	
 		return path;
 	    
 	}
 	
+	public static double[][] XYCoord(){
+		double[][] path= OneDimenisonMotion(.5, .5, .5);
+		double[][] xy = new double[path.length][2];
+		double angle =270;
+		for(int i=0; i<path.length; i++) {
+			xy[i][0] = path[i][1]*Math.cos(angle*Math.PI/180.00);
+			xy[i][1] = path[i][1]*Math.sin(angle*Math.PI/180.00);
+		}
+		return xy;
+		
+	}
+	
 	public static void TwoDimensionMotion() {
+		
+		
 		
 		
 	}

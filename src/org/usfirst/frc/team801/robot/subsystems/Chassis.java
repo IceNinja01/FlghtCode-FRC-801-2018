@@ -116,6 +116,16 @@ public class Chassis extends PIDSubsystem {
 		SmartDashboard.putNumber("zRateCmd", zRateCmd);
 
 	}
+	
+	public void cmdDrive(double x, double y, double gyroCMD, double angleCmd) {
+		headingCMD = gyroCMD;
+		headingError = Robot.chassis.getGyroAngle() - headingCMD;
+		chassisSwerveDrive.drive(x, y, zRateCmd, angleCmd);
+		SmartDashboard.putNumber("HeadingCMD", headingCMD);
+		SmartDashboard.putNumber("HeadingError", headingError);
+		SmartDashboard.putNumber("zRateCmd", zRateCmd);
+
+	}
 
 	public void stop() {
 		chassisSwerveDrive.stopMotor();
