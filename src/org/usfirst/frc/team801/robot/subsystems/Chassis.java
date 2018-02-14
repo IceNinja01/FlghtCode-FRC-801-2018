@@ -174,10 +174,8 @@ public class Chassis extends PIDSubsystem {
 		return headingCMD;
 	}
 	
-	public void setMotionMagic(double cruiseVelocity, double acceleration) {
-		this.cruiseVelocity = cruiseVelocity;
-		this.acceleration = acceleration;
-		chassisSwerveDrive.motionMagicInit(cruiseVelocity, acceleration);
+	public void setMotionMagic() {
+		chassisSwerveDrive.motionMagicInit();
 	}
 	
 	public void driveMotionMagic(double distance) {
@@ -213,6 +211,10 @@ public class Chassis extends PIDSubsystem {
 	public double getChassisPosition() {
 		return chassisSwerveDrive.getTraveledDistance();
 		
+	}
+	
+	public double getChassisError() {
+		return chassisSwerveDrive.getPositionErrorDrive();
 	}
 	
 	

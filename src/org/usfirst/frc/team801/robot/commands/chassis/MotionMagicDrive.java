@@ -12,16 +12,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class MotionMagicDrive extends Command {
 
     private double distance;
-	private double cruiseVelocity;
-	private double acceleration;
+
 	private double[][] turnAngle;
-	private int i;
-	public MotionMagicDrive(double distance,double cruiseVelocity, double acceleration) {
+
+	private double dist;
+
+	private double error;
+	public MotionMagicDrive(double distance) {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.chassis);
         this.distance = distance;
-        this.cruiseVelocity = cruiseVelocity;
-        this.acceleration = acceleration;
+
         this.turnAngle=turnAngle; //array of distance to turn, the angle to turn from current 90 degree left = -90, rad/sec
     }
 
@@ -29,16 +30,16 @@ public class MotionMagicDrive extends Command {
     protected void initialize() {
     	Robot.chassis.pointWheels(Robot.chassis.getGyroAngle()); //point wheels strait
     	Timer.delay(0.3);
-//    	Robot.chassis.chassisSwerveDrive.motionMagicInit(cruiseVelocity, acceleration);
+    	Robot.chassis.setMotionMagic();
 
     	SmartDashboard.putBoolean("Start Motion", true);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.chassis.chassisSwerveDrive.motionMagicDrive(distance);
+    	Robot.chassis.driveMotionMagic(distance);
 
-    	Robot.chassis.chassisSwerveDrive.getTraveledDistance();
+    	error = Robot.chassis.getChassisError();
 
 
 //    	Robot.chassis.getTurnAngles(turnAngle);
@@ -47,7 +48,7 @@ public class MotionMagicDrive extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return (error < 200.0); //200 is 0.05% of 4096 which is 1 revolution of the shaft
     }
 
     // Called once after isFinished returns true

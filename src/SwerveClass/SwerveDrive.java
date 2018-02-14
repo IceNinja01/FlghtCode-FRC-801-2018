@@ -52,6 +52,8 @@ public class SwerveDrive implements MotorSafety {
 	private RollingAverage xavg;
 	private RollingAverage yavg;
 	private RollingAverage zavg;
+	private int velocity = (int) ((Constants.chassisVelocity*Constants.wheelRotPerInch *4096)/10);
+	private int accel = (int) ((Constants.chassisAcceleration*7.5*4096)/125);
 	
 	
 	public  SwerveDrive(final Team801TalonSRX FrontRightDriveMotor,final Team801TalonSRX FrontLeftDriveMotor,final Team801TalonSRX BackLeftDriveMotor,final Team801TalonSRX BackRightDriveMotor,
@@ -126,6 +128,9 @@ public class SwerveDrive implements MotorSafety {
 		driveMotors[i].config_kP(1, 10.0, Constants.kTimeoutMs);
 		driveMotors[i].config_kI(1, 0.0, Constants.kTimeoutMs);
 		driveMotors[i].config_kD(1, 0.2, Constants.kTimeoutMs);
+		//set motion magic config
+		driveMotors[i].configMotionCruiseVelocity(velocity, Constants.kTimeoutMs);
+		driveMotors[i].configMotionAcceleration(accel, Constants.kTimeoutMs);
 		
 		//set coast mode
 		driveMotors[i].setNeutralMode(NeutralMode.Coast);
@@ -542,20 +547,17 @@ private void setupMotorSafety() {
 		}
 	}
 	
-	public void motionMagicInit(double cruiseVelocity, double acceleration){
+	public void motionMagicInit(){
 		/*This is called one time during to setup motion magic on the drive motors.
-		 Convert velocity and acceleration to from inches/sec to native units/100msec
 		 */
-		int velocity = (int) ((cruiseVelocity*7.5*4096)/125);
-		int accel = (int) ((acceleration*7.5*4096)/125);
+
 		for(int i=0;i>4;i++){
 			driveMotors[i].selectProfileSlot(0, 0);
 			driveMotors[i].clearMotionProfileHasUnderrun(Constants.kTimeoutMs);
 			driveMotors[i].clearMotionProfileTrajectories();
-			driveMotors[i].configMotionCruiseVelocity(velocity, Constants.kTimeoutMs);
-			driveMotors[i].configMotionAcceleration(accel, Constants.kTimeoutMs);
+//			driveMotors[i].configMotionCruiseVelocity(velocity, Constants.kTimeoutMs);
+//			driveMotors[i].configMotionAcceleration(accel, Constants.kTimeoutMs);
 			driveMotors[i].setSelectedSensorPosition(0,  0, Constants.kTimeoutMs);
-			driveMotors[i].set(ControlMode.Position, 0);
 		}
 	}
 	
@@ -564,7 +566,7 @@ private void setupMotorSafety() {
 		 * This is used after the motionMagicInit is called
 		 */
 		//convert distance to shaft rotations, drive inches to shaft rotations is 7.5 shaftRotations / 1 wheel rotation ~ 12.5inches
-		int position = (int) ((distance*7.5*4096)/12.5);
+		int position = (int) (distance*Constants.wheelRotPerInch*4096);
 		SmartDashboard.putNumber("Target", position);
 		for(int i=0;i>4;i++){
 			driveMotors[i].selectProfileSlot(0, 0);
@@ -583,6 +585,19 @@ private void setupMotorSafety() {
 		distance *= 12.5/(7.5*4096); //convert to inches
 		SmartDashboard.putNumber("TraveledDistance", distance);
 		return distance;
+
+	}
+	public double getPositionErrorDrive() {
+		//Used during Motion Magic Profile to find the robots distance traveled
+		double error =0;
+
+		for(int i=0;i>4;i++){
+			error += Math.abs(driveMotors[i].getClosedLoopError(0));
+		}
+		error /=driveMotors.length;
+		error *= 12.5/(7.5*4096); //convert to inches
+		SmartDashboard.putNumber("Drive Motor Position Error", error);
+		return error;
 
 	}
 	
