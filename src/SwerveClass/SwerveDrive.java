@@ -52,8 +52,8 @@ public class SwerveDrive implements MotorSafety {
 	private RollingAverage xavg;
 	private RollingAverage yavg;
 	private RollingAverage zavg;
-	private int velocity = (int) ((Constants.chassisVelocity*Constants.wheelRotPerInch *4096)/10);
-	private int accel = (int) ((Constants.chassisAcceleration*7.5*4096)/125);
+	private int velocity = (int) ((Constants.chassisVelocity*Constants.wheelRotPerInch*4096)/10);
+	private int accel = (int) ((Constants.chassisAcceleration*Constants.wheelRotPerInch*4096)/10);
 	
 	
 	public  SwerveDrive(final Team801TalonSRX FrontRightDriveMotor,final Team801TalonSRX FrontLeftDriveMotor,final Team801TalonSRX BackLeftDriveMotor,final Team801TalonSRX BackRightDriveMotor,
@@ -124,10 +124,10 @@ public class SwerveDrive implements MotorSafety {
 		driveMotors[i].config_kD(0, 1.0, Constants.kTimeoutMs);
 		
 		//index 1
-		driveMotors[i].config_kF(1, 10.0, Constants.kTimeoutMs);
-		driveMotors[i].config_kP(1, 10.0, Constants.kTimeoutMs);
+		driveMotors[i].config_kF(1, 0.2, Constants.kTimeoutMs);
+		driveMotors[i].config_kP(1, 0.2, Constants.kTimeoutMs);
 		driveMotors[i].config_kI(1, 0.0, Constants.kTimeoutMs);
-		driveMotors[i].config_kD(1, 0.2, Constants.kTimeoutMs);
+		driveMotors[i].config_kD(1, 0.6, Constants.kTimeoutMs);
 		//set motion magic config
 		driveMotors[i].configMotionCruiseVelocity(velocity, Constants.kTimeoutMs);
 		driveMotors[i].configMotionAcceleration(accel, Constants.kTimeoutMs);
@@ -552,7 +552,7 @@ private void setupMotorSafety() {
 		 */
 
 		for(int i=0;i>4;i++){
-			driveMotors[i].selectProfileSlot(0, 0);
+			driveMotors[i].selectProfileSlot(1, 0);
 			driveMotors[i].clearMotionProfileHasUnderrun(Constants.kTimeoutMs);
 			driveMotors[i].clearMotionProfileTrajectories();
 //			driveMotors[i].configMotionCruiseVelocity(velocity, Constants.kTimeoutMs);
@@ -561,17 +561,48 @@ private void setupMotorSafety() {
 		}
 	}
 	
-	public void motionMagicDrive(double distance) {
+	public void motionMagicDrive(double distance, double angle) {
 		/*
 		 * This is used after the motionMagicInit is called
 		 */
 		//convert distance to shaft rotations, drive inches to shaft rotations is 7.5 shaftRotations / 1 wheel rotation ~ 12.5inches
 		int position = (int) (distance*Constants.wheelRotPerInch*4096);
+		double[] degs = new double[4];
+		double[] angleDiff = new double[4];
+		double[] oldAngle = new double[4];		
+		//
+		wheelAngles[0] = angle;
+	    wheelAngles[1] = angle;
+	    wheelAngles[2] = angle;
+	    wheelAngles[3] = angle;
+	    
 		SmartDashboard.putNumber("Target", position);
 		for(int i=0;i>4;i++){
-			driveMotors[i].selectProfileSlot(0, 0);
-			driveMotors[i].set(ControlMode.Position, position);
-		}
+			driveMotors[i].selectProfileSlot(1, 0);
+			driveMotors[i].set(ControlMode.MotionMagic, position);
+			
+			degs[i] = currentAngle(turnMotors[i],i);
+	    		    	
+			angleDiff[i]= wheelAngles[i]- oldAngle[i];
+	    	angleError[i] = wheelAngles[i] - degs[i];
+
+		    if(Math.abs(angleDiff[i]) > 90){ //new angle is greater than a 90degree turn, so find shortest path
+		    	//reverse translational motors 
+		    	
+		    	//find new angle
+		    	wheelAngles[i] -= 180.0; //subtract 180 degrees
+		    	
+		    	if(wheelAngles[i] < 0){ //wrap to new angle between 0-360
+		    		wheelAngles[i] += 360.0;
+		    	}
+		    }
+		    pidTurnController[i].setSetpoint(wheelAngles[i]);
+	    	oldAngle[i] = wheelAngles[i];
+	    	//now the angle is set to move to the shortest path, which is just 180 degrees 
+	    	//from the current heading
+		    	
+		 }    
+		
 	}
 	
 	public double getTraveledDistance() {
@@ -579,7 +610,7 @@ private void setupMotorSafety() {
 		double distance =0;
 
 		for(int i=0;i>4;i++){
-			distance += driveMotors[i].getSelectedSensorPosition(0);
+			distance += driveMotors[i].getSelectedSensorPosition(1);
 		}
 		distance /=driveMotors.length;
 		distance *= 12.5/(7.5*4096); //convert to inches
@@ -597,6 +628,7 @@ private void setupMotorSafety() {
 		error /=driveMotors.length;
 		error *= 12.5/(7.5*4096); //convert to inches
 		SmartDashboard.putNumber("Drive Motor Position Error", error);
+		System.out.println("error" + error);
 		return error;
 
 	}

@@ -178,8 +178,8 @@ public class Chassis extends PIDSubsystem {
 		chassisSwerveDrive.motionMagicInit();
 	}
 	
-	public void driveMotionMagic(double distance) {
-		chassisSwerveDrive.motionMagicDrive(distance);
+	public void driveMotionMagic(double distance, double angle) {
+		chassisSwerveDrive.motionMagicDrive(distance, angle);
 	}
 
 	public void getTurnAngles(double[][] turnAngle) {

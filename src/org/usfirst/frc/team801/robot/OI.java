@@ -85,6 +85,6 @@ public class OI {
     	turnBack.whileHeld(new TurnBack());
     	turnRight.whileHeld(new TurnRight());
     	turnLeft.whileHeld(new TurnLeft());
-    	driveSquare.whileHeld(new MotionMagicDrive(24.0));
+    	driveSquare.whenPressed(new MotionMagicDrive(24.0, 90));
     }
 }

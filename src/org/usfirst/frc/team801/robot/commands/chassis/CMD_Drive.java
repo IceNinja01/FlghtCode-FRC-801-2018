@@ -23,10 +23,9 @@ public class CMD_Drive extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	x_y = MotionProfile.XYCoord();
     	Robot.chassis.pointWheels(0); //point wheels strait
     	Timer.delay(0.3);
-    	
+    	Robot.chassis.setMotionMagic();
     	
 //    	x[0] =0.01;
 //    	for(int i=1; i<1000; i++) {
@@ -40,8 +39,11 @@ public class CMD_Drive extends Command {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
-    	Robot.chassis.chassisSwerveDrive.CMDdrive(x_y[j][0],x_y[j][1],0,Robot.chassis.getGyroAngle());
-    	j++;
+    	
+    	
+    	
+//    	Robot.chassis.chassisSwerveDrive.CMDdrive(x_y[j][0],x_y[j][1],0,Robot.chassis.getGyroAngle());
+//    	j++;
     }
 
     // Make this return true when this Command no longer needs to run execute()

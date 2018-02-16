@@ -52,8 +52,8 @@ public class Constants {
 	public static double ultrakI = 0.0000001;
 	public static double ultrakD = 1.0;
 
-	public static double chassisAcceleration = 2.5;		//acceleration slope inches/sec
-	public static double chassisVelocity = 5.0;			//Max Velocity inches/sec
+	public static double chassisAcceleration = 50;		//acceleration slope inches/sec
+	public static double chassisVelocity = 50;			//Max Velocity inches/sec
 	public static double wheelRotPerInch = 7.5/12.5;	//Sensor Shaft revolutions per wheel turn in inch
 
 	
