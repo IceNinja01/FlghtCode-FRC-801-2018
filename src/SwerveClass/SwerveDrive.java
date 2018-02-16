@@ -127,7 +127,7 @@ public class SwerveDrive implements MotorSafety {
 		
 		
 		for(int i=0;i<4;i++){
-			int j =i;
+			final int j =i;
 			pidTurnSource[i] = new PIDSource() {				
 				@Override
 				public void setPIDSourceType(PIDSourceType pidSource) {				
