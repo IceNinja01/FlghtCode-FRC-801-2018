@@ -4,8 +4,12 @@ import static org.usfirst.frc.team801.robot.Robot.LEFT;
 import static org.usfirst.frc.team801.robot.Robot.CENTER;
 import static org.usfirst.frc.team801.robot.Robot.RIGHT;
 
+import edu.wpi.first.wpilibj.command.Command;
+
 public class PathBuilder {
 
+	private Command pathCommand;
+	
 	public PathBuilder (int location, String fieldLayout) {
 		
 		String[] sides = new String[3];
@@ -20,17 +24,50 @@ public class PathBuilder {
 		switch (sides[0]) {
 		case "L":
 			switch(location) {
-			case: LEFT
+			case LEFT:
+				//Go forward
+				break;
+			case CENTER:
+				//Go left then forward
+				break;
+			case RIGHT:
+				//Go left x2 then forward
+				break;
 			}
+			location = LEFT;
 			break;
 		case "R":
+			switch(location) {
+			case LEFT:
+				//Go right x2 then forward
+				break;
+			case CENTER:
+				//Go right then forward
+				break;
+			case RIGHT:
+				//Go forward
+				break;
+			}
+			location = RIGHT;
 			break;
 		}
 		
 		switch (sides[1]) {
 		case "L":
+			switch(location) {
+			case LEFT:
+				//Go forward
+			case RIGHT:
+				//Go left x2 then forward
+			}
 			break;
 		case "R":
+			switch(location) {
+			case LEFT:
+				//Go right x2 then forward
+			case RIGHT:
+				//Go forward
+			}
 			break;
 		}
 		
@@ -40,5 +77,9 @@ public class PathBuilder {
 		case "R":
 			break;
 		}
+	}
+	
+	public Command getPath() {
+		return pathCommand;
 	}
 }
