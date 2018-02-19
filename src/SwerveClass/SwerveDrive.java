@@ -589,7 +589,7 @@ private void setupMotorSafety() {
 		 * This is used after the motionMagicInit is called
 		 */
 		//convert distance to shaft rotations, drive inches to shaft rotations is 7.5 shaftRotations / 1 wheel rotation ~ 12.5inches
-		int position = (int) (distance*Constants.wheelRotPerInch*4096);
+		double position = (distance*Constants.wheelRotPerInch*4096);
 		double[] degs = new double[4];
 		double[] angleDiff = new double[4];
 		double[] oldAngle = new double[4];		

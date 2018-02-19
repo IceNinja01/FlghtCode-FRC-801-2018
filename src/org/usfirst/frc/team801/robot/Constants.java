@@ -54,7 +54,7 @@ public class Constants {
 
 	public static double chassisAcceleration = 50;		//acceleration slope inches/sec
 	public static double chassisVelocity = 50;			//Max Velocity inches/sec
-	public static double wheelRotPerInch = 7.5/12.5;	//Sensor Shaft revolutions per wheel turn in inch
+	public static double wheelRotPerInch = 0.6;	//Sensor Shaft revolutions per wheel turn in inch
 
 	
 	
