@@ -33,7 +33,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Robot extends IterativeRobot
 {
 	public static final ExampleSubsystem kExampleSubsystem = new ExampleSubsystem();
-	private static final String LOCATION = null;
+	public static final int LEFT = 0, CENTER = 1, RIGHT = 2;
+	private static final int LOCATION = LEFT;
 	public static OI oi;
 	public static Object prefs;
 	public static Chassis chassis;
