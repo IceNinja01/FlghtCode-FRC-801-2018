@@ -19,12 +19,6 @@ public class MotionMagicDrive extends Command {
 	private double dist;
 
 	private double error;
-
-	private MotionProfile profile;
-
-	private double[][] path;
-
-	private int j = 0;
 	
 	public MotionMagicDrive(double distance, double turnAngle) {
         // Use requires() here to declare subsystem dependencies
@@ -32,29 +26,23 @@ public class MotionMagicDrive extends Command {
         this.distance = distance;
 
         this.turnAngle=turnAngle; //array of distance to turn, the angle to turn from current 90 degree left = -90, rad/sec
-    	profile = new MotionProfile();
 
 	}
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.chassis.pointWheels(turnAngle); //point wheels strait
-    	Timer.delay(0.3);
-    	
-    	path = MotionProfile.OneDimenisonMotion(24, 50, 50, 0, 0);
-//    	Robot.chassis.setMotionMagic();
-    	j  = 0;
+//    	Robot.chassis.pointWheels(turnAngle); //point wheels strait
+//    	Timer.delay(0.3);
+    	Robot.chassis.setMotionMagic();
     	SmartDashboard.putBoolean("Start Motion", true);
     	
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.chassis.pointWheelsDrive(turnAngle, path[j][1]);
-    	System.out.println(path[j][1]);
-//    	error = Robot.chassis.getChassisError();
-    	j++;
-//    	Robot.chassis.getTurnAngles(turnAngle);
+    	Robot.chassis.driveMotionMagic(distance, turnAngle);
+    	Robot.chassis.getChassisError();
+
     	
     }
 
@@ -65,6 +53,7 @@ public class MotionMagicDrive extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.chassis.driveInit();
 		SmartDashboard.putBoolean("Start Motion", false);
 
     }

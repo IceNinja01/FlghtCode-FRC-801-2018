@@ -116,26 +116,29 @@ public class SwerveDrive implements MotorSafety {
 		driveMotors[i].configPeakOutputReverse(-11.0, Constants.kTimeoutMs);
 		/* 0.001 represents 0.1% - default value is 0.04 or 4% */
 		driveMotors[i].configNeutralDeadband(0.01, Constants.kTimeoutMs);
+		driveMotors[i].configAllowableClosedloopError(0, 0, Constants.kTimeoutMs);		
 		/* Set the motors PIDF constants**/
 		//index 0
 		driveMotors[i].config_kF(0, .026, Constants.kTimeoutMs);
 		driveMotors[i].config_kP(0, .051, Constants.kTimeoutMs);
 		driveMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
 		driveMotors[i].config_kD(0, 1.0, Constants.kTimeoutMs);
+		driveMotors[i].setSelectedSensorPosition(0, 0, Constants.kTimeoutMs);
 		
-		//index 1
-		driveMotors[i].config_kF(1, 0.2, Constants.kTimeoutMs);
-		driveMotors[i].config_kP(1, 0.2, Constants.kTimeoutMs);
-		driveMotors[i].config_kI(1, 0.0, Constants.kTimeoutMs);
-		driveMotors[i].config_kD(1, 0.6, Constants.kTimeoutMs);
+//		//index 1
+//		driveMotors[i].config_kF(1, 0.2, Constants.kTimeoutMs);
+//		driveMotors[i].config_kP(1, 0.2, Constants.kTimeoutMs);
+//		driveMotors[i].config_kI(1, 0.0, Constants.kTimeoutMs);
+//		driveMotors[i].config_kD(1, 0.6, Constants.kTimeoutMs);
+//		driveMotors[i].setSelectedSensorPosition(0, 1, Constants.kTimeoutMs);
+
 		//set motion magic config
 		driveMotors[i].configMotionCruiseVelocity(velocity, Constants.kTimeoutMs);
 		driveMotors[i].configMotionAcceleration(accel, Constants.kTimeoutMs);
-		
-		//set coast mode
-		driveMotors[i].setNeutralMode(NeutralMode.Coast);
+//		//set coast mode
+//		driveMotors[i].setNeutralMode(NeutralMode.Coast);
 		//set Velocity Mode for drive motors
-		driveMotors[i].selectProfileSlot(0, 0);
+//		driveMotors[i].selectProfileSlot(0, 0);
 //		driveMotors[i].set(ControlMode.Velocity, 0.0);
 		driveMotors[i].setSensorPhase(false); 
 		}
@@ -547,17 +550,37 @@ private void setupMotorSafety() {
 		}
 	}
 	
+	public void driveInit(){
+		/*This is called one time during to setup motion magic on the drive motors.
+		 */
+		for(int i=0;i>4;i++){
+//			driveMotors[i].selectProfileSlot(1, 0);
+			driveMotors[i].clearMotionProfileHasUnderrun(Constants.kTimeoutMs);
+			driveMotors[i].clearMotionProfileTrajectories();
+			/* Set the motors PIDF constants**/
+			//index 0
+			driveMotors[i].config_kF(0, .026, Constants.kTimeoutMs);
+			driveMotors[i].config_kP(0, .051, Constants.kTimeoutMs);
+			driveMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
+			driveMotors[i].config_kD(0, 1.0, Constants.kTimeoutMs);
+			driveMotors[i].setSelectedSensorPosition(0, 0, Constants.kTimeoutMs);
+		}
+	}
+	
 	public void motionMagicInit(){
 		/*This is called one time during to setup motion magic on the drive motors.
 		 */
-
 		for(int i=0;i>4;i++){
-			driveMotors[i].selectProfileSlot(1, 0);
+//			driveMotors[i].selectProfileSlot(1, 0);
 			driveMotors[i].clearMotionProfileHasUnderrun(Constants.kTimeoutMs);
 			driveMotors[i].clearMotionProfileTrajectories();
-//			driveMotors[i].configMotionCruiseVelocity(velocity, Constants.kTimeoutMs);
-//			driveMotors[i].configMotionAcceleration(accel, Constants.kTimeoutMs);
-			driveMotors[i].setSelectedSensorPosition(0,  0, Constants.kTimeoutMs);
+			/* Set the motors PIDF constants**/
+			//index 0
+			driveMotors[i].config_kF(0, .2, Constants.kTimeoutMs);
+			driveMotors[i].config_kP(0, .2 , Constants.kTimeoutMs);
+			driveMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
+			driveMotors[i].config_kD(0, 0.6, Constants.kTimeoutMs);
+			driveMotors[i].setSelectedSensorPosition(0, 0, Constants.kTimeoutMs);
 		}
 	}
 	
@@ -578,7 +601,7 @@ private void setupMotorSafety() {
 	    
 		SmartDashboard.putNumber("Target", position);
 		for(int i=0;i>4;i++){
-			driveMotors[i].selectProfileSlot(1, 0);
+//			driveMotors[i].selectProfileSlot(1, 0);
 			driveMotors[i].set(ControlMode.MotionMagic, position);
 			
 			degs[i] = currentAngle(turnMotors[i],i);
@@ -618,17 +641,19 @@ private void setupMotorSafety() {
 		return distance;
 
 	}
-	public double getPositionErrorDrive() {
+	public double[] getPositionErrorDrive() {
 		//Used during Motion Magic Profile to find the robots distance traveled
-		double error =0;
+		double[] error = new double[4];
 
 		for(int i=0;i>4;i++){
-			error += Math.abs(driveMotors[i].getClosedLoopError(0));
+			error[i] += Math.abs(driveMotors[i].getClosedLoopError(0));
+			error[i] *= 12.5/(7.5*4096); //convert to inches
+			SmartDashboard.putNumber("Drive Motor Position Error", error[i]);
+			System.out.print("error " + i + "" + error[i] + "\t");
 		}
-		error /=driveMotors.length;
-		error *= 12.5/(7.5*4096); //convert to inches
-		SmartDashboard.putNumber("Drive Motor Position Error", error);
-		System.out.println("error" + error);
+		System.out.println();
+		
+
 		return error;
 
 	}

@@ -174,6 +174,10 @@ public class Chassis extends PIDSubsystem {
 		return headingCMD;
 	}
 	
+	public void driveInit() {
+		chassisSwerveDrive.driveInit();
+	}
+	
 	public void setMotionMagic() {
 		chassisSwerveDrive.motionMagicInit();
 	}
@@ -213,7 +217,7 @@ public class Chassis extends PIDSubsystem {
 		
 	}
 	
-	public double getChassisError() {
+	public double[] getChassisError() {
 		return chassisSwerveDrive.getPositionErrorDrive();
 	}
 	

@@ -27,13 +27,7 @@ public class CMD_Drive extends Command {
     	Timer.delay(0.3);
     	Robot.chassis.setMotionMagic();
     	
-//    	x[0] =0.01;
-//    	for(int i=1; i<1000; i++) {
-//    		x[i] = 0.01 + x[i-1];
-//    	}
-//    	for(int i=0; i<1000; i++) {
-//    		x[i+1000] = 0.01 - x[i-1];
-//    	}
+
     }
 
     // Called repeatedly when this Command is scheduled to run
@@ -48,7 +42,7 @@ public class CMD_Drive extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (j>=x_y.length);
+        return false;
     }
 
     // Called once after isFinished returns true
