@@ -41,10 +41,13 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void robotInit() {
+		
     	prefs = Preferences.getInstance();
     	RobotMap.init();
-		chassis = new Chassis();
+    	
+//    	chassis = new Chassis();
 		elevator = new Elevator();
+		
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
@@ -66,7 +69,7 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() {
 
 		Scheduler.getInstance().run();
-		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
+//		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
 
 	}
 

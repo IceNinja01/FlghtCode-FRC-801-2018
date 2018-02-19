@@ -1,6 +1,7 @@
 package org.usfirst.frc.team801.robot.subsystems;
 
 import org.usfirst.frc.team801.robot.Constants;
+import org.usfirst.frc.team801.robot.Robot;
 import org.usfirst.frc.team801.robot.RobotMap;
 import org.usfirst.frc.team801.robot.commands.ElevatorMotorInt;
 
@@ -19,36 +20,27 @@ public class Elevator extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 	Team801TalonSRX elevaMotor= RobotMap.elevator;
-	private int edgesPerRotation = 7;
-	private int filterWindowSize = 1;
-	private double maxPosition = 110;
-	private double rotPerinch = 1/2;
-	private double min = 0;
-	private double vel = 1;
-	private double acc = 1;
-	
-	
-    public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
-        //setDefaultCommand(new ElevatorMotorInt());
-    }
+	private double rotPerinch = 0.6;
 
-
+	private int vel = 100;
+	private int acc = 100;
+	private double targetPosition;
+	
 	public Elevator() {
-    	for(int i=0;i<4;i++){
+    	
     		elevaMotor.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
-    		elevaMotor.configSetParameter(430, edgesPerRotation, 0x00, 0x00, 0);
-    		elevaMotor.configSetParameter(431, filterWindowSize, 0x00, 0x00, 0);
+//    		elevaMotor.configSetParameter(430, edgesPerRotation, 0x00, 0x00, 0);
+//    		elevaMotor.configSetParameter(431, filterWindowSize, 0x00, 0x00, 0);
     		//Soft limit
-    		elevaMotor.configReverseSoftLimitThreshold((int) (-57*4096*rotPerinch), Constants.kTimeoutMs);
-    		elevaMotor.configForwardSoftLimitThreshold((int) (+57*4096*rotPerinch), Constants.kTimeoutMs);
+//    		elevaMotor.configReverseSoftLimitThreshold((int) (-57*4096*rotPerinch), Constants.kTimeoutMs);
+//    		elevaMotor.configForwardSoftLimitThreshold((int) (+57*4096*rotPerinch), Constants.kTimeoutMs);
 			/* set the peak and nominal outputs, 12V means full */
     		elevaMotor.configNominalOutputForward(0, Constants.kTimeoutMs);
     		elevaMotor.configNominalOutputReverse(0, Constants.kTimeoutMs);
     		elevaMotor.configPeakOutputForward(11, Constants.kTimeoutMs);
     		elevaMotor.configPeakOutputReverse(-11, Constants.kTimeoutMs);
 			
-    		elevaMotor.selectProfileSlot(0, 0);
+//    		elevaMotor.selectProfileSlot(0, 0);
     		elevaMotor.config_kF(0, 0.2, Constants.kTimeoutMs);
     		elevaMotor.config_kP(0, 0.5, Constants.kTimeoutMs);
     		elevaMotor.config_kI(0, 0, Constants.kTimeoutMs);
@@ -57,24 +49,37 @@ public class Elevator extends Subsystem {
     		elevaMotor.configMotionCruiseVelocity((int) (4096*rotPerinch*vel/10) , Constants.kTimeoutMs);
     		elevaMotor.configMotionAcceleration((int) (4096*rotPerinch*acc/10), Constants.kTimeoutMs);
     		elevaMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
-    	}
+    	
+    }
+	
+	
+    public void initDefaultCommand() {
+        // Set the default command for a subsystem here.
+//        setDefaultCommand(new ElevatorMotorInt());
+    }
+    
+    public void percentOutput() {
+    	elevaMotor.set(ControlMode.PercentOutput, Robot.oi.driver.getY());
     }
     
     public void shrink() {
 //    	setPosition = getCurrentPosition() - Constants.liftMotorTopLimit;
-    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevatorMotorBottomPos*rotPerinch*4096);
+    	targetPosition = (int) Constants.elevatorMotorBottomPos*rotPerinch*4096;
+    	elevaMotor.set(ControlMode.MotionMagic, targetPosition);
     	 getCurrentPosition();
     	//compress elevator
     }
     
     public void extendMid() {
-    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevatorMotorMidPos*rotPerinch*4096);
+    	targetPosition = (int) Constants.elevatorMotorMidPos*rotPerinch*4096;
+    	elevaMotor.set(ControlMode.MotionMagic, targetPosition);
     	getCurrentPosition();
     	//extend to Lower Switch
     }
     
     public void extendHigh() {
-    	elevaMotor.set(ControlMode.MotionMagic, Constants.elevatorMotorTopPos*rotPerinch*4096);
+    	targetPosition =(int) Constants.elevatorMotorTopPos*rotPerinch*4096;
+    	elevaMotor.set(ControlMode.MotionMagic, targetPosition);
     	getCurrentPosition();
     	//extend to High Switch
     }
@@ -99,8 +104,11 @@ public class Elevator extends Subsystem {
     }
     
     public double getCurrentPosition() {
+    	System.out.print("\ttarget: ");
+    	System.out.print(targetPosition);
+    	System.out.print("\tpos: ");
     	System.out.print(elevaMotor.getSelectedSensorPosition(0));
-    	System.out.print("\terr:");
+    	System.out.print("\terr: ");
     	System.out.println(elevaMotor.getClosedLoopError(0));
     	return elevaMotor.getClosedLoopError(0);
     	

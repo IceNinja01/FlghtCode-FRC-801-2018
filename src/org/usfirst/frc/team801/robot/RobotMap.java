@@ -28,13 +28,13 @@ public class RobotMap {
 	public static Team801TalonSRX frontLeftDrive = new Team801TalonSRX(14);
 	public static Team801TalonSRX frontLeftTurn = new Team801TalonSRX(10);
 	
-	public static Team801TalonSRX backRightDrive = new Team801TalonSRX(0);
+//	public static Team801TalonSRX backRightDrive = new Team801TalonSRX(0);
 	public static Team801TalonSRX backRightTurn = new Team801TalonSRX(4);
 	
 	public static Team801TalonSRX backLeftDrive = new Team801TalonSRX(15);
 	public static Team801TalonSRX backLeftTurn = new Team801TalonSRX(11);
 	
-	public static Team801TalonSRX elevator = new Team801TalonSRX(9);
+	public static Team801TalonSRX elevator = new Team801TalonSRX(0);
 
 	public static AnalogInput ultraSonic;
 	public static Adis16448_IMU imu;
@@ -48,9 +48,9 @@ public class RobotMap {
 		imu.calibrate();
 		imu.reset();
 		
-		swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backLeftDrive,backRightDrive,
-			frontRightTurn,frontLeftTurn,backLeftTurn,backRightTurn,
-			10);
+//		swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backLeftDrive,backRightDrive,
+//			frontRightTurn,frontLeftTurn,backLeftTurn,backRightTurn,
+//			10);
 	
 	}
 	

@@ -9,7 +9,7 @@ package org.usfirst.frc.team801.robot;
 
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendMid;
-import org.usfirst.frc.team801.robot.elevator.commands.Shrink;
+import org.usfirst.frc.team801.robot.commands.elevator.Shrink;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -22,7 +22,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI {
 	
     public XboxController driver = new XboxController(0);
-    public XboxController manip = new XboxController(1);
+//    public XboxController manip = new XboxController(1);
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.
@@ -31,8 +31,8 @@ public class OI {
 	// Joystick stick = new Joystick(port);
 	// Button button = new JoystickButton(stick, buttonNumber);
     public Button extendH = new JoystickButton(driver,1);
-    public Button extendM = new JoystickButton(driver,2);
-    public Button shrink = new JoystickButton(driver,3);
+//    public Button extendM = new JoystickButton(driver,2);
+    public Button shrink = new JoystickButton(driver,2);
 	// There are a few additional built in buttons you can use. Additionally,
 	// by subclassing Button you can create custom triggers and bind those to
 	// commands the same as any other Button.

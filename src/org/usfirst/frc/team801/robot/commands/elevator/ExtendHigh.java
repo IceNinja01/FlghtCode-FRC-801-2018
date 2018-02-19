@@ -1,30 +1,30 @@
 package org.usfirst.frc.team801.robot.commands.elevator;
 
 import org.usfirst.frc.team801.robot.Robot;
-import org.usfirst.frc.team801.robot.subsystems.Elevator;
 
-public class ExtendHigh {
+import edu.wpi.first.wpilibj.command.Command;
+
+public class ExtendHigh extends Command {
+	
+	
 	public ExtendHigh() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.elevator);
     }
 
-    private void requires(Elevator elevator) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	// Called just before this Command runs the first time
+    // Called just before this Command runs the first time
     protected void initialize() {
     	System.out.print("Extend:   ");
     	Robot.elevator.getCurrentPosition() ;
     	Robot.elevator.coastMotor();
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+//    	Robot.elevator.getCurrentPosition();
     	Robot.elevator.extendHigh();
-    	
+
     }
 
     // Make this return true when this Command no longer needs to run execute()
@@ -34,9 +34,8 @@ public class ExtendHigh {
 
     // Called once after isFinished returns true
     protected void end() {
-    	System.out.print("  ");
-
     	Robot.elevator.getCurrentPosition();
+    	Robot.elevator.stopMotor();
     }
 
     // Called when another command which requires one or more of the same

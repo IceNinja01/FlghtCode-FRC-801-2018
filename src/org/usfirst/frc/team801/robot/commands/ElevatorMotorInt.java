@@ -1,8 +1,11 @@
 package org.usfirst.frc.team801.robot.commands;
 
-import java.awt.Robot;
+import org.usfirst.frc.team801.robot.Robot;
 
-public class ElevatorMotorInt {
+import edu.wpi.first.wpilibj.command.Command;
+
+public class ElevatorMotorInt extends Command {
+	
 	public ElevatorMotorInt() {
         // Use requires() here to declare subsystem dependencies
         // eg. requires(chassis);
@@ -16,6 +19,7 @@ public class ElevatorMotorInt {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
+    	Robot.elevator.percentOutput();
     	
     }
 
