@@ -33,6 +33,7 @@ public class OI {
     public Button extendH = new JoystickButton(driver,1);
 //    public Button extendM = new JoystickButton(driver,2);
     public Button shrink = new JoystickButton(driver,2);
+    public Button extendM = new JoystickButton(driver,3);
 	// There are a few additional built in buttons you can use. Additionally,
 	// by subclassing Button you can create custom triggers and bind those to
 	// commands the same as any other Button.
@@ -57,5 +58,6 @@ public class OI {
     	
     	shrink.whenPressed(new Shrink());
     	extendH.whenPressed(new ExtendHigh());
+    	extendM.whenPressed(new ExtendMid());
     }
 }
