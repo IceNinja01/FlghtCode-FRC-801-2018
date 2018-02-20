@@ -39,7 +39,7 @@ public class SwerveDrive implements MotorSafety {
 	private String motorName[] = {"FrontRight","FrontLeft","BackLeft","BackRight"};
 
 	private double[] oldAngle = {0,0,0,0};
-	private double maxDriveVoltage = 1.0;
+	private double maxDriveVoltage = 0.5;
 	private double maxTurnVoltage = 0.7;
 	private int deadBand = 2; //
 	private Team801TalonSRX[] driveMotors  = new Team801TalonSRX[4];
@@ -54,6 +54,9 @@ public class SwerveDrive implements MotorSafety {
 	private RollingAverage zavg;
 	private int velocity = (int) ((Constants.chassisVelocity*Constants.wheelRotPerInch*4096)/10);
 	private int accel = (int) ((Constants.chassisAcceleration*Constants.wheelRotPerInch*4096)/10);
+	private int distance;
+	private int targetPosition;
+	private double[] error = new double[4];
 	
 	
 	public  SwerveDrive(final Team801TalonSRX FrontRightDriveMotor,final Team801TalonSRX FrontLeftDriveMotor,final Team801TalonSRX BackLeftDriveMotor,final Team801TalonSRX BackRightDriveMotor,
@@ -589,7 +592,7 @@ private void setupMotorSafety() {
 		 * This is used after the motionMagicInit is called
 		 */
 		//convert distance to shaft rotations, drive inches to shaft rotations is 7.5 shaftRotations / 1 wheel rotation ~ 12.5inches
-		double position = (distance*Constants.wheelRotPerInch*4096);
+		targetPosition = (int) (distance*Constants.wheelRotPerInch*4096);
 		double[] degs = new double[4];
 		double[] angleDiff = new double[4];
 		double[] oldAngle = new double[4];		
@@ -599,10 +602,10 @@ private void setupMotorSafety() {
 	    wheelAngles[2] = angle;
 	    wheelAngles[3] = angle;
 	    
-		SmartDashboard.putNumber("Target", position);
-		for(int i=0;i>4;i++){
+		SmartDashboard.putNumber("Target", targetPosition);
+		for(int i=0; i<4 ;i++){
 //			driveMotors[i].selectProfileSlot(1, 0);
-			driveMotors[i].set(ControlMode.MotionMagic, position);
+			driveMotors[i].set(ControlMode.MotionMagic, targetPosition);
 			
 			degs[i] = currentAngle(turnMotors[i],i);
 	    		    	
@@ -630,31 +633,35 @@ private void setupMotorSafety() {
 	
 	public double getTraveledDistance() {
 		//Used during Motion Magic Profile to find the robots distance traveled
-		double distance =0;
 
-		for(int i=0;i>4;i++){
-			distance += driveMotors[i].getSelectedSensorPosition(1);
+		for(int i=0;i<4;i++){
+			distance += driveMotors[i].getSelectedSensorPosition(0);
 		}
 		distance /=driveMotors.length;
 		distance *= 12.5/(7.5*4096); //convert to inches
 		SmartDashboard.putNumber("TraveledDistance", distance);
+		System.out.println(distance);
 		return distance;
 
 	}
-	public double[] getPositionErrorDrive() {
+	public double getPositionErrorDrive() {
 		//Used during Motion Magic Profile to find the robots distance traveled
-		double[] error = new double[4];
-
-		for(int i=0;i>4;i++){
-			error[i] += Math.abs(driveMotors[i].getClosedLoopError(0));
+		
+		System.out.print("\ttarget" + targetPosition + " ");
+		double err =0;
+		for(int i=0;i<4;i++){
+			error[i] += Math.abs(driveMotors[i].getSelectedSensorPosition(0));
 			error[i] *= 12.5/(7.5*4096); //convert to inches
 			SmartDashboard.putNumber("Drive Motor Position Error", error[i]);
-			System.out.print("error " + i + "" + error[i] + "\t");
+//			System.out.print("error " + i + " " + error[i] + "\t");
+			err +=error[i];
 		}
-		System.out.println();
+		err /= 4;
+		
+		System.out.print(err);
 		
 
-		return error;
+		return err;
 
 	}
 	

@@ -217,7 +217,7 @@ public class Chassis extends PIDSubsystem {
 		
 	}
 	
-	public double[] getChassisError() {
+	public double getChassisError() {
 		return chassisSwerveDrive.getPositionErrorDrive();
 	}
 	
