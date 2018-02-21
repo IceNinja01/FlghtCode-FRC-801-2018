@@ -25,7 +25,7 @@ public class MotionMagicDrive extends Command {
         requires(Robot.chassis);
         this.distance = distance;
 
-        this.turnAngle=turnAngle; //array of distance to turn, the angle to turn from current 90 degree left = -90, rad/sec
+        this.turnAngle= turnAngle; //array of distance to turn, the angle to turn from current 90 degree left = -90, rad/sec
 
 	}
 
