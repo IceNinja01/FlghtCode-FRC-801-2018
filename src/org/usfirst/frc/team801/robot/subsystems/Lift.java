@@ -18,6 +18,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Lift extends Subsystem {
 Team801TalonSRX liftMotor= RobotMap.lift;
+Team801TalonSRX theWinchThatStoleChristmas= RobotMap.theWinchThatStoleChristmas;
 	
 double maxPosition = 12000;
 double min= 0;
@@ -46,6 +47,28 @@ public Lift(){
 	liftMotor.configMotionAcceleration(4096, Constants.kTimeoutMs);
 	liftMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); 
 
+	
+//	theWinchThatStoleChristmas.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
+
+//	theWinchThatStoleChristmas.setInverted(false);
+//	theWinchThatStoleChristmas.setSensorPhase(false);
+//	theWinchThatStoleChristmas.configNominalOutputForward(0, Constants.kTimeoutMs);
+//	theWinchThatStoleChristmas.configNominalOutputReverse(0, Constants.kTimeoutMs);
+//	theWinchThatStoleChristmas.configPeakOutputForward(11, Constants.kTimeoutMs);
+//	theWinchThatStoleChristmas.configPeakOutputReverse(-11, Constants.kTimeoutMs);
+
+//	theWinchThatStoleChristmas.selectProfileSlot(0, 0);
+//	theWinchThatStoleChristmas.config_kF(0, 0.2, Constants.kTimeoutMs);
+//	theWinchThatStoleChristmas.config_kP(0, 0.5, Constants.kTimeoutMs);
+//	theWinchThatStoleChristmas.config_kI(0, 0, Constants.kTimeoutMs);
+//	theWinchThatStoleChristmas.config_kD(0, 0.2, Constants.kTimeoutMs);
+	/* set acceleration and vcruise velocity - see documentation */
+//	theWinchThatStoleChristmas.configMotionCruiseVelocity(4096, Constants.kTimeoutMs);
+//	theWinchThatStoleChristmas.configMotionAcceleration(4096, Constants.kTimeoutMs);
+//	theWinchThatStoleChristmas.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); 
+
+	
+	
 	setDriveCurrentLimit(20, 200, 25);
 }
     // Put methods for controlling this subsystem
@@ -59,8 +82,10 @@ public Lift(){
     
     public void shrink() {
 //    	setPosition = getCurrentPosition() - Constants.liftMotorTopLimit;
+    	theWinchThatStoleChristmas.set(ControlMode.PercentOutput, 1);
     	liftMotor.set(ControlMode.MotionMagic, Constants.liftMotorBottomLimit);
     	 getCurrentPosition();
+    	 
     	//compress to lift
     }
     

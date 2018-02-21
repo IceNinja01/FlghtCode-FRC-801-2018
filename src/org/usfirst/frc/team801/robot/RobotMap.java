@@ -35,8 +35,10 @@ public class RobotMap {
 	public static Team801TalonSRX backLeftTurn = new Team801TalonSRX(11);
 	
 	//Lift Motor 
-	public static Team801TalonSRX lift = new Team801TalonSRX(4);
-
+	public static Team801TalonSRX lift = new Team801TalonSRX(2);
+	//Wench motor
+	public static Team801TalonSRX theWinchThatStoleChristmas = new Team801TalonSRX(13);
+	
 	public static AnalogInput ultraSonic;
 	public static Adis16448_IMU imu;
 	
