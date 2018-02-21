@@ -50,7 +50,8 @@ public class Elevator extends Subsystem {
     		elevaMotor.configMotionAcceleration((int) (4096*rotPerinch*acc/10), Constants.kTimeoutMs);
     		elevaMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
     	
-    }
+    		setDriveCurrentLimit(25, 200, 25);
+	}
 	
 	
     public void initDefaultCommand() {
@@ -83,6 +84,7 @@ public class Elevator extends Subsystem {
     	getCurrentPosition();
     	//extend to High Switch
     }
+    
     public void setZeroPos() {
     	
     	/* zero the sensor */
