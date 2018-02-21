@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team801.robot.commands.ExampleCommand;
+import org.usfirst.frc.team801.robot.commands.pinchers.CompressorOff;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team801.robot.subsystems.Pinchers;
@@ -50,6 +51,7 @@ public class Robot extends IterativeRobot {
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
 		SmartDashboard.putData(Scheduler.getInstance());
+		SmartDashboard.putBoolean("Pnuematic Compressor On/Off", true);
 		oi = new OI();
 	}
 
@@ -126,6 +128,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
+		pinchers.compressorOnOff(SmartDashboard.getBoolean("Pnuematic Compressor On/Off", true));
 	}
 
 	/**

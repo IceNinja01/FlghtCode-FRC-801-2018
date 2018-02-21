@@ -7,15 +7,18 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 /**
  *
  */
-public class PinchersInit extends InstantCommand {
+public class OpenPinchers extends InstantCommand {
 
-    public PinchersInit() {
+    public OpenPinchers() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.pinchers);
     }
 
     // Called once when the command executes
     protected void initialize() {
+    	
+    	Robot.pinchers.openPinchers();
+    	
     }
 
 }

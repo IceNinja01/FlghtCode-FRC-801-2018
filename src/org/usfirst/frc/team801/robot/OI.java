@@ -11,6 +11,8 @@ import org.usfirst.frc.team801.robot.commands.chassis.TurnBack;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnFront;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnLeft;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnRight;
+import org.usfirst.frc.team801.robot.commands.pinchers.ClosePinchers;
+import org.usfirst.frc.team801.robot.commands.pinchers.OpenPinchers;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -28,6 +30,8 @@ public class OI {
     public Button turnRight = new JoystickButton(driver,2);
     public Button turnLeft = new JoystickButton(driver,3);
     public Button turnBack = new JoystickButton(driver,1);
+    public Button openPinch = new JoystickButton(driver,7);
+    public Button closePinch = new JoystickButton(driver,8);
 
     //
     //	      5	    _                            _    6
@@ -82,5 +86,7 @@ public class OI {
     	turnBack.whileHeld(new TurnBack());
     	turnRight.whileHeld(new TurnRight());
     	turnLeft.whileHeld(new TurnLeft());
+    	openPinch.whenPressed(new OpenPinchers());
+    	closePinch.whenPressed(new ClosePinchers());
     }
 }
