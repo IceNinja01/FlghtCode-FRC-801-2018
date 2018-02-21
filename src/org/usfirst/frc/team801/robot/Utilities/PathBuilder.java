@@ -79,6 +79,7 @@ public class PathBuilder {
 		}
 	}
 	
+	
 	public Command getPath() {
 		return pathCommand;
 	}

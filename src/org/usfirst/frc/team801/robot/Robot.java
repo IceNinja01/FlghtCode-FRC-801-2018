@@ -94,6 +94,7 @@ public class Robot extends IterativeRobot
 	{
 		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
 		PathBuilder logic = new PathBuilder(LOCATION, fieldLayout);
+		logic.getPath();
 		m_autonomousCommand = m_chooser.getSelected();
 
 		/*
