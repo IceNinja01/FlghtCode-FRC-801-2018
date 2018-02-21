@@ -24,6 +24,7 @@ double maxPosition = 12000;
 double min= 0;
 
 private double setPosition;
+private double rotPerInch = 1;
 
 private double cpos;
 
@@ -83,14 +84,14 @@ public Lift(){
     public void shrink() {
 //    	setPosition = getCurrentPosition() - Constants.liftMotorTopLimit;
     	theWinchThatStoleChristmas.set(ControlMode.PercentOutput, 1);
-    	liftMotor.set(ControlMode.MotionMagic, Constants.liftMotorBottomLimit);
+    	liftMotor.set(ControlMode.MotionMagic, Constants.liftMotorBottomLimit*rotPerInch*4096);
     	 getCurrentPosition();
     	 
     	//compress to lift
     }
     
     public void extend() {
-    	liftMotor.set(ControlMode.MotionMagic, Constants.liftMotorTopLimit);
+    	liftMotor.set(ControlMode.MotionMagic, Constants.liftMotorTopLimit*rotPerInch*4096);
     	getCurrentPosition();
     	//extend to grab rung
     }
