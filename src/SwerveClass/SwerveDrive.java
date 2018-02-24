@@ -644,11 +644,11 @@ private void setupMotorSafety() {
 		return distance;
 
 	}
-	public double getPositionErrorDrive() {
+	public int getPositionErrorDrive() {
 		//Used during Motion Magic Profile to find the robots distance traveled
 		
 		System.out.print("\ttarget" + targetPosition + " ");
-		double err =0;
+		int err =0;
 		for(int i=0;i<4;i++){
 			error[i] += Math.abs(driveMotors[i].getSelectedSensorPosition(0));
 			error[i] *= 12.5/(7.5*4096); //convert to inches
