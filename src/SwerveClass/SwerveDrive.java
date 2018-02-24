@@ -651,7 +651,7 @@ private void setupMotorSafety() {
 		int err =0;
 		for(int i=0;i<4;i++){
 			error[i] += Math.abs(driveMotors[i].getSelectedSensorPosition(0));
-			error[i] *= 12.5/(7.5*4096); //convert to inches
+//			error[i] *= 12.5/(7.5*4096); //convert to inches
 			SmartDashboard.putNumber("Drive Motor Position Error", error[i]);
 //			System.out.print("error " + i + " " + error[i] + "\t");
 			err +=error[i];
