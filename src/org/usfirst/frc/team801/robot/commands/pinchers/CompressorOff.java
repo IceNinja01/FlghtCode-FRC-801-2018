@@ -17,7 +17,7 @@ public class CompressorOff extends InstantCommand {
     // Called once when the command executes
     protected void initialize() {
     	
-    	Robot.pinchers.compressorOn();
+    	Robot.pinchers.compressorOff();
     	
     }
 

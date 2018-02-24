@@ -55,7 +55,7 @@ public class Pinchers extends Subsystem {
 //		if(b = false && !lastState) {
 //			compressorOff();
 //		}
-		compressorOn();
+//		compressorOn();
 		lastState = b;
 		return b;
 	}
