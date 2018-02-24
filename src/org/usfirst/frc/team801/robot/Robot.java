@@ -11,13 +11,14 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team801.robot.commands.ExampleCommand;
-import org.usfirst.frc.team801.robot.commands.pinchers.CompressorOff;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
 import org.usfirst.frc.team801.robot.subsystems.Pinchers;
+import org.usfirst.frc.team801.robot.subsystems.Compressor801;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -32,6 +33,7 @@ public class Robot extends IterativeRobot {
 	public static Object prefs;
 	public static Chassis chassis;
 	public static Pinchers pinchers;
+	public static Compressor801 compressor;
 
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -45,8 +47,9 @@ public class Robot extends IterativeRobot {
 	{
     	prefs = Preferences.getInstance();
     	RobotMap.init();
-		chassis = new Chassis();
+//		chassis = new Chassis();
 		pinchers = new Pinchers();
+		compressor = new Compressor801();
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
@@ -70,7 +73,7 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() {
 
 		Scheduler.getInstance().run();
-		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
+//		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
 
 	}
 
@@ -128,7 +131,8 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		pinchers.compressorOnOff(SmartDashboard.getBoolean("Pnuematic Compressor On/Off", true));
+		compressor.compressorOnOff(SmartDashboard.getBoolean("Compressor", true));
+		SmartDashboard.putNumber("Compress Current", compressor.getCurrent());
 	}
 
 	/**

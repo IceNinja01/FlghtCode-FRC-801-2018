@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team801.robot;
 
+import org.usfirst.frc.team801.robot.Utilities.XBOXJoystick;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnBack;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnFront;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnLeft;
@@ -24,7 +25,7 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  */
 public class OI {
 	
-    public XboxController driver = new XboxController(0);
+    public XBOXJoystick driver = new XBOXJoystick(0);
 
     public Button turnFront = new JoystickButton(driver,4);
     public Button turnRight = new JoystickButton(driver,2);
@@ -82,11 +83,11 @@ public class OI {
     
     public OI(){
         	
-    	turnFront.whileHeld(new TurnFront());
-    	turnBack.whileHeld(new TurnBack());
-    	turnRight.whileHeld(new TurnRight());
-    	turnLeft.whileHeld(new TurnLeft());
-    	openPinch.whenPressed(new OpenPinchers());
-    	closePinch.whenPressed(new ClosePinchers());
+//    	turnFront.whileHeld(new TurnFront());
+//    	turnBack.whileHeld(new TurnBack());
+//    	turnRight.whileHeld(new TurnRight());
+//    	turnLeft.whileHeld(new TurnLeft());
+    	openPinch.whileHeld(new OpenPinchers());
+    	closePinch.whileHeld(new ClosePinchers());
     }
 }
