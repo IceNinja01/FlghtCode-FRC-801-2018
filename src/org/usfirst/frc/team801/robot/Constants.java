@@ -52,4 +52,8 @@ public class Constants {
 	public static double ultrakI = 0.0000001;
 	public static double ultrakD = 1.0;
 	
+	//AutoSelector Constants
+	public static final int LEFT = 0, CENTER = 1, RIGHT = 2;
+	public static final int LOCATION = LEFT;
+	
 }
