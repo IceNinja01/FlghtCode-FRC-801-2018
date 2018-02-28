@@ -7,16 +7,10 @@
 
 package org.usfirst.frc.team801.robot;
 
-<<<<<<< HEAD
-import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
-import org.usfirst.frc.team801.robot.commands.elevator.ExtendMid;
-import org.usfirst.frc.team801.robot.commands.elevator.Shrink;
-=======
 import org.usfirst.frc.team801.robot.commands.chassis.TurnBack;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnFront;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnLeft;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnRight;
->>>>>>> master
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -29,9 +23,6 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI {
 	
     public XboxController driver = new XboxController(0);
-<<<<<<< HEAD
-//    public XboxController manip = new XboxController(1);
-=======
 
     public Button turnFront = new JoystickButton(driver,4);
     public Button turnRight = new JoystickButton(driver,2);
@@ -57,7 +48,6 @@ public class OI {
     //	 \       ,'                                `.       /
     //	  `.__,-'                                    `-.__,'
     //
->>>>>>> master
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.
@@ -65,10 +55,7 @@ public class OI {
 	// number it is.
 	// Joystick stick = new Joystick(port);
 	// Button button = new JoystickButton(stick, buttonNumber);
-    public Button extendH = new JoystickButton(driver,1);
-//    public Button extendM = new JoystickButton(driver,2);
-    public Button shrink = new JoystickButton(driver,2);
-    public Button extendM = new JoystickButton(driver,3);
+
 	// There are a few additional built in buttons you can use. Additionally,
 	// by subclassing Button you can create custom triggers and bind those to
 	// commands the same as any other Button.
@@ -89,19 +76,11 @@ public class OI {
 	// until it is finished as determined by it's isFinished method.
 	// button.whenReleased(new ExampleCommand());
     
-<<<<<<< HEAD
-    public OI() {
-    	
-    	shrink.whenPressed(new Shrink());
-    	extendH.whenPressed(new ExtendHigh());
-    	extendM.whenPressed(new ExtendMid());
-=======
     public OI(){
         	
     	turnFront.whileHeld(new TurnFront());
     	turnBack.whileHeld(new TurnBack());
     	turnRight.whileHeld(new TurnRight());
     	turnLeft.whileHeld(new TurnLeft());
->>>>>>> master
     }
 }
