@@ -271,7 +271,7 @@ public class SwerveDrive implements MotorSafety {
 	
 	public void turnMotorsDrive(double angle_CMD , double speed){
 	    for(int i=0;i<4;i++){
-	    	driveMotors[i].set(ControlMode.Velocity, speed * 5400);
+	    	driveMotors[i].set(ControlMode.Velocity, speed * 4800);
 	    }
 		
 	}

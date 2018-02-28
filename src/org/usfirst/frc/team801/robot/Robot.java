@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-import org.usfirst.frc.team801.robot.Utilities.PathBuilder;
 import org.usfirst.frc.team801.robot.commands.ExampleCommand;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
@@ -87,7 +86,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 		
-		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
+//		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
 //		PathBuilder logic = new PathBuilder(LOCATION, fieldLayout);
 //		logic.getPath();
 		m_autonomousCommand = m_chooser.getSelected();

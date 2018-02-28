@@ -46,11 +46,11 @@ public class Chassis extends PIDSubsystem {
 
 	public Chassis() {
 
-		super(Constants.ultrakP, Constants.ultrakI, Constants.ultrakD, 0.01);
+		super(Constants.ultrakP, Constants.ultrakI, Constants.ultrakD, Constants.ultrakF);
 		getPIDController().setAbsoluteTolerance(1.0);
 		getPIDController().setInputRange(0.0, 360.0);
 		getPIDController().setContinuous(true);
-		getPIDController().setOutputRange(-1.0, 1.0);
+		getPIDController().setOutputRange(-0.5, 0.5);
 		enable();
 //		tilt = new RollingAverage(5);
 //		x_g = new RollingAverage(5);
