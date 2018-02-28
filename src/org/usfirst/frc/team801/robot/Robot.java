@@ -17,7 +17,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team801.robot.commands.ExampleCommand;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
-import org.usfirst.frc.team801.robot.subsystems.Elevator;
 import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
 
 /**
@@ -32,7 +31,6 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	public static Object prefs;
 	public static Chassis chassis;
-	public static Elevator elevator;
 
 
 	Command m_autonomousCommand;
@@ -43,19 +41,6 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	@Override
-<<<<<<< HEAD
-	public void robotInit() {
-		
-    	prefs = Preferences.getInstance();
-    	RobotMap.init();
-    	
-    	chassis = new Chassis();
-		elevator = new Elevator();
-		
-		m_chooser.addDefault("Default Auto", new ExampleCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", m_chooser);
-=======
 	public void robotInit()
 	{
     	prefs = Preferences.getInstance();
@@ -65,7 +50,6 @@ public class Robot extends IterativeRobot {
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
 		SmartDashboard.putData(Scheduler.getInstance());
->>>>>>> master
 		oi = new OI();
 	}
 
@@ -84,7 +68,7 @@ public class Robot extends IterativeRobot {
 	public void disabledPeriodic() {
 
 		Scheduler.getInstance().run();
-//		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
+		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
 
 	}
 
