@@ -38,6 +38,7 @@ public class RobotMap {
 	public static Adis16448_IMU imu;
 	
 	public static SwerveDrive swerveDrive;
+	public static Team801TalonSRX elevator = new Team801TalonSRX(2);;
 	
 	
 	public static void init() 
@@ -49,7 +50,7 @@ public class RobotMap {
 		
 		swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backLeftDrive,backRightDrive,
 			frontRightTurn,frontLeftTurn,backLeftTurn,backRightTurn,
-			10);
+			5);
 	
 	}
 	

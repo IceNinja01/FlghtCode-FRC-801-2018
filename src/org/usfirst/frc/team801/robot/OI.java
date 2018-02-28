@@ -13,6 +13,10 @@ import org.usfirst.frc.team801.robot.commands.chassis.TurnBack;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnFront;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnLeft;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnRight;
+import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
+import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
+import org.usfirst.frc.team801.robot.commands.elevator.ExtendMid;
+import org.usfirst.frc.team801.robot.commands.elevator.Shrink;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -26,12 +30,19 @@ public class OI {
 	double commandTurns[][] = { {12, 90, 45} , {24, 90, 45}, {36, 90, 45} }; //turns as a square 12"x12"
 	
     public XboxController driver = new XboxController(0);
-
+    public XboxController manip = new XboxController(1);
+    
     public Button driveSquare = new JoystickButton(driver,6);
     public Button turnFront = new JoystickButton(driver,4);
     public Button turnRight = new JoystickButton(driver,2);
     public Button turnLeft = new JoystickButton(driver,3);
     public Button turnBack = new JoystickButton(driver,1);
+    
+    public Button shrink = new JoystickButton(manip, 1);
+    public Button elevatorLow = new JoystickButton(manip, 2);
+    public Button elevatorMid = new JoystickButton(manip, 3);
+    public Button elevatorHigh = new JoystickButton(manip, 4);
+
 
     //
     //	      5	    _                            _    6
@@ -86,6 +97,11 @@ public class OI {
     	turnBack.whileHeld(new TurnBack());
     	turnRight.whileHeld(new TurnRight());
     	turnLeft.whileHeld(new TurnLeft());
-    	driveSquare.whenPressed(new Square());
+//    	driveSquare.whenPressed(new Square());
+    	shrink.whenPressed(new Shrink());
+    	elevatorLow.whenPressed(new ExtendLow());
+    	elevatorMid.whenPressed(new ExtendMid());
+    	elevatorHigh.whenPressed(new ExtendHigh());
+
     }
 }

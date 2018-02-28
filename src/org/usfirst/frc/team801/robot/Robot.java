@@ -17,6 +17,7 @@ import org.usfirst.frc.team801.robot.commands.ExampleCommand;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
+import org.usfirst.frc.team801.robot.subsystems.Elevator;
 import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
 
 /**
@@ -31,7 +32,7 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	public static Object prefs;
 	public static Chassis chassis;
-
+    public static Elevator elevator;
 	Command m_autonomousCommand;
 	
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -46,6 +47,7 @@ public class Robot extends IterativeRobot {
     	prefs = Preferences.getInstance();
     	RobotMap.init();
 		chassis = new Chassis();
+		elevator = new Elevator();
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);

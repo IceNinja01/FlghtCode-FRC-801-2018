@@ -48,6 +48,7 @@ public class Chassis extends PIDSubsystem {
 //	private RollingAverage tilt;
 
 	private double acceleration;
+private double elevatorHeight;
 
 	public Chassis() {
 
@@ -73,12 +74,17 @@ public class Chassis extends PIDSubsystem {
 	}
 
 	public void motorDrive(double angleCmd_Deg) {
+		elevatorHeight = Robot.elevator.getCurrentPosition();
+		
+		if(elevatorHeight> 48.0) {
+			
+			chassisSwerveDrive.setMaxDriveVoltage(0.5);
+		}
 		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(Hand.kLeft), 1.5), 0.01, 1.0);
 		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(Hand.kLeft), 1.5), 0.01, 1.0);
 		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.01, 1.0);
 //		SmartDashboard.putNumber("Joystick X", x);
 //		SmartDashboard.putNumber("Joystick Y", y);
-
 		chassisSwerveDrive.drive(x, y, z, angleCmd_Deg);
 		
 //		getTilt();

@@ -7,7 +7,7 @@ public class Constants {
 	public static double BackLeftBias = Robot.prefs.getDouble("BackLeftBias", 0.0);
 	public static double BackRightBias = Robot.prefs.getDouble("BackRightBias", 0.0);
 	*/
-	public static final double[] AngleBias = {177,20.0,208.0,324.7};
+	public static final double[] AngleBias = {206.5,16.6,211.1,325.1};
 	
 	/** which Talon on CANBus*/
 	public static final int kTalonID = 0;
@@ -55,7 +55,18 @@ public class Constants {
 	public static double chassisAcceleration = 50;		//acceleration slope inches/sec
 	public static double chassisVelocity = 50;			//Max Velocity inches/sec
 	public static double wheelRotPerInch = 0.6;	//Sensor Shaft revolutions per wheel turn in inch
+	
+	//AutoSelector Constants
+		public static final int LEFT = 0, CENTER = 1, RIGHT = 2;
+		public static final int LOCATION = LEFT;
+		
+		public static double elevatorMotorBottomPos = 0.0;
 
+		public static double elevatorMotorTopPos = 75; //inches
+
+		public static double elevatorMotorMidPos = 56;
+		
+		public static double elevatorMotorLowPos = 24;
 	
 	
 }
