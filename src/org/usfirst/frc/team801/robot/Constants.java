@@ -58,4 +58,10 @@ public class Constants {
 	public static final int LEFT = 0, CENTER = 1, RIGHT = 2;
 	public static final int LOCATION = LEFT;
 	
+	public static double elevatorMotorBottomPos = 0.0;
+
+	public static double elevatorMotorTopPos = 75; //inches
+
+	public static double elevatorMotorMidPos = 50;
+	
 }
