@@ -77,7 +77,7 @@ public class OI {
     	bottomElevator.whenPressed(new Shrink());
     	highElevator.whenPressed(new ExtendHigh());
     	midElevator.whenPressed(new ExtendMid());	
-    	lowElevator.whenPressed(new ExtendLow());
+//    	lowElevator.whenPressed(new ExtendLow());
 
     }
 }
