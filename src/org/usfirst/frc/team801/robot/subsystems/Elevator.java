@@ -3,7 +3,6 @@ package org.usfirst.frc.team801.robot.subsystems;
 import org.usfirst.frc.team801.robot.Constants;
 import org.usfirst.frc.team801.robot.Robot;
 import org.usfirst.frc.team801.robot.RobotMap;
-import org.usfirst.frc.team801.robot.commands.ElevatorMotorInt;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
@@ -22,8 +21,8 @@ public class Elevator extends Subsystem {
 	Team801TalonSRX elevaMotor= RobotMap.elevator;
 	private double rotPerinch = 0.5;
 
-	private int vel = 100;
-	private int acc = 100;
+	private int vel = 50;
+	private int acc = 50;
 	private double targetPosition;
 	
 	public Elevator() {
@@ -41,8 +40,8 @@ public class Elevator extends Subsystem {
     		elevaMotor.configPeakOutputReverse(-11, Constants.kTimeoutMs);
 			
 //    		elevaMotor.selectProfileSlot(0, 0);
-    		elevaMotor.config_kF(0, 0.2, Constants.kTimeoutMs);
-    		elevaMotor.config_kP(0, 0.5, Constants.kTimeoutMs);
+    		elevaMotor.config_kF(0, 0.1, Constants.kTimeoutMs);
+    		elevaMotor.config_kP(0, 1.0, Constants.kTimeoutMs);
     		elevaMotor.config_kI(0, 0, Constants.kTimeoutMs);
     		elevaMotor.config_kD(0, 0.2, Constants.kTimeoutMs);
 			/* set acceleration and vcruise velocity - see documentation */

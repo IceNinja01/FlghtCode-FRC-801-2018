@@ -22,17 +22,17 @@ import edu.wpi.first.wpilibj.AnalogInput;
 public class RobotMap {
 	
 	//Make all the swerve drive talons here
-//	public static Team801TalonSRX frontRightDrive = new Team801TalonSRX(1);
-//	public static Team801TalonSRX frontRightTurn = new Team801TalonSRX(5);
-//	
-//	public static Team801TalonSRX frontLeftDrive = new Team801TalonSRX(14);
-//	public static Team801TalonSRX frontLeftTurn = new Team801TalonSRX(10);
+	public static Team801TalonSRX frontRightDrive = new Team801TalonSRX(1);
+	public static Team801TalonSRX frontRightTurn = new Team801TalonSRX(5);
 	
-//	public static Team801TalonSRX backRightDrive = new Team801TalonSRX(0);
-//	public static Team801TalonSRX backRightTurn = new Team801TalonSRX(4);
-//	
-//	public static Team801TalonSRX backLeftDrive = new Team801TalonSRX(15);
-//	public static Team801TalonSRX backLeftTurn = new Team801TalonSRX(11);
+	public static Team801TalonSRX frontLeftDrive = new Team801TalonSRX(14);
+	public static Team801TalonSRX frontLeftTurn = new Team801TalonSRX(10);
+	
+	public static Team801TalonSRX backRightDrive = new Team801TalonSRX(0);
+	public static Team801TalonSRX backRightTurn = new Team801TalonSRX(4);
+	
+	public static Team801TalonSRX backLeftDrive = new Team801TalonSRX(15);
+	public static Team801TalonSRX backLeftTurn = new Team801TalonSRX(11);
 	
 	public static Team801TalonSRX elevator = new Team801TalonSRX(6);
 
@@ -48,9 +48,9 @@ public class RobotMap {
 		imu.calibrate();
 		imu.reset();
 		
-//		swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backLeftDrive,backRightDrive,
-//			frontRightTurn,frontLeftTurn,backLeftTurn,backRightTurn,
-//			10);
+		swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backLeftDrive,backRightDrive,
+			frontRightTurn,frontLeftTurn,backLeftTurn,backRightTurn,
+			10);
 	
 	}
 	
