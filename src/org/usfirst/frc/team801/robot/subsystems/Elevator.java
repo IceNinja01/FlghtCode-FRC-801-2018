@@ -20,7 +20,7 @@ public class Elevator extends Subsystem {
     // Put methods for controlling this subsystem
     // here. Call these from Commands.
 	Team801TalonSRX elevaMotor= RobotMap.elevator;
-	private double rotPerinch = 0.6;
+	private double rotPerinch = 0.5;
 
 	private int vel = 100;
 	private int acc = 100;
