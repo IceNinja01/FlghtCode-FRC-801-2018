@@ -39,8 +39,8 @@ public class SwerveDrive implements MotorSafety {
 	private String motorName[] = {"FrontRight","FrontLeft","BackLeft","BackRight"};
 
 	private double[] oldAngle = {0,0,0,0};
-	private double maxDriveVoltage = 0.4;
-	private double maxTurnVoltage = 0.5;
+	private double maxDriveVoltage = 1.0;
+	private double maxTurnVoltage = 0.7;
 	private int deadBand = 2; //
 	private Team801TalonSRX[] driveMotors  = new Team801TalonSRX[4];
 	private Team801TalonSRX[] turnMotors  = new Team801TalonSRX[4];
@@ -127,7 +127,7 @@ public class SwerveDrive implements MotorSafety {
 		
 		
 		for(int i=0;i<4;i++){
-			int j =i;
+			final int j =i;
 			pidTurnSource[i] = new PIDSource() {				
 				@Override
 				public void setPIDSourceType(PIDSourceType pidSource) {				
@@ -143,9 +143,9 @@ public class SwerveDrive implements MotorSafety {
 			};
 			
 			pidTurnController[i] = new PIDController(kP, kI, kD, pidTurnSource[i], turnMotors[i]);
-			pidTurnController[i].setContinuous(true);
 			pidTurnController[i].setAbsoluteTolerance(deadBand);
 			pidTurnController[i].setInputRange(0, 360);
+			pidTurnController[i].setContinuous(true);
 			pidTurnController[i].setOutputRange(-maxTurnVoltage, maxTurnVoltage);
 			pidTurnController[i].enable();
 		}
@@ -271,7 +271,7 @@ public class SwerveDrive implements MotorSafety {
 	
 	public void turnMotorsDrive(double angle_CMD , double speed){
 	    for(int i=0;i<4;i++){
-	    	driveMotors[i].set(ControlMode.Velocity, speed * 5400);
+	    	driveMotors[i].set(ControlMode.Velocity, speed * 4800);
 	    }
 		
 	}

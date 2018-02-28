@@ -7,12 +7,14 @@
 
 package org.usfirst.frc.team801.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc.team801.robot.commands.ExampleCommand;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.Elevator;
@@ -32,6 +34,7 @@ public class Robot extends IterativeRobot {
 	public static Chassis chassis;
 	public static Elevator elevator;
 
+
 	Command m_autonomousCommand;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 
@@ -40,6 +43,7 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	@Override
+<<<<<<< HEAD
 	public void robotInit() {
 		
     	prefs = Preferences.getInstance();
@@ -51,6 +55,17 @@ public class Robot extends IterativeRobot {
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
+=======
+	public void robotInit()
+	{
+    	prefs = Preferences.getInstance();
+    	RobotMap.init();
+		chassis = new Chassis();
+		m_chooser.addDefault("Default Auto", new ExampleCommand());
+		// chooser.addObject("My Auto", new MyAutoCommand());
+		SmartDashboard.putData("Auto mode", m_chooser);
+		SmartDashboard.putData(Scheduler.getInstance());
+>>>>>>> master
 		oi = new OI();
 	}
 
@@ -86,6 +101,10 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		
+//		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
+//		PathBuilder logic = new PathBuilder(LOCATION, fieldLayout);
+//		logic.getPath();
 		m_autonomousCommand = m_chooser.getSelected();
 
 		/*

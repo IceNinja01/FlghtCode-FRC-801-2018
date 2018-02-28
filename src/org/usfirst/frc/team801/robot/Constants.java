@@ -7,7 +7,7 @@ public class Constants {
 	public static double BackLeftBias = Robot.prefs.getDouble("BackLeftBias", 0.0);
 	public static double BackRightBias = Robot.prefs.getDouble("BackRightBias", 0.0);
 	*/
-	public static final double[] AngleBias = {177,190.0,183,297};
+	public static final double[] AngleBias = {206.5,16.6,211.1,325.1};
 	
 	/** which Talon on CANBus*/
 	public static final int kTalonID = 0;
@@ -48,11 +48,15 @@ public class Constants {
 	 */
 	public static final double kNeutralDeadband  = 0.01;
 
-	public static double ultrakP = 0.01;
+	public static double ultrakP = 0.02;
+	public static double ultrakI = 0.0000001;
+	public static double ultrakD = 1.0;
 
-	public static double ultrakI = 0.0;
-
-	public static double ultrakD = 0.0;
+	public static double ultrakF = 0.01;
+	
+	//AutoSelector Constants
+	public static final int LEFT = 0, CENTER = 1, RIGHT = 2;
+	public static final int LOCATION = LEFT;
 	
 	public static double elevatorMotorBottomPos = 0.0;
 
