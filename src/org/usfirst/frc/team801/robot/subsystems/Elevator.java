@@ -70,12 +70,20 @@ public class Elevator extends Subsystem {
     	//compress elevator
     }
     
+    public void extendLow() {
+    	targetPosition = (int) Constants.elevatorMotorLowPos*rotPerinch*4096;
+    	elevaMotor.set(ControlMode.MotionMagic, targetPosition);
+    	getCurrentPosition();
+    	//extend to Lower Switch
+    }
+    
     public void extendMid() {
     	targetPosition = (int) Constants.elevatorMotorMidPos*rotPerinch*4096;
     	elevaMotor.set(ControlMode.MotionMagic, targetPosition);
     	getCurrentPosition();
     	//extend to Lower Switch
     }
+    
     
     public void extendHigh() {
     	targetPosition =(int) Constants.elevatorMotorTopPos*rotPerinch*4096;

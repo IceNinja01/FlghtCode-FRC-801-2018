@@ -43,29 +43,17 @@ public class Robot extends IterativeRobot {
 	 * used for any initialization code.
 	 */
 	@Override
-<<<<<<< HEAD
-	public void robotInit() {
-		
-    	prefs = Preferences.getInstance();
-    	RobotMap.init();
-    	
-    	chassis = new Chassis();
-		elevator = new Elevator();
-		
-		m_chooser.addDefault("Default Auto", new ExampleCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
-		SmartDashboard.putData("Auto mode", m_chooser);
-=======
 	public void robotInit()
 	{
     	prefs = Preferences.getInstance();
     	RobotMap.init();
 		chassis = new Chassis();
+		elevator = new Elevator();
+
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
 		SmartDashboard.putData(Scheduler.getInstance());
->>>>>>> master
 		oi = new OI();
 	}
 
