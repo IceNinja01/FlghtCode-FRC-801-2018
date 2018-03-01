@@ -188,6 +188,10 @@ private double elevatorHeight;
 		chassisSwerveDrive.motionMagicInit();
 	}
 	
+	public void resetEnocdersPosition() {
+		
+	}
+	
 	public void driveMotionMagic(double distance, double angle) {
 		chassisSwerveDrive.motionMagicDrive(distance, angle);
 	}

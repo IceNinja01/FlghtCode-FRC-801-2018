@@ -115,12 +115,12 @@ public class Elevator extends Subsystem {
     public double getCurrentPosition() {
     	double pos = elevaMotor.getSelectedSensorPosition(0);
 
-    	System.out.print("\ttarget: ");
-    	System.out.print(targetPosition);
-    	System.out.print("\tpos: ");
-    	System.out.print(pos);
-    	System.out.print("\terr: ");
-    	System.out.println(elevaMotor.getClosedLoopError(0));
+//    	System.out.print("\ttarget: ");
+//    	System.out.print(targetPosition);
+//    	System.out.print("\tpos: ");
+//    	System.out.print(pos);
+//    	System.out.print("\terr: ");
+//    	System.out.println(elevaMotor.getClosedLoopError(0));
     	pos /= rotPerinch*4096; 
     	return pos;
     	

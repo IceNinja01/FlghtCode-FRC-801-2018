@@ -52,21 +52,21 @@ public class Constants {
 	public static double ultrakI = 0.0000001;
 	public static double ultrakD = 1.0;
 
-	public static double chassisAcceleration = 50;		//acceleration slope inches/sec
-	public static double chassisVelocity = 50;			//Max Velocity inches/sec
+	public static double chassisAcceleration = 100;		//acceleration slope inches/sec
+	public static double chassisVelocity = 100;			//Max Velocity inches/sec
 	public static double wheelRotPerInch = 0.6;	//Sensor Shaft revolutions per wheel turn in inch
 	
 	//AutoSelector Constants
 		public static final int LEFT = 0, CENTER = 1, RIGHT = 2;
 		public static final int LOCATION = LEFT;
 		
-		public static double elevatorMotorBottomPos = 0.0;
-
+		public static double elevatorMotorBottomPos = 0.0; //inches
+		public static double elevatorMotorLowPos = 24; //inches
+		public static double elevatorMotorMidPos = 56; //inches
 		public static double elevatorMotorTopPos = 75; //inches
 
-		public static double elevatorMotorMidPos = 56;
 		
-		public static double elevatorMotorLowPos = 24;
+		
 	
 	
 }

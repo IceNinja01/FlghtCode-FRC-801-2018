@@ -53,6 +53,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Auto mode", m_chooser);
 		SmartDashboard.putData(Scheduler.getInstance());
 		SmartDashboard.putBoolean("Start Motion", false);
+    	Robot.chassis.setMotionMagic();
 		oi = new OI();
 	}
 
@@ -89,7 +90,7 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		m_autonomousCommand = new CMD_Drive();
+//		m_autonomousCommand = new CMD_Drive(0, 0, 0, 0);
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team801.robot.commands;
 
+import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
@@ -10,10 +11,10 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class Square extends CommandGroup {
 
     public Square() {
-    	addSequential(new MotionMagicDrive(24,0), 2);
-    	addSequential(new MotionMagicDrive(24,90), 2);
-    	addSequential(new MotionMagicDrive(24,180), 2);
-    	addSequential(new MotionMagicDrive(24,270), 2);
+    	addSequential(new CMD_Drive(0.0, 0.6, 0.0, 48.0));
+    	addSequential(new CMD_Drive(0.6, 0.0, 90.0, 36.0));
+    	addSequential(new CMD_Drive(0.0, -0.6, 180.0, 48.0));
+    	addSequential(new CMD_Drive(-0.6, 0.0, 270.0, 36.0));
 
     	
         // Add Commands here:

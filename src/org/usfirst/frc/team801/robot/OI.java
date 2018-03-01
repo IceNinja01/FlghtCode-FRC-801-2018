@@ -8,6 +8,7 @@
 package org.usfirst.frc.team801.robot;
 
 import org.usfirst.frc.team801.robot.commands.Square;
+import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnBack;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnFront;
@@ -97,7 +98,7 @@ public class OI {
     	turnBack.whileHeld(new TurnBack());
     	turnRight.whileHeld(new TurnRight());
     	turnLeft.whileHeld(new TurnLeft());
-//    	driveSquare.whenPressed(new Square());
+    	driveSquare.whenPressed(new Square());
     	shrink.whenPressed(new Shrink());
     	elevatorLow.whenPressed(new ExtendLow());
     	elevatorMid.whenPressed(new ExtendMid());

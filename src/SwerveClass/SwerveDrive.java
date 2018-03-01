@@ -579,8 +579,8 @@ private void setupMotorSafety() {
 			driveMotors[i].clearMotionProfileTrajectories();
 			/* Set the motors PIDF constants**/
 			//index 0
-			driveMotors[i].config_kF(0, .2, Constants.kTimeoutMs);
-			driveMotors[i].config_kP(0, .2 , Constants.kTimeoutMs);
+			driveMotors[i].config_kF(0, .05, Constants.kTimeoutMs);
+			driveMotors[i].config_kP(0, 0.5 , Constants.kTimeoutMs);
 			driveMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
 			driveMotors[i].config_kD(0, 0.6, Constants.kTimeoutMs);
 			driveMotors[i].setSelectedSensorPosition(0, 0, Constants.kTimeoutMs);
@@ -605,7 +605,6 @@ private void setupMotorSafety() {
 		SmartDashboard.putNumber("Target", targetPosition);
 		for(int i=0; i<4 ;i++){
 //			driveMotors[i].selectProfileSlot(1, 0);
-			driveMotors[i].set(ControlMode.MotionMagic, targetPosition);
 			
 			degs[i] = currentAngle(turnMotors[i],i);
 	    		    	
@@ -624,6 +623,8 @@ private void setupMotorSafety() {
 		    }
 		    pidTurnController[i].setSetpoint(wheelAngles[i]);
 	    	oldAngle[i] = wheelAngles[i];
+			driveMotors[i].set(ControlMode.MotionMagic, targetPosition);
+
 	    	//now the angle is set to move to the shortest path, which is just 180 degrees 
 	    	//from the current heading
 		    	
@@ -633,15 +634,15 @@ private void setupMotorSafety() {
 	
 	public double getTraveledDistance() {
 		//Used during Motion Magic Profile to find the robots distance traveled
-
+		double dist = 0;
 		for(int i=0;i<4;i++){
-			distance += driveMotors[i].getSelectedSensorPosition(0);
+			dist += driveMotors[i].getSelectedSensorPosition(0);
 		}
-		distance /=driveMotors.length;
-		distance *= 12.5/(7.5*4096); //convert to inches
-		SmartDashboard.putNumber("TraveledDistance", distance);
-		System.out.println(distance);
-		return distance;
+		dist /= driveMotors.length;
+		dist *= 12.5/(7.5*4096); //convert to inches
+		SmartDashboard.putNumber("TraveledDistance", dist);
+//		System.out.println(distance);
+		return -dist;
 
 	}
 	public int getPositionErrorDrive() {
@@ -657,6 +658,8 @@ private void setupMotorSafety() {
 			err +=error[i];
 		}
 		err /= 4;
+		
+		err /= 4096;
 		
 		System.out.print(err);
 		

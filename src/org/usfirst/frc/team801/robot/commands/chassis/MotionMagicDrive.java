@@ -24,7 +24,6 @@ public class MotionMagicDrive extends Command {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.chassis);
         this.distance = distance;
-
         this.turnAngle= turnAngle; //array of distance to turn, the angle to turn from current 90 degree left = -90, rad/sec
 
 	}
@@ -33,32 +32,36 @@ public class MotionMagicDrive extends Command {
     protected void initialize() {
     	Robot.chassis.pointWheels(turnAngle); //point wheels strait
     	Timer.delay(0.3);
-    	Robot.chassis.setMotionMagic();
-    	Timer.delay(0.3);
-       	error = Robot.chassis.getChassisError();;
-    	System.out.println(error);
-
+       	dist = Robot.chassis.getChassisPosition();
+       	distance += dist;
+       	distance *= -1;
+    	System.out.print("target:\t" + -distance);
+    	System.out.print("\tpos:\t" + -dist);
+    	System.out.println("\terror:\t" + error);
     	SmartDashboard.putBoolean("Start Motion", true);
     	
     }
+    
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	Robot.chassis.driveMotionMagic(distance, turnAngle);
-    	error = Robot.chassis.getChassisError();;
-    	System.out.println(error);
+    	dist = Robot.chassis.getChassisPosition();;
+    	error = -distance - dist;
+    	System.out.print("target:\t" + -distance);
+    	System.out.print("\tpos:\t" + -dist);
+    	System.out.println("\terror:\t" + error);
     	
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false; //200 is 0.05% of 4096 which is 1 revolution of the shaft
+        return (error <= 1.0); //200 is 0.05% of 4096 which is 1 revolution of the shaft
     }
 
     // Called once after isFinished returns true
     protected void end() {
-    	Robot.chassis.driveInit();
-		SmartDashboard.putBoolean("Start Motion", false);
+    	SmartDashboard.putBoolean("Start Motion", false);
 
     }
 
