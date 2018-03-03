@@ -7,6 +7,7 @@
 
 package org.usfirst.frc.team801.robot;
 
+import org.usfirst.frc.team801.robot.Utilities.XBOXJoystick;
 import org.usfirst.frc.team801.robot.commands.Square;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
@@ -32,20 +33,6 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
 public class OI {
 	double commandTurns[][] = { {12, 90, 45} , {24, 90, 45}, {36, 90, 45} }; //turns as a square 12"x12"
 	
-    public XboxController driver = new XboxController(0);
-    public XboxController manip = new XboxController(1);
-    
-    public Button driveSquare = new JoystickButton(driver,6);
-    public Button turnFront = new JoystickButton(driver,4);
-    public Button turnRight = new JoystickButton(driver,2);
-    public Button turnLeft = new JoystickButton(driver,3);
-    public Button turnBack = new JoystickButton(driver,1);
-    
-    public Button shrink = new JoystickButton(manip, 1);
-    public Button elevatorLow = new JoystickButton(manip, 2);
-    public Button elevatorMid = new JoystickButton(manip, 3);
-    public Button elevatorHigh = new JoystickButton(manip, 4);
-
 
 
     //
@@ -97,7 +84,7 @@ public class OI {
 	// until it is finished as determined by it's isFinished method.
 	// button.whenReleased(new ExampleCommand());
     
-    public OI(){
+   
         	
 	   public XBOXJoystick driver = new XBOXJoystick(0);
 //	    public XboxController manip = new XboxController(1);
@@ -108,10 +95,10 @@ public class OI {
 	    public Button turnLeft = new JoystickButton(driver,3);
 	    public Button turnBack = new JoystickButton(driver,1);
 	    
-	    public Button bottomElevator = new JoystickButoon(manip, 1);
-	    public Button lowElevator = new JoystickButoon(manip, 2);
-	    public Button midElevator = new JoystickButoon(manip, 3);
-	    public Button highElevator = new JoystickButoon(manip, 4);
+	    public Button bottomElevator = new JoystickButton(manip, 1);
+	    public Button lowElevator = new JoystickButton(manip, 2);
+	    public Button midElevator = new JoystickButton(manip, 3);
+	    public Button highElevator = new JoystickButton(manip, 4);
     
     public OI() {
     	turnFront.whileHeld(new TurnFront());
@@ -122,7 +109,7 @@ public class OI {
     	bottomElevator.whenPressed(new Shrink());
     	highElevator.whenPressed(new ExtendHigh());
     	midElevator.whenPressed(new ExtendMid());	
-//    	lowElevator.whenPressed(new ExtendLow());
+    	lowElevator.whenPressed(new ExtendLow());
 
     }
 }
