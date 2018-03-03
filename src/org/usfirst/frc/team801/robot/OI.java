@@ -7,15 +7,19 @@
 
 package org.usfirst.frc.team801.robot;
 
+import org.usfirst.frc.team801.robot.commands.Square;
+import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
+import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
 
-import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
-import org.usfirst.frc.team801.robot.commands.elevator.ExtendMid;
-import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
-import org.usfirst.frc.team801.robot.commands.elevator.Shrink;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnBack;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnFront;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnLeft;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnRight;
+import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
+import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
+import org.usfirst.frc.team801.robot.commands.elevator.ExtendMid;
+import org.usfirst.frc.team801.robot.commands.elevator.Shrink;
+
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -26,7 +30,24 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
+	double commandTurns[][] = { {12, 90, 45} , {24, 90, 45}, {36, 90, 45} }; //turns as a square 12"x12"
 	
+    public XboxController driver = new XboxController(0);
+    public XboxController manip = new XboxController(1);
+    
+    public Button driveSquare = new JoystickButton(driver,6);
+    public Button turnFront = new JoystickButton(driver,4);
+    public Button turnRight = new JoystickButton(driver,2);
+    public Button turnLeft = new JoystickButton(driver,3);
+    public Button turnBack = new JoystickButton(driver,1);
+    
+    public Button shrink = new JoystickButton(manip, 1);
+    public Button elevatorLow = new JoystickButton(manip, 2);
+    public Button elevatorMid = new JoystickButton(manip, 3);
+    public Button elevatorHigh = new JoystickButton(manip, 4);
+
+
+
     //
     //	      5	    _                            _    6
     //	       _.-'` `-._                    _,-' `'-._
@@ -47,6 +68,7 @@ public class OI {
     //	  `.__,-'                                    `-.__,'
     //
 
+
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.
@@ -54,6 +76,29 @@ public class OI {
 	// number it is.
 	// Joystick stick = new Joystick(port);
 	// Button button = new JoystickButton(stick, buttonNumber);
+
+	// There are a few additional built in buttons you can use. Additionally,
+	// by subclassing Button you can create custom triggers and bind those to
+	// commands the same as any other Button.
+
+	//// TRIGGERING COMMANDS WITH BUTTONS
+	// Once you have a button, it's trivial to bind it to a button in one of
+	// three ways:
+
+	// Start the command when the button is pressed and let it run the command
+	// until it is finished as determined by it's isFinished method.
+	// button.whenPressed(new ExampleCommand());
+
+	// Run the command while the button is being held down and interrupt it once
+	// the button is released.
+	// button.whileHeld(new ExampleCommand());
+
+	// Start the command when the button is released and let it run the command
+	// until it is finished as determined by it's isFinished method.
+	// button.whenReleased(new ExampleCommand());
+    
+    public OI(){
+        	
 	   public XBOXJoystick driver = new XBOXJoystick(0);
 //	    public XboxController manip = new XboxController(1);
 	    public XBOXJoystick manip = new XBOXJoystick(1);
