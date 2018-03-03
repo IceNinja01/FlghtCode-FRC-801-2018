@@ -20,7 +20,8 @@ import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendMid;
 import org.usfirst.frc.team801.robot.commands.elevator.Shrink;
-
+import org.usfirst.frc.team801.robot.commands.pinchers.ClosePinchers;
+import org.usfirst.frc.team801.robot.commands.pinchers.OpenPinchers;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -94,6 +95,8 @@ public class OI {
 	    public Button turnRight = new JoystickButton(driver,2);
 	    public Button turnLeft = new JoystickButton(driver,3);
 	    public Button turnBack = new JoystickButton(driver,1);
+	    public Button openPinch = new JoystickButton(driver,7);
+	    public Button closePinch = new JoystickButton(driver,8);
 	    
 	    public Button bottomElevator = new JoystickButton(manip, 1);
 	    public Button lowElevator = new JoystickButton(manip, 2);
@@ -105,6 +108,8 @@ public class OI {
     	turnBack.whileHeld(new TurnBack());
     	turnRight.whileHeld(new TurnRight());
     	turnLeft.whileHeld(new TurnLeft());	
+    	openPinch.whileHeld(new OpenPinchers());
+    	closePinch.whileHeld(new ClosePinchers());
     	
     	bottomElevator.whenPressed(new Shrink());
     	highElevator.whenPressed(new ExtendHigh());

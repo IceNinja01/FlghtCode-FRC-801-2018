@@ -22,6 +22,7 @@ import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.Elevator;
 import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team801.robot.subsystems.Pinchers;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,6 +36,7 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	public static Object prefs;
 	public static Chassis chassis;
+	public static Pinchers pinchers;
 	Command m_autonomousCommand;
 	public static Elevator elevator;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -50,6 +52,7 @@ public class Robot extends IterativeRobot {
     	RobotMap.init();
 		chassis = new Chassis();
 		elevator = new Elevator();
+		pinchers = new Pinchers();
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
