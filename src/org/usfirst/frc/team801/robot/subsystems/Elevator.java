@@ -22,7 +22,7 @@ public class Elevator extends Subsystem {
 	private double rotPerinch = 0.5;
 
 	private int vel = 50;
-	private int acc = 50;
+	private int acc = 5;
 	private double targetPosition;
 	
 	public Elevator() {
@@ -113,14 +113,16 @@ public class Elevator extends Subsystem {
     }
     
     public double getCurrentPosition() {
-    	System.out.print("\ttarget: ");
-    	System.out.print(targetPosition);
-    	System.out.print("\tpos: ");
-    	System.out.print(elevaMotor.getSelectedSensorPosition(0));
-    	System.out.print("\terr: ");
-    	System.out.println(elevaMotor.getClosedLoopError(0));
-    	return elevaMotor.getClosedLoopError(0);
-    	
+    	double pos = elevaMotor.getSelectedSensorPosition(0);
+
+//    	System.out.print("\ttarget: ");
+//    	System.out.print(targetPosition);
+//    	System.out.print("\tpos: ");
+//    	System.out.print(pos);
+//    	System.out.print("\terr: ");
+//    	System.out.println(elevaMotor.getClosedLoopError(0));
+    	pos /= rotPerinch*4096; 
+    	return pos;
     }
     
     public void setDriveCurrentLimit(int peakAmps, int durationMs, int continousAmps) {

@@ -33,6 +33,7 @@ public class RobotMap {
 	
 	public static Team801TalonSRX backLeftDrive = new Team801TalonSRX(15);
 	public static Team801TalonSRX backLeftTurn = new Team801TalonSRX(11);
+
 	
 	public static Team801TalonSRX elevator = new Team801TalonSRX(6);
 
@@ -40,7 +41,6 @@ public class RobotMap {
 	public static Adis16448_IMU imu;
 	
 	public static SwerveDrive swerveDrive;
-	
 	
 	public static void init() 
 	{
@@ -51,7 +51,7 @@ public class RobotMap {
 		
 		swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backLeftDrive,backRightDrive,
 			frontRightTurn,frontLeftTurn,backLeftTurn,backRightTurn,
-			10);
+			5);
 	
 	}
 	

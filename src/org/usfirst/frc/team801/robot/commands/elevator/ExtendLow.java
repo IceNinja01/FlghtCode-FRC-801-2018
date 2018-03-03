@@ -4,8 +4,7 @@ import org.usfirst.frc.team801.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ExtendMid extends Command {
-	
+public class ExtendLow extends Command {
 	
 	public ExtendLow() {
         // Use requires() here to declare subsystem dependencies

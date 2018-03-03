@@ -37,6 +37,10 @@ public class Chassis extends PIDSubsystem {
 	private double x;
 	private double y;
 	private double z;
+	private double[] turnDistance;
+	private double turnRadius = 3;
+	private double cruiseVelocity;
+
 //	private RollingAverage xAvg;
 //	private RollingAverage yAvg;
 //	private RollingAverage x_g;
@@ -44,13 +48,17 @@ public class Chassis extends PIDSubsystem {
 //	private RollingAverage z_g;
 //	private RollingAverage tilt;
 
+	private double acceleration;
+private double elevatorHeight;
+
 	public Chassis() {
 
-		super(Constants.ultrakP, Constants.ultrakI, Constants.ultrakD, Constants.ultrakF);
+		super(Constants.ultrakP, Constants.ultrakI, Constants.ultrakD, 0.01);
 		getPIDController().setAbsoluteTolerance(1.0);
 		getPIDController().setInputRange(0.0, 360.0);
 		getPIDController().setContinuous(true);
-		getPIDController().setOutputRange(-0.5, 0.5);
+		getPIDController().setOutputRange(-1.0, 1.0);
+
 		enable();
 //		tilt = new RollingAverage(5);
 //		x_g = new RollingAverage(5);
@@ -68,6 +76,13 @@ public class Chassis extends PIDSubsystem {
 	}
 
 	public void motorDrive(double angleCmd_Deg) {
+		elevatorHeight = Robot.elevator.getCurrentPosition();
+		
+		if(elevatorHeight> 48.0) {
+			
+			chassisSwerveDrive.setMaxDriveVoltage(0.5);
+		}
+
 		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(Hand.kLeft), 1.5), 0.01, 1.0);
 		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(Hand.kLeft), 1.5), 0.01, 1.0);
 		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.01, 1.0);
@@ -110,8 +125,16 @@ public class Chassis extends PIDSubsystem {
 		SmartDashboard.putNumber("HeadingError", headingError);
 		SmartDashboard.putNumber("zRateCmd", zRateCmd);
 
-	}
+	}	
+	public void cmdDrive(double x, double y, double gyroCMD, double angleCmd) {
+		headingCMD = gyroCMD;
+		headingError = Robot.chassis.getGyroAngle() - headingCMD;
+		chassisSwerveDrive.drive(x, y, zRateCmd, angleCmd);
+		SmartDashboard.putNumber("HeadingCMD", headingCMD);
+		SmartDashboard.putNumber("HeadingError", headingError);
+		SmartDashboard.putNumber("zRateCmd", zRateCmd);
 
+	}
 	public void stop() {
 		chassisSwerveDrive.stopMotor();
 	}
@@ -159,6 +182,58 @@ public class Chassis extends PIDSubsystem {
 		return headingCMD;
 	}
 	
+	public void driveInit() {
+		chassisSwerveDrive.driveInit();
+	}
+	
+	public void setMotionMagic() {
+		chassisSwerveDrive.motionMagicInit();
+	}
+	
+	public void resetEnocdersPosition() {
+		
+	}
+	
+	public void driveMotionMagic(double distance, double angle) {
+		chassisSwerveDrive.motionMagicDrive(distance, angle);
+	}
+
+	public void getTurnAngles(double[][] turnAngle) {
+		// This method calculates the angle to turn the turn motors while driving a motion magic profile at some 
+		// drive position
+		double angularTime;
+		double pos = getChassisPosition();
+		int j = 0;
+		for(int i=0; i<turnAngle.length; i++) {
+			double newAngle = turnAngle[i-1][1];
+			if(turnAngle[i][0] - getChassisPosition() < 0.5){ //distance is less than one inch to turn point
+				angularTime = (turnAngle[i][1] - turnAngle[i-1][1])/ turnAngle[i][2]  ;// angluar speed[i][2]
+				j = (int) (angularTime / Constants.kTimeoutMs);
+				double dA = turnAngle[i][1] / j;
+//				dA *= turnAngle[i][3];
+				for(int k=0; k<j; k++) {//start turning
+					newAngle += dA;
+					newAngle = Utils.wrapAngle0To360Deg(newAngle);
+					chassisSwerveDrive.turnMotors(newAngle);
+				}
+			}
+			else{
+				chassisSwerveDrive.turnMotors(newAngle);
+			}
+		}
+		
+	}
+	
+	public double getChassisPosition() {
+		return chassisSwerveDrive.getTraveledDistance();
+		
+	}
+	
+	public double getChassisError() {
+		return chassisSwerveDrive.getPositionErrorDrive();
+	}
+	
+
 }
 //
 //	public void motorDriveHoldHeading(double x, double y, double angleCmd_Deg) {
