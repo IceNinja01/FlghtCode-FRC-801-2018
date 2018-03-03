@@ -1,26 +1,25 @@
-package org.usfirst.frc.team801.robot.commands.elevator;
+package org.usfirst.frc.team801.robot.commands;
 
 import org.usfirst.frc.team801.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class ExtendLow extends Command {
+public class ElevatorMotorInt extends Command {
 	
-	public ExtendLow() {
+	public ElevatorMotorInt() {
         // Use requires() here to declare subsystem dependencies
-        requires(Robot.elevator);
+        // eg. requires(chassis);
+    	requires(Robot.elevator);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	System.out.print("Extend:   ");
-    	Robot.elevator.getCurrentPosition() ;
-    	Robot.elevator.coastMotor();
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.elevator.extendLow();
+    	Robot.elevator.percentOutput();
     	
     }
 
@@ -31,14 +30,10 @@ public class ExtendLow extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
-    	System.out.print("  ");
-
-    	Robot.elevator.getCurrentPosition();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-    	Robot.elevator.stopMotor();
     }
 }

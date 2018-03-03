@@ -40,6 +40,7 @@ public class Chassis extends PIDSubsystem {
 	private double[] turnDistance;
 	private double turnRadius = 3;
 	private double cruiseVelocity;
+
 //	private RollingAverage xAvg;
 //	private RollingAverage yAvg;
 //	private RollingAverage x_g;
@@ -57,6 +58,7 @@ private double elevatorHeight;
 		getPIDController().setInputRange(0.0, 360.0);
 		getPIDController().setContinuous(true);
 		getPIDController().setOutputRange(-1.0, 1.0);
+
 		enable();
 //		tilt = new RollingAverage(5);
 //		x_g = new RollingAverage(5);
@@ -80,11 +82,13 @@ private double elevatorHeight;
 			
 			chassisSwerveDrive.setMaxDriveVoltage(0.5);
 		}
+
 		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(Hand.kLeft), 1.5), 0.01, 1.0);
 		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(Hand.kLeft), 1.5), 0.01, 1.0);
 		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.01, 1.0);
 //		SmartDashboard.putNumber("Joystick X", x);
 //		SmartDashboard.putNumber("Joystick Y", y);
+
 		chassisSwerveDrive.drive(x, y, z, angleCmd_Deg);
 		
 //		getTilt();
@@ -121,8 +125,7 @@ private double elevatorHeight;
 		SmartDashboard.putNumber("HeadingError", headingError);
 		SmartDashboard.putNumber("zRateCmd", zRateCmd);
 
-	}
-	
+	}	
 	public void cmdDrive(double x, double y, double gyroCMD, double angleCmd) {
 		headingCMD = gyroCMD;
 		headingError = Robot.chassis.getGyroAngle() - headingCMD;
@@ -132,7 +135,6 @@ private double elevatorHeight;
 		SmartDashboard.putNumber("zRateCmd", zRateCmd);
 
 	}
-
 	public void stop() {
 		chassisSwerveDrive.stopMotor();
 	}
@@ -231,8 +233,7 @@ private double elevatorHeight;
 		return chassisSwerveDrive.getPositionErrorDrive();
 	}
 	
-	
-	
+
 }
 //
 //	public void motorDriveHoldHeading(double x, double y, double angleCmd_Deg) {

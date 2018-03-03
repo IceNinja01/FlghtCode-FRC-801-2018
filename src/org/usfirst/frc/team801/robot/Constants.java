@@ -65,8 +65,8 @@ public class Constants {
 		public static double elevatorMotorMidPos = 56; //inches
 		public static double elevatorMotorTopPos = 75; //inches
 
-		
-		
-	
+
+	public static double ultrakF = 0.01;
+
 	
 }

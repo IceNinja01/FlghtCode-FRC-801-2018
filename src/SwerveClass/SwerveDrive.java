@@ -41,6 +41,7 @@ public class SwerveDrive implements MotorSafety {
 	private double[] oldAngle = {0,0,0,0};
 	private double maxDriveVoltage = 0.75;
 	private double maxTurnVoltage = 1.0;
+
 	private int deadBand = 2; //
 	private Team801TalonSRX[] driveMotors  = new Team801TalonSRX[4];
 	private Team801TalonSRX[] turnMotors  = new Team801TalonSRX[4];
@@ -57,6 +58,7 @@ public class SwerveDrive implements MotorSafety {
 	private int distance;
 	private int targetPosition;
 	private double[] error = new double[4];
+
 	
 	
 	public  SwerveDrive(final Team801TalonSRX FrontRightDriveMotor,final Team801TalonSRX FrontLeftDriveMotor,final Team801TalonSRX BackLeftDriveMotor,final Team801TalonSRX BackRightDriveMotor,
@@ -110,14 +112,7 @@ public class SwerveDrive implements MotorSafety {
 		turnMotors[i].setSensorPhase(false); 
 
 		driveMotors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
-		
-//		driveMotors[i].setSensorPhase(true);
-        /* set the peak and nominal outputs, 12V means full */
-		driveMotors[i].configNominalOutputForward(0, Constants.kTimeoutMs);
-		driveMotors[i].configNominalOutputReverse(0, Constants.kTimeoutMs);
-		driveMotors[i].configPeakOutputForward(11.0, Constants.kTimeoutMs);
-		driveMotors[i].configPeakOutputReverse(-11.0, Constants.kTimeoutMs);
-		/* 0.001 represents 0.1% - default value is 0.04 or 4% */
+
 		driveMotors[i].configNeutralDeadband(0.01, Constants.kTimeoutMs);
 		driveMotors[i].configAllowableClosedloopError(0, 0, Constants.kTimeoutMs);		
 		/* Set the motors PIDF constants**/
@@ -127,28 +122,26 @@ public class SwerveDrive implements MotorSafety {
 		driveMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
 		driveMotors[i].config_kD(0, 1.0, Constants.kTimeoutMs);
 		driveMotors[i].setSelectedSensorPosition(0, 0, Constants.kTimeoutMs);
-		
-//		//index 1
-//		driveMotors[i].config_kF(1, 0.2, Constants.kTimeoutMs);
-//		driveMotors[i].config_kP(1, 0.2, Constants.kTimeoutMs);
-//		driveMotors[i].config_kI(1, 0.0, Constants.kTimeoutMs);
-//		driveMotors[i].config_kD(1, 0.6, Constants.kTimeoutMs);
-//		driveMotors[i].setSelectedSensorPosition(0, 1, Constants.kTimeoutMs);
 
 		//set motion magic config
 		driveMotors[i].configMotionCruiseVelocity(velocity, Constants.kTimeoutMs);
 		driveMotors[i].configMotionAcceleration(accel, Constants.kTimeoutMs);
-//		//set coast mode
-//		driveMotors[i].setNeutralMode(NeutralMode.Coast);
+		driveMotors[i].configNeutralDeadband(0.001, Constants.kTimeoutMs);
+		/* Set the motors PIDF constants**/
+		driveMotors[i].config_kF(0, .026, Constants.kTimeoutMs);
+		driveMotors[i].config_kP(0, .051, Constants.kTimeoutMs);
+		driveMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
+		driveMotors[i].config_kD(0, 0.0, Constants.kTimeoutMs);
+		//set coast mode
+		driveMotors[i].setNeutralMode(NeutralMode.Coast);
 		//set Velocity Mode for drive motors
-//		driveMotors[i].selectProfileSlot(0, 0);
-//		driveMotors[i].set(ControlMode.Velocity, 0.0);
+		driveMotors[i].set(ControlMode.Velocity, 0.0);
 		driveMotors[i].setSensorPhase(false); 
 		}
 		
 		
 		for(int i=0;i<4;i++){
-			int j =i;
+      final int j =i;
 			pidTurnSource[i] = new PIDSource() {				
 				@Override
 				public void setPIDSourceType(PIDSourceType pidSource) {				
@@ -358,6 +351,7 @@ public class SwerveDrive implements MotorSafety {
 			    else
 			    {
 					driveMotors[i].selectProfileSlot(0, 0);
+
 			    	driveMotors[i].set(ControlMode.Velocity, -maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);
 			    }
 				//Turn Motors

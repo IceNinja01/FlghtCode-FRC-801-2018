@@ -10,6 +10,7 @@ package org.usfirst.frc.team801.robot;
 import org.usfirst.frc.team801.robot.commands.Square;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
+
 import org.usfirst.frc.team801.robot.commands.chassis.TurnBack;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnFront;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnLeft;
@@ -18,6 +19,7 @@ import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendMid;
 import org.usfirst.frc.team801.robot.commands.elevator.Shrink;
+
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -45,6 +47,7 @@ public class OI {
     public Button elevatorHigh = new JoystickButton(manip, 4);
 
 
+
     //
     //	      5	    _                            _    6
     //	       _.-'` `-._                    _,-' `'-._
@@ -64,6 +67,8 @@ public class OI {
     //	 \       ,'                                `.       /
     //	  `.__,-'                                    `-.__,'
     //
+
+
 	//// CREATING BUTTONS
 	// One type of button is a joystick button which is any button on a
 	//// joystick.
@@ -94,15 +99,30 @@ public class OI {
     
     public OI(){
         	
+	   public XBOXJoystick driver = new XBOXJoystick(0);
+//	    public XboxController manip = new XboxController(1);
+	    public XBOXJoystick manip = new XBOXJoystick(1);
+
+	    public Button turnFront = new JoystickButton(driver,4);
+	    public Button turnRight = new JoystickButton(driver,2);
+	    public Button turnLeft = new JoystickButton(driver,3);
+	    public Button turnBack = new JoystickButton(driver,1);
+	    
+	    public Button bottomElevator = new JoystickButoon(manip, 1);
+	    public Button lowElevator = new JoystickButoon(manip, 2);
+	    public Button midElevator = new JoystickButoon(manip, 3);
+	    public Button highElevator = new JoystickButoon(manip, 4);
+    
+    public OI() {
     	turnFront.whileHeld(new TurnFront());
     	turnBack.whileHeld(new TurnBack());
     	turnRight.whileHeld(new TurnRight());
-    	turnLeft.whileHeld(new TurnLeft());
-    	driveSquare.whenPressed(new Square());
-    	shrink.whenPressed(new Shrink());
-    	elevatorLow.whenPressed(new ExtendLow());
-    	elevatorMid.whenPressed(new ExtendMid());
-    	elevatorHigh.whenPressed(new ExtendHigh());
+    	turnLeft.whileHeld(new TurnLeft());	
+    	
+    	bottomElevator.whenPressed(new Shrink());
+    	highElevator.whenPressed(new ExtendHigh());
+    	midElevator.whenPressed(new ExtendMid());	
+    	lowElevator.whenPressed(new ExtendLow());
 
     }
 }

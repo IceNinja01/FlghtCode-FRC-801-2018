@@ -123,7 +123,6 @@ public class Elevator extends Subsystem {
 //    	System.out.println(elevaMotor.getClosedLoopError(0));
     	pos /= rotPerinch*4096; 
     	return pos;
-    	
     }
     
     public void setDriveCurrentLimit(int peakAmps, int durationMs, int continousAmps) {
@@ -138,6 +137,4 @@ public class Elevator extends Subsystem {
     		
     	}
 }
-
-
 

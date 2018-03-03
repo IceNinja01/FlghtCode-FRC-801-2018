@@ -7,6 +7,9 @@
 
 package org.usfirst.frc.team801.robot;
 
+
+import edu.wpi.first.wpilibj.DriverStation;
+
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.command.Command;
@@ -32,9 +35,8 @@ public class Robot extends IterativeRobot {
 	public static OI oi;
 	public static Object prefs;
 	public static Chassis chassis;
-    public static Elevator elevator;
 	Command m_autonomousCommand;
-	
+	public static Elevator elevator;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 
 	/**
@@ -53,7 +55,8 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putData("Auto mode", m_chooser);
 		SmartDashboard.putData(Scheduler.getInstance());
 		SmartDashboard.putBoolean("Start Motion", false);
-    	Robot.chassis.setMotionMagic();
+    Robot.chassis.setMotionMagic();
+
 		oi = new OI();
 	}
 
@@ -75,6 +78,8 @@ public class Robot extends IterativeRobot {
 		Scheduler.getInstance().run();
 		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
 
+		Scheduler.getInstance().run();
+
 	}
 
 	/**
@@ -91,6 +96,12 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void autonomousInit() {
 //		m_autonomousCommand = new CMD_Drive(0, 0, 0, 0);
+
+//		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
+//		PathBuilder logic = new PathBuilder(LOCATION, fieldLayout);
+//		logic.getPath();
+		m_autonomousCommand = m_chooser.getSelected();
+
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
