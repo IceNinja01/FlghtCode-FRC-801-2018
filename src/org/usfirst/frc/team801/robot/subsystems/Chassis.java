@@ -53,7 +53,7 @@ private double elevatorHeight;
 
 	public Chassis() {
 
-		super(Constants.ultrakP, Constants.ultrakI, Constants.ultrakD, 0.01);
+		super(Constants.ultrakP, Constants.ultrakI, Constants.ultrakD, 0.001);
 		getPIDController().setAbsoluteTolerance(1.0);
 		getPIDController().setInputRange(0.0, 360.0);
 		getPIDController().setContinuous(true);
@@ -78,14 +78,18 @@ private double elevatorHeight;
 	public void motorDrive(double angleCmd_Deg) {
 		elevatorHeight = Robot.elevator.getCurrentPosition();
 		
-		if(elevatorHeight> 48.0) {
+		if(elevatorHeight > 48.0) {
 			
 			chassisSwerveDrive.setMaxDriveVoltage(0.5);
 		}
+		else {
+			chassisSwerveDrive.setMaxDriveVoltage(1.0);
 
-		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(Hand.kLeft), 1.5), 0.01, 1.0);
-		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(Hand.kLeft), 1.5), 0.01, 1.0);
-		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.01, 1.0);
+		}
+
+		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.01, 1.0);
+		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.01, 1.0);
+		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.01, 1.0);
 //		SmartDashboard.putNumber("Joystick X", x);
 //		SmartDashboard.putNumber("Joystick Y", y);
 
@@ -129,7 +133,7 @@ private double elevatorHeight;
 	public void cmdDrive(double x, double y, double gyroCMD, double angleCmd) {
 		headingCMD = gyroCMD;
 		headingError = Robot.chassis.getGyroAngle() - headingCMD;
-		chassisSwerveDrive.drive(x, y, zRateCmd, angleCmd);
+		chassisSwerveDrive.CMDdrive(x, y, zRateCmd, angleCmd);
 		SmartDashboard.putNumber("HeadingCMD", headingCMD);
 		SmartDashboard.putNumber("HeadingError", headingError);
 		SmartDashboard.putNumber("zRateCmd", zRateCmd);

@@ -1,41 +1,37 @@
-package org.usfirst.frc.team801.robot.commands.chassis;
+package org.usfirst.frc.team801.robot.commands.arm;
 
 import org.usfirst.frc.team801.robot.Robot;
-import org.usfirst.frc.team801.robot.Utilities.Utils;
 
 import edu.wpi.first.wpilibj.command.Command;
 
 /**
  *
  */
-public class TurnRight extends Command {
+public class ArmDrive extends Command {
 
-    private double angleCMD;
-	private double error;
-
-	public TurnRight() {
-        requires(Robot.chassis);
+    public ArmDrive() {
+        // Use requires() here to declare subsystem dependencies
+    	requires(Robot.arm);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	angleCMD = 90;
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
-    	Robot.chassis.turnToHeading(angleCMD, Robot.chassis.getGyroAngle());
-    	error = angleCMD - Robot.chassis.getGyroAngle();
+    	Robot.arm.armDrive();
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (Math.abs(error) < 5);
+        return false;
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.arm.stop();
     }
 
     // Called when another command which requires one or more of the same

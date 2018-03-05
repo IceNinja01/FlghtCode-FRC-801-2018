@@ -9,6 +9,9 @@ package org.usfirst.frc.team801.robot;
 
 import org.usfirst.frc.team801.robot.Utilities.XBOXJoystick;
 import org.usfirst.frc.team801.robot.commands.Square;
+import org.usfirst.frc.team801.robot.commands.arm.ArmDown;
+import org.usfirst.frc.team801.robot.commands.arm.ArmDrive;
+import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
 
@@ -87,34 +90,43 @@ public class OI {
     
    
         	
-	   public XBOXJoystick driver = new XBOXJoystick(0);
+	    public XBOXJoystick driver = new XBOXJoystick(0);
 //	    public XboxController manip = new XboxController(1);
 	    public XBOXJoystick manip = new XBOXJoystick(1);
 
-	    public Button turnFront = new JoystickButton(driver,4);
+	    public Button turnFront = new JoystickButton(driver,1);
 	    public Button turnRight = new JoystickButton(driver,2);
-	    public Button turnLeft = new JoystickButton(driver,3);
-	    public Button turnBack = new JoystickButton(driver,1);
+	    public Button turnLeft = new JoystickButton(driver,4);
+	    public Button turnBack = new JoystickButton(driver,3);
 	    public Button openPinch = new JoystickButton(driver,7);
 	    public Button closePinch = new JoystickButton(driver,8);
+	    public Button armDown = new JoystickButton(driver, 6);
+	    public Button armUp = new JoystickButton(driver, 5);	    
 	    
-	    public Button bottomElevator = new JoystickButton(manip, 1);
+	    public Button bottomElevator = new JoystickButton(manip, 3);
 	    public Button lowElevator = new JoystickButton(manip, 2);
-	    public Button midElevator = new JoystickButton(manip, 3);
-	    public Button highElevator = new JoystickButton(manip, 4);
+	    public Button midElevator = new JoystickButton(manip, 4);
+	    public Button highElevator = new JoystickButton(manip, 1);
+	    public Button armDrive = new JoystickButton(manip, 10);
+	    public Button square = new JoystickButton(manip, 5);
     
     public OI() {
     	turnFront.whileHeld(new TurnFront());
     	turnBack.whileHeld(new TurnBack());
     	turnRight.whileHeld(new TurnRight());
     	turnLeft.whileHeld(new TurnLeft());	
-    	openPinch.whileHeld(new OpenPinchers());
-    	closePinch.whileHeld(new ClosePinchers());
+    	openPinch.whenPressed(new OpenPinchers());
+    	closePinch.whenPressed(new ClosePinchers());
     	
     	bottomElevator.whenPressed(new Shrink());
     	highElevator.whenPressed(new ExtendHigh());
     	midElevator.whenPressed(new ExtendMid());	
     	lowElevator.whenPressed(new ExtendLow());
+    	armDown.whenPressed(new ArmDown());
+    	armUp.whenPressed(new ArmUp());
+    	armDrive.toggleWhenPressed(new ArmDrive());
+    	square.whenPressed(new Square());
+
 
     }
 }

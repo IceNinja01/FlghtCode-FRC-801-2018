@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team801.robot.commands.ExampleCommand;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
+import org.usfirst.frc.team801.robot.subsystems.Arm;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.Elevator;
 import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
@@ -37,6 +38,7 @@ public class Robot extends IterativeRobot {
 	public static Object prefs;
 	public static Chassis chassis;
 	public static Pinchers pinchers;
+	public static Arm arm;
 	Command m_autonomousCommand;
 	public static Elevator elevator;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
@@ -53,6 +55,7 @@ public class Robot extends IterativeRobot {
 		chassis = new Chassis();
 		elevator = new Elevator();
 		pinchers = new Pinchers();
+		arm = new Arm();
 		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);

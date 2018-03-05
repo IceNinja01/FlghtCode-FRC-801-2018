@@ -48,10 +48,12 @@ public class Constants {
 	 */
 	public static final double kNeutralDeadband  = 0.01;
 
+	//For chassis PID z axis
 	public static double ultrakP = 0.02;
 	public static double ultrakI = 0.0000001;
 	public static double ultrakD = 1.0;
-
+	public static double ultrakF = 0.001;
+	
 	public static double chassisAcceleration = 100;		//acceleration slope inches/sec
 	public static double chassisVelocity = 100;			//Max Velocity inches/sec
 	public static double wheelRotPerInch = 0.6;	//Sensor Shaft revolutions per wheel turn in inch
@@ -63,10 +65,10 @@ public class Constants {
 		public static double elevatorMotorBottomPos = 0.0; //inches
 		public static double elevatorMotorLowPos = 24; //inches
 		public static double elevatorMotorMidPos = 56; //inches
-		public static double elevatorMotorTopPos = 75; //inches
+		public static double elevatorMotorTopPos = 72; //inches
 
 
-	public static double ultrakF = 0.01;
+	
 
 	
 }

@@ -39,7 +39,7 @@ public class SwerveDrive implements MotorSafety {
 	private String motorName[] = {"FrontRight","FrontLeft","BackLeft","BackRight"};
 
 	private double[] oldAngle = {0,0,0,0};
-	private double maxDriveVoltage = 0.75;
+	private double maxDriveVoltage = 1.0;
 	private double maxTurnVoltage = 1.0;
 
 	private int deadBand = 2; //
@@ -85,6 +85,7 @@ public class SwerveDrive implements MotorSafety {
 			turnMotors[i].configNominalOutputReverse(0, Constants.kTimeoutMs);
 			turnMotors[i].configPeakOutputForward(11.0, Constants.kTimeoutMs);
 			turnMotors[i].configPeakOutputReverse(-11.0, Constants.kTimeoutMs);
+			turnMotors[i].enableVoltageCompensation(true); 
 			/* 0.001 represents 0.1% - default value is 0.04 or 4% */
 			turnMotors[i].configNeutralDeadband(0.001, Constants.kTimeoutMs);
 			
@@ -111,8 +112,16 @@ public class SwerveDrive implements MotorSafety {
 		drive.**/
 		turnMotors[i].setSensorPhase(false); 
 
+		
+		
+		
 		driveMotors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
-
+		/* set the peak and nominal outputs, 12V means full */
+		driveMotors[i].configNominalOutputForward(0, Constants.kTimeoutMs);
+		driveMotors[i].configNominalOutputReverse(0, Constants.kTimeoutMs);
+		driveMotors[i].configPeakOutputForward(11.0, Constants.kTimeoutMs);
+		driveMotors[i].configPeakOutputReverse(-11.0, Constants.kTimeoutMs);
+		driveMotors[i].enableVoltageCompensation(true); 
 		driveMotors[i].configNeutralDeadband(0.01, Constants.kTimeoutMs);
 		driveMotors[i].configAllowableClosedloopError(0, 0, Constants.kTimeoutMs);		
 		/* Set the motors PIDF constants**/
@@ -120,18 +129,13 @@ public class SwerveDrive implements MotorSafety {
 		driveMotors[i].config_kF(0, .026, Constants.kTimeoutMs);
 		driveMotors[i].config_kP(0, .051, Constants.kTimeoutMs);
 		driveMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
-		driveMotors[i].config_kD(0, 1.0, Constants.kTimeoutMs);
+		driveMotors[i].config_kD(0, 0.5, Constants.kTimeoutMs);
 		driveMotors[i].setSelectedSensorPosition(0, 0, Constants.kTimeoutMs);
 
 		//set motion magic config
 		driveMotors[i].configMotionCruiseVelocity(velocity, Constants.kTimeoutMs);
 		driveMotors[i].configMotionAcceleration(accel, Constants.kTimeoutMs);
 		driveMotors[i].configNeutralDeadband(0.001, Constants.kTimeoutMs);
-		/* Set the motors PIDF constants**/
-		driveMotors[i].config_kF(0, .026, Constants.kTimeoutMs);
-		driveMotors[i].config_kP(0, .051, Constants.kTimeoutMs);
-		driveMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
-		driveMotors[i].config_kD(0, 0.0, Constants.kTimeoutMs);
 		//set coast mode
 		driveMotors[i].setNeutralMode(NeutralMode.Coast);
 		//set Velocity Mode for drive motors
@@ -193,7 +197,7 @@ public class SwerveDrive implements MotorSafety {
 		FWD = -yavg.getAverage();
 		STR = xavg.getAverage();
 		RCW = zavg.getAverage();
-		double radians = gyroAngle *Math.PI/180.00;
+		double radians = gyroAngle*Math.PI/180.00;
 		temp = FWD*Math.cos(radians) + STR*Math.sin(radians);
 		STR = -FWD*Math.sin(radians) + STR*Math.cos(radians);
 		FWD = temp;
@@ -281,6 +285,7 @@ public class SwerveDrive implements MotorSafety {
 	
 	public void CMDdrive(double AxisX, double AxisY, double rotation, double gyroAngle){
 		
+		
 		//Calculate Angles and Magnitudes for each motor
 		FWD = -AxisY;
 		STR = AxisX;
@@ -329,40 +334,17 @@ public class SwerveDrive implements MotorSafety {
 	    	double[] degs = new double[4];
 		    for(int i=0;i<4;i++){
 		    	degs[i] = currentAngle(turnMotors[i],i);
-		    	
-		    	angleJoyStickDiff[i]= wheelAngles[i]- oldAngle[i];
-		    	angleError[i] = wheelAngles[i] - degs[i];
+		    	pidTurnController[i].setSetpoint(wheelAngles[i]);
+		    }
+		    for(int i=0;i<4;i++){
 
-			    if(Math.abs(angleJoyStickDiff[i]) > 90){ //new angle is greater than a 90degree turn, so find shortest path
-			    	//reverse translational motors 
-					driveMotors[i].selectProfileSlot(0, 0);
-			    	driveMotors[i].set(ControlMode.Velocity, maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);
-			    	
-			    	//find new angle
-			    	wheelAngles[i] -= 180.0; //subtract 180 degrees
-			    	if(wheelAngles[i] < 0){ //wrap to new angle between 0-360
-			    		wheelAngles[i] += 360.0;
-			    	}
-			    	//now the angle is set to move to the shortest path, which is just 180 degrees 
-			    	//from the current heading
-			    	
-			    }    
-			    
-			    else
-			    {
 					driveMotors[i].selectProfileSlot(0, 0);
 
-			    	driveMotors[i].set(ControlMode.Velocity, -maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);
-			    }
-				//Turn Motors
-			    if(wheelSpeeds[i]>0.1){
-			    	pidTurnController[i].setSetpoint(wheelAngles[i]);
-			    	oldAngle[i] = wheelAngles[i];
-			    }
+			    	driveMotors[i].set(ControlMode.Velocity, -maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);			    
 		    
-		    currentSpeed(driveMotors[i], i);
+			    	currentSpeed(driveMotors[i], i);
 		    
-	    }
+		    }
 
 	    	SmartDashboard.putNumber("Angle", angleJoyStickDiff[0]);
 

@@ -1,5 +1,6 @@
 package org.usfirst.frc.team801.robot.commands.elevator;
 
+import org.usfirst.frc.team801.robot.Constants;
 import org.usfirst.frc.team801.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -17,6 +18,7 @@ public class Shrink extends Command {
     	System.out.print("Shrink:   ");
     	Robot.elevator.getCurrentPosition();
     	Robot.elevator.coastMotor();
+		Robot.elevator.setShrink();
 
     }
 
@@ -35,6 +37,7 @@ public class Shrink extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	Robot.elevator.getCurrentPosition();
+    	Robot.elevator.endShrink();
 
     }
 

@@ -22,7 +22,7 @@ public class Elevator extends Subsystem {
 	private double rotPerinch = 0.5;
 
 	private int vel = 50;
-	private int acc = 5;
+	private int acc = 25;
 	private double targetPosition;
 	
 	public Elevator() {
@@ -31,8 +31,8 @@ public class Elevator extends Subsystem {
 //    		elevaMotor.configSetParameter(430, edgesPerRotation, 0x00, 0x00, 0);
 //    		elevaMotor.configSetParameter(431, filterWindowSize, 0x00, 0x00, 0);
     		//Soft limit
-//    		elevaMotor.configReverseSoftLimitThreshold((int) (-57*4096*rotPerinch), Constants.kTimeoutMs);
-//    		elevaMotor.configForwardSoftLimitThreshold((int) (+57*4096*rotPerinch), Constants.kTimeoutMs);
+    		elevaMotor.configReverseSoftLimitThreshold((int) (0*4096*rotPerinch), Constants.kTimeoutMs);
+    		elevaMotor.configForwardSoftLimitThreshold((int) (60*4096*rotPerinch), Constants.kTimeoutMs);
 			/* set the peak and nominal outputs, 12V means full */
     		elevaMotor.configNominalOutputForward(0, Constants.kTimeoutMs);
     		elevaMotor.configNominalOutputReverse(0, Constants.kTimeoutMs);
@@ -59,7 +59,7 @@ public class Elevator extends Subsystem {
     }
     
     public void percentOutput() {
-    	elevaMotor.set(ControlMode.PercentOutput, Robot.oi.driver.getY());
+    	elevaMotor.set(ControlMode.PercentOutput, Robot.oi.manip.getY());
     }
     
     public void shrink() {
@@ -136,5 +136,16 @@ public class Elevator extends Subsystem {
     	elevaMotor.enableCurrentLimit(true); /* turn it on */
     		
     	}
+
+
+	public void setShrink() {
+		// TODO Auto-generated method stub
+		elevaMotor.config_kD(0, 0.75, Constants.kTimeoutMs);
+
+	}
+	public void endShrink() {
+		elevaMotor.config_kD(0, 0.2, Constants.kTimeoutMs);
+
+	}
 }
 
