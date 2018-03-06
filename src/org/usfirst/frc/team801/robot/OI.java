@@ -14,7 +14,7 @@ import org.usfirst.frc.team801.robot.commands.arm.ArmDrive;
 import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
-
+import org.usfirst.frc.team801.robot.commands.chassis.ToggleDriveOrientation;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnBack;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnFront;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnLeft;
@@ -35,7 +35,6 @@ import edu.wpi.first.wpilibj.buttons.JoystickButton;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-	double commandTurns[][] = { {12, 90, 45} , {24, 90, 45}, {36, 90, 45} }; //turns as a square 12"x12"
 	
 
 
@@ -98,17 +97,18 @@ public class OI {
 	    public Button turnRight = new JoystickButton(driver,2);
 	    public Button turnLeft = new JoystickButton(driver,4);
 	    public Button turnBack = new JoystickButton(driver,3);
-	    public Button openPinch = new JoystickButton(driver,7);
-	    public Button closePinch = new JoystickButton(driver,8);
-	    public Button armDown = new JoystickButton(driver, 6);
-	    public Button armUp = new JoystickButton(driver, 5);	    
+	    public Button toggleDriveOrientation = new JoystickButton(driver, 7);
 	    
 	    public Button bottomElevator = new JoystickButton(manip, 3);
 	    public Button lowElevator = new JoystickButton(manip, 2);
 	    public Button midElevator = new JoystickButton(manip, 4);
 	    public Button highElevator = new JoystickButton(manip, 1);
 	    public Button armDrive = new JoystickButton(manip, 10);
-	    public Button square = new JoystickButton(manip, 5);
+	    public Button openPinch = new JoystickButton(manip,7);
+	    public Button closePinch = new JoystickButton(manip,8);
+	    public Button armDown = new JoystickButton(manip, 6);
+	    public Button armUp = new JoystickButton(manip, 5);
+//	    public Button square = new JoystickButton(manip, 5);
     
     public OI() {
     	turnFront.whileHeld(new TurnFront());
@@ -125,7 +125,8 @@ public class OI {
     	armDown.whenPressed(new ArmDown());
     	armUp.whenPressed(new ArmUp());
     	armDrive.toggleWhenPressed(new ArmDrive());
-    	square.whenPressed(new Square());
+    	toggleDriveOrientation.whileHeld(new ToggleDriveOrientation());
+//    	square.whenPressed(new Square());
 
 
     }

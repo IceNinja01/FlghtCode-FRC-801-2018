@@ -50,6 +50,7 @@ public class Chassis extends PIDSubsystem {
 
 	private double acceleration;
 private double elevatorHeight;
+private boolean robotOrient = false;
 
 	public Chassis() {
 
@@ -79,12 +80,18 @@ private double elevatorHeight;
 			chassisSwerveDrive.setMaxDriveVoltage(1.0);
 
 		}
+		
+		
 
 		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.01, 1.0);
 		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.01, 1.0);
 		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.01, 1.0);
-		
-		chassisSwerveDrive.drive(x, y, z, angleCmd_Deg);
+		if(robotOrient) {
+			chassisSwerveDrive.drive(x, y, z, 0);
+		}
+		else {
+			chassisSwerveDrive.drive(x, y, z, angleCmd_Deg);
+		}
 		
 	}
 
@@ -179,6 +186,18 @@ private double elevatorHeight;
 	
 	public double getChassisError() {
 		return chassisSwerveDrive.getPositionErrorDrive();
+	}
+	
+	public void toggleFieldOrient() {
+		
+		robotOrient = false;
+		
+	}
+	
+	public void toggleRobotOrient() {
+		
+		robotOrient = true;
+		
 	}
 	
 
