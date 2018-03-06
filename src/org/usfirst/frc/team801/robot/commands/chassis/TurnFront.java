@@ -10,7 +10,8 @@ import edu.wpi.first.wpilibj.command.Command;
  */
 public class TurnFront extends Command {
 
-    private double angleCMD; 
+    private double angleCMD;
+	private double error; 
 
 	public TurnFront() {
         requires(Robot.chassis);
@@ -25,12 +26,13 @@ public class TurnFront extends Command {
     protected void execute() {
     	
     	Robot.chassis.turnToHeading(angleCMD, Robot.chassis.getGyroAngle());
-    	
+    	error = angleCMD - Robot.chassis.getGyroAngle();
+
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return (Math.abs(error) < 5);
     }
 
     // Called once after isFinished returns true

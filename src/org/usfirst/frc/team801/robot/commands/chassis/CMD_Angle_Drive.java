@@ -40,9 +40,8 @@ public class CMD_Angle_Drive extends Command {
     	Robot.chassis.setMotionMagic();
     	distance += Robot.chassis.getChassisPosition();
     	//Ramp up motors;
-    	for(int i = 0 ; i<10; i++) {
-        	Robot.chassis.cmdDrive(x*i/10, -y*i/10, heading, Robot.chassis.getGyroAngle());
-
+    	for(int i = 0 ; i<25; i++) { //assuming cycle time is 50 ms, so a total of 500ms
+        	Robot.chassis.cmdDrive(x*i/25, -y*i/25, heading, Robot.chassis.getGyroAngle());
     	}
     }
 

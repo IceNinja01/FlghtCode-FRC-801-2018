@@ -1,5 +1,6 @@
 package org.usfirst.frc.team801.robot.commands.elevator;
 
+import org.usfirst.frc.team801.robot.Constants;
 import org.usfirst.frc.team801.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
@@ -7,6 +8,8 @@ import edu.wpi.first.wpilibj.command.Command;
 public class ExtendHigh extends Command {
 	
 	
+	private double error;
+
 	public ExtendHigh() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.elevator);
@@ -24,12 +27,13 @@ public class ExtendHigh extends Command {
     protected void execute() {
     	Robot.elevator.getCurrentPosition();
     	Robot.elevator.extendHigh();
+    	error = Constants.elevatorMotorTopPos - Robot.elevator.getCurrentPosition();
 
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return false;
+        return (Math.abs(error) < 0.5);
     }
 
     // Called once after isFinished returns true

@@ -28,6 +28,7 @@ public class Arm extends Subsystem {
 		arm.configNominalOutputReverse(0, Constants.kTimeoutMs);
 		arm.configPeakOutputForward(11, Constants.kTimeoutMs);
 		arm.configPeakOutputReverse(-11, Constants.kTimeoutMs);
+		arm.setNeutralMode(NeutralMode.Brake);
 //		arm.enableVoltageCompensation(true); 
 		arm.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
 		arm.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
@@ -61,7 +62,7 @@ public class Arm extends Subsystem {
     
     public void armUp() {
     	
-    	arm.set(ControlMode.PercentOutput, 0.7);    	
+    	arm.set(ControlMode.PercentOutput, 0.6);    	
     	
     }
     
@@ -77,6 +78,7 @@ public class Arm extends Subsystem {
     
     public void stop() {
     	arm.setNeutralMode(NeutralMode.Brake);
+    	
     }
         
 }

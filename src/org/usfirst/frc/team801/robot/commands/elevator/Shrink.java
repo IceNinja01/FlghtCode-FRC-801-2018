@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj.command.Command;
 public class Shrink extends Command {
 
 	
+	private double error;
+
 	public Shrink() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.elevator);
@@ -26,12 +28,13 @@ public class Shrink extends Command {
     protected void execute() {
 //    	Robot.elevator.getCurrentPosition();
     	Robot.elevator.shrink();
+    	error = Constants.elevatorMotorBottomPos - Robot.elevator.getCurrentPosition();
 
     }
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-    	return false;
+        return (Math.abs(error) < 0.5);
     	}
 
     // Called once after isFinished returns true
