@@ -38,7 +38,10 @@ public class RobotMap {
 	public static Team801TalonSRX elevator = new Team801TalonSRX(2);
 	
 	public static Team801TalonSRX arm = new Team801TalonSRX(9);
-
+	//Lift Motor 
+	public static Team801TalonSRX lift = new Team801TalonSRX(6);
+	//Wench motor
+	public static Team801TalonSRX theWinchThatStoleChristmas = new Team801TalonSRX(13);
 
 	public static AnalogInput ultraSonic;
 	public static Adis16448_IMU imu;
@@ -51,7 +54,7 @@ public class RobotMap {
 		imu = new Adis16448_IMU();
 		imu.calibrate();
 		imu.reset();
-		
+		backLeftTurn.setInverted(true);
 		swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backLeftDrive,backRightDrive,
 			frontRightTurn,frontLeftTurn,backLeftTurn,backRightTurn,
 			2);

@@ -16,13 +16,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import org.usfirst.frc.team801.robot.commands.ExampleCommand;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
 import org.usfirst.frc.team801.robot.subsystems.Arm;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.Elevator;
-import org.usfirst.frc.team801.robot.subsystems.ExampleSubsystem;
+import org.usfirst.frc.team801.robot.subsystems.Lift;
 import org.usfirst.frc.team801.robot.subsystems.Pinchers;
 
 /**
@@ -33,7 +32,6 @@ import org.usfirst.frc.team801.robot.subsystems.Pinchers;
  * project.
  */
 public class Robot extends IterativeRobot {
-	public static final ExampleSubsystem kExampleSubsystem = new ExampleSubsystem();
 	public static OI oi;
 	public static Object prefs;
 	public static Chassis chassis;
@@ -42,6 +40,7 @@ public class Robot extends IterativeRobot {
 	Command m_autonomousCommand;
 	public static Elevator elevator;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
+	public static Lift lift;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -56,7 +55,8 @@ public class Robot extends IterativeRobot {
 		elevator = new Elevator();
 		pinchers = new Pinchers();
 		arm = new Arm();
-		m_chooser.addDefault("Default Auto", new ExampleCommand());
+		lift = new Lift();
+//		m_chooser.addDefault("Default Auto", new ExampleCommand());
 		// chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
 		SmartDashboard.putData(Scheduler.getInstance());

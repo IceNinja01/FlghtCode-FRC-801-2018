@@ -77,7 +77,8 @@ public class Arm extends Subsystem {
     }
     
     public void stop() {
-    	arm.setNeutralMode(NeutralMode.Brake);
+    	arm.set(ControlMode.PercentOutput, 0.05);    	
+//    	arm.setNeutralMode(NeutralMode.Brake);
     	
     }
         
