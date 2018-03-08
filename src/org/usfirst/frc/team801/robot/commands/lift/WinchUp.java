@@ -33,6 +33,7 @@ public class WinchUp extends Command {
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.lift.stopWinch();
     	Robot.lift.getCurrentPosition();
 
     }

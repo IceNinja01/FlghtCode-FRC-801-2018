@@ -54,7 +54,7 @@ public class RobotMap {
 		imu = new Adis16448_IMU();
 		imu.calibrate();
 		imu.reset();
-		backLeftTurn.setInverted(true);
+//		backLeftTurn.setInverted(true);
 		swerveDrive = new SwerveDrive(frontRightDrive,frontLeftDrive,backLeftDrive,backRightDrive,
 			frontRightTurn,frontLeftTurn,backLeftTurn,backRightTurn,
 			2);

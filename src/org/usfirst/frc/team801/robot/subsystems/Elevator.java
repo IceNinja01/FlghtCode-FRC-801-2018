@@ -10,6 +10,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 
 import SwerveClass.Team801TalonSRX;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  *
@@ -50,6 +51,7 @@ public class Elevator extends Subsystem {
     		elevaMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
     	
     		setDriveCurrentLimit(25, 200, 25);
+    		getCurrentPosition();
 	}
 	
 	
@@ -115,13 +117,8 @@ public class Elevator extends Subsystem {
     public double getCurrentPosition() {
     	double pos = elevaMotor.getSelectedSensorPosition(0);
 
-//    	System.out.print("\ttarget: ");
-//    	System.out.print(targetPosition);
-//    	System.out.print("\tpos: ");
-//    	System.out.print(pos);
-//    	System.out.print("\terr: ");
-//    	System.out.println(elevaMotor.getClosedLoopError(0));
-    	pos /= rotPerinch*4096; 
+    	pos /= rotPerinch*4096;
+    	SmartDashboard.putNumber("ElevatorPos", pos);
     	return pos;
     }
     

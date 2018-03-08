@@ -23,6 +23,9 @@ import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendMid;
 import org.usfirst.frc.team801.robot.commands.elevator.Shrink;
+import org.usfirst.frc.team801.robot.commands.lift.LiftMotorExtend;
+import org.usfirst.frc.team801.robot.commands.lift.LiftMotorShrink;
+import org.usfirst.frc.team801.robot.commands.lift.WinchUp;
 import org.usfirst.frc.team801.robot.commands.pinchers.ClosePinchers;
 import org.usfirst.frc.team801.robot.commands.pinchers.OpenPinchers;
 
@@ -98,12 +101,14 @@ public class OI {
 	    public Button turnLeft = new JoystickButton(driver,4);
 	    public Button turnBack = new JoystickButton(driver,3);
 	    public Button toggleDriveOrientation = new JoystickButton(driver, 7);
+	    public Button liftUp = new JoystickButton(driver,5);
+	    public Button liftDown = new JoystickButton(driver,6);
 	    
 	    public Button bottomElevator = new JoystickButton(manip, 3);
 	    public Button lowElevator = new JoystickButton(manip, 2);
 	    public Button midElevator = new JoystickButton(manip, 4);
 	    public Button highElevator = new JoystickButton(manip, 1);
-	    public Button armDrive = new JoystickButton(manip, 10);
+	    public Button winch = new JoystickButton(manip, 10);
 	    public Button openPinch = new JoystickButton(manip,7);
 	    public Button closePinch = new JoystickButton(manip,8);
 	    public Button armDown = new JoystickButton(manip, 6);
@@ -117,6 +122,9 @@ public class OI {
     	turnLeft.whileHeld(new TurnLeft());	
     	openPinch.whenPressed(new OpenPinchers());
     	closePinch.whenPressed(new ClosePinchers());
+    	liftUp.whenPressed(new LiftMotorExtend());
+    	liftDown.whenPressed(new LiftMotorShrink());
+
     	
     	bottomElevator.whenPressed(new Shrink());
     	highElevator.whenPressed(new ExtendHigh());
@@ -124,7 +132,7 @@ public class OI {
     	lowElevator.whenPressed(new ExtendLow());
     	armDown.whenPressed(new ArmDown());
     	armUp.whenPressed(new ArmUp());
-    	armDrive.toggleWhenPressed(new ArmDrive());
+    	winch.whileHeld(new WinchUp());
     	toggleDriveOrientation.whileHeld(new ToggleDriveOrientation());
 //    	square.whenPressed(new Square());
 

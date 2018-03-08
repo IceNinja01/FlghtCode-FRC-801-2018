@@ -43,6 +43,8 @@ public class Robot extends IterativeRobot {
 	Command m_autonomousCommand;
 	public static Elevator elevator;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
+	SendableChooser<Object> loc_chooser = new SendableChooser<>();
+
 	public static Lift lift;
 
 	/**
@@ -59,9 +61,12 @@ public class Robot extends IterativeRobot {
 		pinchers = new Pinchers();
 		arm = new Arm();
 		lift = new Lift();
-		CameraServer.getInstance().startAutomaticCapture();
+//		CameraServer.getInstance().startAutomaticCapture();
 //		m_chooser.addDefault("Default Auto", new ExampleCommand());
 //		m_chooser.addObject("My Auto", new MyAutoCommand());
+		loc_chooser.addDefault("Center", Constants.CENTER);
+		loc_chooser.addObject("Location Left", Constants.LEFT);
+		loc_chooser.addObject("Location Right", Constants.RIGHT);
 		SmartDashboard.putData("Auto mode", m_chooser);
 		SmartDashboard.putData(Scheduler.getInstance());
 		SmartDashboard.putBoolean("Start Motion", false);
@@ -87,7 +92,7 @@ public class Robot extends IterativeRobot {
 
 		Scheduler.getInstance().run();
 		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
-
+//		SmartDashboard.putNumber("ElevatorPos", lift.getCurrentPosition());
 		Scheduler.getInstance().run();
 
 	}
@@ -107,7 +112,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 
 		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
-		PathBuilder logic = new PathBuilder(Constants.CENTER, fieldLayout);
+		PathBuilder logic = new PathBuilder((int) loc_chooser.getSelected(), fieldLayout);
 		
 		m_autonomousCommand = logic.getPath();;
 

@@ -1,5 +1,11 @@
 package org.usfirst.frc.team801.robot.commands.auto;
 
+import org.usfirst.frc.team801.robot.commands.arm.ArmDown;
+import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
+import org.usfirst.frc.team801.robot.commands.chassis.CMD_Angle_Drive;
+import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
+import org.usfirst.frc.team801.robot.commands.pinchers.OpenPinchers;
+
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
@@ -8,6 +14,14 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class LeftGoLeftSwitch extends CommandGroup {
 
     public LeftGoLeftSwitch() {
+    	
+    	
+    	addSequential(new ArmUp());
+    	addSequential(new CMD_Angle_Drive(104, 90, 0.2));
+    	addSequential(new ExtendLow());
+    	addSequential(new ArmDown());
+    	addSequential(new OpenPinchers());
+    	addSequential(new ArmUp());
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

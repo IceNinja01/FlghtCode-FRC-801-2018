@@ -37,18 +37,19 @@ public class Arm extends Subsystem {
 
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
-    	setDefaultCommand(new ArmStop());
+    	setDefaultCommand(new ArmDrive());
     }
     
     public void armDrive() {
-    	double y = Utils.joyExpo(Robot.oi.manip.getY(), 1.5);
-    	if(y<0) { //down
-    		y = Utils.limitMagnitude(y, 0.01, .1);
-    	}
-    	else {
-    		y = Utils.limitMagnitude(y, 0.01, .5);
-    		
-    	}
+    	Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.01, 1.0);
+    	double y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.manip.getRawAxis(4), 1.5), 0.01, 1.0);
+//    	if(y<0) { //down
+//    		y = Utils.limitMagnitude(y, 0.01, .1);
+//    	}
+//    	else {
+//    		y = Utils.limitMagnitude(y, 0.01, .5);
+//    		
+//    	}
 
     	arm.set(ControlMode.PercentOutput, -y);    	
 

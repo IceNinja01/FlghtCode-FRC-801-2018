@@ -3,6 +3,7 @@ package org.usfirst.frc.team801.robot.commands.auto;
 import org.usfirst.frc.team801.robot.commands.arm.ArmDown;
 import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Angle_Drive;
+import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
 import org.usfirst.frc.team801.robot.commands.pinchers.OpenPinchers;
 
@@ -11,19 +12,18 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 /**
  *
  */
-public class MiddleGoRightSwitch extends CommandGroup {
+public class LeftGoRightScale extends CommandGroup {
 
-    public MiddleGoRightSwitch() {
-    	
+    public LeftGoRightScale() {
     	addSequential(new ArmUp());
-
-    	addSequential(new CMD_Angle_Drive(4.0, 90, 0.2));
-    	addSequential(new CMD_Angle_Drive(57.0, 0, 0.2));
-    	addSequential(new CMD_Angle_Drive(101, 90, 0.2));
-    	addSequential(new ExtendLow());
+    	addSequential(new CMD_Angle_Drive(240, 90, 0.2));
+    	addSequential(new CMD_Angle_Drive(160, 0, 0.2)); //strafe Right
+    	addSequential(new CMD_Angle_Drive(60, 90, 0.2));
+    	addSequential(new ExtendHigh());
     	addSequential(new ArmDown());
     	addSequential(new OpenPinchers());
     	addSequential(new ArmUp());
+
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

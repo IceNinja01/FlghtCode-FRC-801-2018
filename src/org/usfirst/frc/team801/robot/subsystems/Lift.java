@@ -1,7 +1,9 @@
 package org.usfirst.frc.team801.robot.subsystems;
 
 import org.usfirst.frc.team801.robot.Constants;
+import org.usfirst.frc.team801.robot.Robot;
 import org.usfirst.frc.team801.robot.RobotMap;
+import org.usfirst.frc.team801.robot.Utilities.Utils;
 import org.usfirst.frc.team801.robot.commands.lift.LiftMotorInt;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -20,14 +22,7 @@ public class Lift extends Subsystem {
 Team801TalonSRX liftMotor= RobotMap.lift;
 Team801TalonSRX theWinchThatStoleChristmas= RobotMap.theWinchThatStoleChristmas;
 	
-double maxPosition = 12000;
-double min= 0;
-
-private double setPosition;
-private double rotPerInch = 1;
-
-private double cpos;
-private double rotPerinch = 0.049;
+private double rotPerInch = 0.049;
 private int vel = 50;
 private int accel = 25;
 
@@ -47,8 +42,8 @@ public Lift(){
 	liftMotor.config_kI(0, 0, Constants.kTimeoutMs);
 	liftMotor.config_kD(0, 0.2, Constants.kTimeoutMs);
 	/* set acceleration and vcruise velocity - see documentation */
-	liftMotor.configMotionCruiseVelocity((int) (4096*rotPerinch *vel/10), Constants.kTimeoutMs);
-	liftMotor.configMotionAcceleration((int) (4096*rotPerinch *accel /10), Constants.kTimeoutMs);
+	liftMotor.configMotionCruiseVelocity((int) (4096*rotPerInch *vel/10), Constants.kTimeoutMs);
+	liftMotor.configMotionAcceleration((int) (4096*rotPerInch *accel /10), Constants.kTimeoutMs);
 	liftMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); 
 
 	
@@ -61,6 +56,12 @@ public Lift(){
     	setDefaultCommand(new LiftMotorInt());
         // Set the default command for a subsystem here.
         //setDefaultCommand(new MySpecialCommand());
+    }
+    
+    public void driveLift() {
+    	double y =Utils.limitMagnitude(Utils.joyExpo(Robot.oi.manip.getY(), 1.5), 0.01, 0.2);
+    	liftMotor.set(ControlMode.PercentOutput, -y);
+
     }
     
     public void shrink() {
@@ -121,6 +122,13 @@ public Lift(){
     public void winchUp() {
     	theWinchThatStoleChristmas.set(ControlMode.PercentOutput, 1.0);
     }
+
+	public void stopWinch() {
+		// TODO Auto-generated method stub
+    	theWinchThatStoleChristmas.set(ControlMode.PercentOutput, 0.0);
+
+		
+	}
 }
 
 
