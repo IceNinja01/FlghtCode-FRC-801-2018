@@ -8,6 +8,7 @@
 package org.usfirst.frc.team801.robot;
 
 
+import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
@@ -16,6 +17,8 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
+import org.usfirst.frc.team801.robot.Utilities.PathBuilder;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
 import org.usfirst.frc.team801.robot.subsystems.Arm;
@@ -56,12 +59,13 @@ public class Robot extends IterativeRobot {
 		pinchers = new Pinchers();
 		arm = new Arm();
 		lift = new Lift();
+		CameraServer.getInstance().startAutomaticCapture();
 //		m_chooser.addDefault("Default Auto", new ExampleCommand());
-		// chooser.addObject("My Auto", new MyAutoCommand());
+//		m_chooser.addObject("My Auto", new MyAutoCommand());
 		SmartDashboard.putData("Auto mode", m_chooser);
 		SmartDashboard.putData(Scheduler.getInstance());
 		SmartDashboard.putBoolean("Start Motion", false);
-    Robot.chassis.setMotionMagic();
+		Robot.chassis.setMotionMagic();
 
 		oi = new OI();
 	}
@@ -101,12 +105,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-//		m_autonomousCommand = new CMD_Drive(0, 0, 0, 0);
 
-//		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
-//		PathBuilder logic = new PathBuilder(LOCATION, fieldLayout);
-//		logic.getPath();
-		m_autonomousCommand = m_chooser.getSelected();
+		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
+		PathBuilder logic = new PathBuilder(Constants.CENTER, fieldLayout);
+		
+		m_autonomousCommand = logic.getPath();;
 
 
 		/*
