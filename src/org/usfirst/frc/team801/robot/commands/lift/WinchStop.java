@@ -8,9 +8,9 @@ import edu.wpi.first.wpilibj.command.Command;
 /**
  *
  */
-public class WinchUp extends Command {
+public class WinchStop extends Command {
 
-    public WinchUp() {
+    public WinchStop() {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.winch);
     }
@@ -21,7 +21,7 @@ public class WinchUp extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.winch.winchUp();
+    	Robot.winch.stopWinch();
     	
     }
 

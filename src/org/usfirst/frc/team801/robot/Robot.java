@@ -26,6 +26,7 @@ import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.Elevator;
 import org.usfirst.frc.team801.robot.subsystems.Lift;
 import org.usfirst.frc.team801.robot.subsystems.Pinchers;
+import org.usfirst.frc.team801.robot.subsystems.Winch;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -44,6 +45,7 @@ public class Robot extends IterativeRobot {
 	public static Elevator elevator;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 	SendableChooser<Object> loc_chooser = new SendableChooser<>();
+	public static Winch winch;
 
 	public static Lift lift;
 
@@ -61,7 +63,8 @@ public class Robot extends IterativeRobot {
 		pinchers = new Pinchers();
 		arm = new Arm();
 		lift = new Lift();
-//		CameraServer.getInstance().startAutomaticCapture();
+		winch = new Winch();
+		CameraServer.getInstance().startAutomaticCapture();
 //		m_chooser.addDefault("Default Auto", new ExampleCommand());
 //		m_chooser.addObject("My Auto", new MyAutoCommand());
 		loc_chooser.addDefault("Center", Constants.CENTER);
@@ -110,6 +113,8 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
+		
+		RobotMap.imu.reset();
 
 		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
 		PathBuilder logic = new PathBuilder((int) loc_chooser.getSelected(), fieldLayout);

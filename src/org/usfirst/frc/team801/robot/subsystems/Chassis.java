@@ -58,7 +58,7 @@ private boolean robotOrient = false;
 		getPIDController().setAbsoluteTolerance(1.0);
 		getPIDController().setInputRange(0.0, 360.0);
 		getPIDController().setContinuous(true);
-		getPIDController().setOutputRange(-1.0, 1.0);
+		getPIDController().setOutputRange(-0.5, 0.5);
 		enable();
 
 	}
@@ -86,12 +86,9 @@ private boolean robotOrient = false;
 		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.01, 1.0);
 		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.01, 1.0);
 		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.01, 1.0);
-		if(robotOrient) {
-			chassisSwerveDrive.drive(x, y, z, 0);
-		}
-		else {
+
 			chassisSwerveDrive.drive(x, y, z, angleCmd_Deg);
-		}
+		
 		
 	}
 
@@ -198,6 +195,31 @@ private boolean robotOrient = false;
 		
 		robotOrient = true;
 		
+	}
+
+	public void driveRobotOrient() {
+		// TODO Auto-generated method stub
+		elevatorHeight = Robot.elevator.getCurrentPosition();
+		
+		if(elevatorHeight > 48.0) {
+			
+			chassisSwerveDrive.setMaxDriveVoltage(0.5);
+		}
+		else {
+			chassisSwerveDrive.setMaxDriveVoltage(1.0);
+
+		}
+		
+		
+
+		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.01, 1.0);
+		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.01, 1.0);
+		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.01, 1.0);
+
+			chassisSwerveDrive.drive(x, y, z, 0);
+		
+		
+	
 	}
 	
 

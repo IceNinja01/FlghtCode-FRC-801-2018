@@ -41,8 +41,7 @@ public class Arm extends Subsystem {
     }
     
     public void armDrive() {
-    	Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.01, 1.0);
-    	double y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.manip.getRawAxis(4), 1.5), 0.01, 1.0);
+//    	double y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.manip.getY(), 1.5), 0.01, 1.0);
 //    	if(y<0) { //down
 //    		y = Utils.limitMagnitude(y, 0.01, .1);
 //    	}
@@ -51,7 +50,7 @@ public class Arm extends Subsystem {
 //    		
 //    	}
 
-    	arm.set(ControlMode.PercentOutput, -y);    	
+    	arm.set(ControlMode.PercentOutput, 0.05);    	
 
     }
     

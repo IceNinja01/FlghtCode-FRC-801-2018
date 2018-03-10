@@ -40,8 +40,8 @@ public class CMD_Angle_Drive extends Command {
     	Robot.chassis.setMotionMagic();
     	distance += Robot.chassis.getChassisPosition();
     	//Ramp up motors;
-    	for(int i = 0 ; i<25; i++) { //assuming cycle time is 50 ms, so a total of 500ms
-        	Robot.chassis.cmdDrive(x*i/25, -y*i/25, heading, Robot.chassis.getGyroAngle());
+    	for(int i = 0 ; i<50; i++) { //assuming cycle time is 50 ms, so a total of 500ms
+        	Robot.chassis.cmdDrive(x*i/50, -y*i/50, heading, Robot.chassis.getGyroAngle());
     	}
     }
 
@@ -52,7 +52,7 @@ public class CMD_Angle_Drive extends Command {
 //    	System.out.print("X: " + x_y[j][0]);
 //    	System.out.println("\tY: " + x_y[j][1]);
     	dist = Robot.chassis.getChassisPosition();;
-    	error = Math.abs(dist - distance);
+    	error = (distance-dist);
        	System.out.print("target:\t" + distance);
     	System.out.print("\tpos:\t" + dist);
     	System.out.println("\terror:\t" + error);
@@ -61,15 +61,18 @@ public class CMD_Angle_Drive extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (error < 1.0);
+        return (error < 2.0);
     }
 
     // Called once after isFinished returns true
     protected void end() {
+    	Robot.chassis.stop();
     }
 
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
+    	Robot.chassis.stop();
+
     }
 }

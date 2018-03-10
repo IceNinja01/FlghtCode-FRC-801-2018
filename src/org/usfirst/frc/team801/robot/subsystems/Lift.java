@@ -8,6 +8,8 @@ import org.usfirst.frc.team801.robot.commands.lift.LiftMotorInt;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.LimitSwitchNormal;
+import com.ctre.phoenix.motorcontrol.LimitSwitchSource;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.StatusFrameEnhanced;
 
@@ -20,7 +22,6 @@ import edu.wpi.first.wpilibj.command.Subsystem;
  */
 public class Lift extends Subsystem {
 Team801TalonSRX liftMotor= RobotMap.lift;
-Team801TalonSRX theWinchThatStoleChristmas= RobotMap.theWinchThatStoleChristmas;
 	
 private double rotPerInch = 0.049;
 private int vel = 50;
@@ -45,7 +46,12 @@ public Lift(){
 	liftMotor.configMotionCruiseVelocity((int) (4096*rotPerInch *vel/10), Constants.kTimeoutMs);
 	liftMotor.configMotionAcceleration((int) (4096*rotPerInch *accel /10), Constants.kTimeoutMs);
 	liftMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs); 
+//	arm.enableVoltageCompensation(true); 
+	liftMotor.setInverted(true);
+	liftMotor.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
+	liftMotor.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
 
+	
 	
 	setDriveCurrentLimit(20, 200, 25);
 }
@@ -59,14 +65,20 @@ public Lift(){
     }
     
     public void driveLift() {
-    	double y =Utils.limitMagnitude(Utils.joyExpo(Robot.oi.manip.getY(), 1.5), 0.01, 0.2);
+    	double y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.manip.getY(), 1.5), 0.01, 1.0);
     	liftMotor.set(ControlMode.PercentOutput, -y);
-
+    }
+    
+    public void driveUp() {
+    	liftMotor.set(ControlMode.PercentOutput, 1.0);
+    }
+    
+    public void driveDown() {
+    	liftMotor.set(ControlMode.PercentOutput, -0.4);
     }
     
     public void shrink() {
 //    	setPosition = getCurrentPosition() - Constants.liftMotorTopLimit;
-    	theWinchThatStoleChristmas.set(ControlMode.PercentOutput, 1);
     	liftMotor.set(ControlMode.MotionMagic, Constants.liftMotorBottomLimit*rotPerInch*4096);
     	 getCurrentPosition();
     	 
@@ -99,7 +111,8 @@ public Lift(){
     }
     
     public void stopMotor() {
-    	liftMotor.setNeutralMode(NeutralMode.Brake);
+    	liftMotor.set(ControlMode.PercentOutput, 0.0);
+//    	liftMotor.setNeutralMode(NeutralMode.Brake);
     }
     
     public void coastMotor() {
@@ -119,16 +132,7 @@ public Lift(){
     		
     	}
     
-    public void winchUp() {
-    	theWinchThatStoleChristmas.set(ControlMode.PercentOutput, 1.0);
-    }
-
-	public void stopWinch() {
-		// TODO Auto-generated method stub
-    	theWinchThatStoleChristmas.set(ControlMode.PercentOutput, 0.0);
-
-		
-	}
+ 
 }
 
 
