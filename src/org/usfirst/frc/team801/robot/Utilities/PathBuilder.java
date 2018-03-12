@@ -31,15 +31,26 @@ public class PathBuilder {
 				
 		// For the Switch
 		if (location == sides[0]) {
+			//If the Switch is on the same side as the robot's starting position
+			//Go to Switch
 			pathCommand.addSequential(new StartPosGoPosSwitch());
 		} else if (location == Constants.CENTER) {
+			//If the robot starts in the center
+			//Move to the side with the Switch
 			pathCommand.addSequential(new StartCenterGoPos(sides[0]));
+			//Go to Switch
 			pathCommand.addSequential(new StartPosGoPosSwitch());
 		} else {
 			
 		}
+		//The robot is now on the side with the Switch
+		location = sides[0];
 		
-		
+		if (location == sides[1]) {
+			//If the Scale is on the same side as the Switch
+		} else {
+			//If the Scale is not on the same side as the Switch
+		}
 		
 		
 		
