@@ -1,95 +1,140 @@
 package org.usfirst.frc.team801.robot.Utilities;
 
-
-
 import org.usfirst.frc.team801.robot.Constants;
-import org.usfirst.frc.team801.robot.Robot;
 import org.usfirst.frc.team801.robot.commands.auto.MiddleGoLeftSwitch;
 import org.usfirst.frc.team801.robot.commands.auto.MiddleGoRightSwitch;
+import org.usfirst.frc.team801.robot.commands.auto.nikhil_test.StartPosGoPosSwitch;
+import org.usfirst.frc.team801.robot.commands.auto.nikhil_test.StartCenterGoPos;
 
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class PathBuilder {
 
-	private Command pathCommand;
-	
-	public PathBuilder (int location, String fieldLayout) {
-		
-		String[] sides = new String[3];
-		
+	private CommandGroup pathCommand;
+
+	public PathBuilder(int location, String fieldLayout) {
+
+		String[] cutFieldLayout = new String[3];
+		int[] sides = new int[3];
+		pathCommand = new CommandGroup("PathCommand");
+
 		for (int i = 0; i < fieldLayout.length(); i++) {
-			sides[i] = fieldLayout.substring(i, i+1);
+			cutFieldLayout[i] = fieldLayout.substring(i, i + 1);
+		}
+
+		for (int i = 0; i < cutFieldLayout.length; i++)
+			if (cutFieldLayout[i].equals("L"))
+				sides[i] = Constants.LEFT;
+			else
+				sides[i] = Constants.RIGHT;
+				
+		// For the Switch
+		if (location == sides[0]) {
+			pathCommand.addSequential(new StartPosGoPosSwitch());
+		} else if (location == Constants.CENTER) {
+			pathCommand.addSequential(new StartCenterGoPos(sides[0]));
+			pathCommand.addSequential(new StartPosGoPosSwitch());
+		} else {
+			
 		}
 		
-		for (int i = 0; i < sides.length; i ++)
-			System.out.println(sides[i]);
-		//For the Switch
-		switch (sides[0]) {
-		case "L":
-			switch(location) {
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/*
+		if (cutFieldLayout[0].equals("L")) {
+			// This will run if the our switch is on the LEFT side of of the
+			// field.
+			switch (location) {
 			case Constants.LEFT:
-				//Go forward
+				try {
+					pathCommand.addSequential(new StartPosGoPosSwitch(location));
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+					pathCommand = new CommandGroup("null");
+					break;
+				}
 				break;
 			case Constants.CENTER:
-				//Go left then forward
+				// Go left then forward
 				pathCommand = new MiddleGoLeftSwitch();
 				break;
 			case Constants.RIGHT:
-				//Go left x2 then forward
+				// Go left x2 then forward
 				break;
 			}
 			location = Constants.LEFT;
-			break;
-		case "R":
-			switch(location) {
+		} else {
+			switch (location) {
 			case Constants.LEFT:
-				//Go right x2 then forward
+				// Go right x2 then forward
 				break;
 			case Constants.CENTER:
-				//Go right then forward
+				// Go right then forward
 				pathCommand = new MiddleGoRightSwitch();
 				break;
 			case Constants.RIGHT:
-				//Go forward
+				try {
+					pathCommand.addSequential(new StartPosGoPosSwitch(location));
+				} catch (IllegalArgumentException e) {
+					e.printStackTrace();
+					pathCommand = new CommandGroup("null");
+					break;
+				}
 				break;
 			}
 			location = Constants.RIGHT;
-			break;
 		}
 	}
-		//End Switch
-		
-//		//For the Scale
-//		switch (sides[1]) {
-//		case "L":
-//			switch(location) {
-//			case Constants.LEFT:
-//				//Go forward
-//			case Constants.RIGHT:
-//				//Go left x2 then forward
-//			}
-//			break;
-//		case "R":
-//			switch(location) {
-//			case Constants.LEFT:
-//				//Go right x2 then forward
-//			case Constants.RIGHT:
-//				//Go forward
-//			}
-//			break;
-//		}
-//		
-//		switch (sides[2]) {
-//		case "L":
-//			break;
-//		case "R":
-//			break;
-//		}
-//	}
-//	//end Scale
-	
+	// End Switch
+
+	// //For the Scale
+	// switch (cutFieldLayout[1]) {
+	// case "L":
+	// switch(location) {
+	// case Constants.LEFT:
+	// //Go forward
+	// case Constants.RIGHT:
+	// //Go left x2 then forward
+	// }
+	// break;
+	// case "R":
+	// switch(location) {
+	// case Constants.LEFT:
+	// //Go right x2 then forward
+	// case Constants.RIGHT:
+	// //Go forward
+	// }
+	// break;
+	// }
+	//
+	// switch (cutFieldLayout[2]) {
+	// case "L":
+	// break;
+	// case "R":
+	// break;
+	// }
+	// }
+	// //end Scale
+	 */
+	}
+
 	public Command getPath() {
 		return pathCommand;
 	}
 }
-
