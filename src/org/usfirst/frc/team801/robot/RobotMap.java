@@ -20,6 +20,7 @@ import org.usfirst.frc.team801.robot.Utilities.BufferedWriterFRC;
 import SwerveClass.SwerveDrive;
 import SwerveClass.Team801TalonSRX;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.PowerDistributionPanel;
 import edu.wpi.first.wpilibj.internal.HardwareTimer;
 
 /**
@@ -52,6 +53,8 @@ public class RobotMap {
 	//Wench motor
 	public static Team801TalonSRX theWinchThatStoleChristmas = new Team801TalonSRX(13);
 
+	public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
+	
 	public static AnalogInput ultraSonic;
 	public static Adis16448_IMU imu;
 	

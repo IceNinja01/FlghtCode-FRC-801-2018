@@ -137,7 +137,15 @@ private boolean robotOrient = false;
 		SmartDashboard.putNumber("IMU", angle);
 		return angle;
 	}
-
+	
+	public double getAngleX() {
+		double x = adis.getAngleX();
+		return x;
+	}
+	public double getAngleY() {
+		double y = adis.getAngleY();
+		return y;
+	}
 
 	
 	protected double returnPIDInput() {

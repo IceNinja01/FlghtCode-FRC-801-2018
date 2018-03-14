@@ -18,18 +18,23 @@ import edu.wpi.first.wpilibj.Preferences;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
+import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team801.robot.Utilities.PathBuilder;
+import org.usfirst.frc.team801.robot.commands.UpdateSD;
+import org.usfirst.frc.team801.robot.commands.WriteData;
 import org.usfirst.frc.team801.robot.commands.auto.RightGo;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
 import org.usfirst.frc.team801.robot.subsystems.Arm;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
+import org.usfirst.frc.team801.robot.subsystems.DataWriter;
 import org.usfirst.frc.team801.robot.subsystems.Elevator;
 import org.usfirst.frc.team801.robot.subsystems.Lift;
 import org.usfirst.frc.team801.robot.subsystems.Pinchers;
+import org.usfirst.frc.team801.robot.subsystems.SmartDashUpdater;
 import org.usfirst.frc.team801.robot.subsystems.Winch;
 
 /**
@@ -51,8 +56,9 @@ public class Robot extends IterativeRobot {
 	SendableChooser<Object> loc_chooser = new SendableChooser<>();
 	private CameraServer server;
 	public static Winch winch;
-	
-
+	public static final DataWriter dataWriter = new DataWriter();
+	public static final SmartDashUpdater sdUpdater = new SmartDashUpdater();
+	public static final WriteData writeData = new WriteData();
 	public static Lift lift;
 
 	/**
@@ -84,6 +90,12 @@ public class Robot extends IterativeRobot {
 		Robot.chassis.setMotionMagic();
 
 		oi = new OI();
+		
+		new UpdateSD().start();	//Start SD updater after initialization of all subsystems
+        if(DataWriter.logFile != null)
+        {
+        	writeData.start();
+        }
 	}
 
 
