@@ -63,7 +63,7 @@ public class Utils
 		}
 		if(out < min)
 		{
-			out = min;
+			out = 0.0;
 		}
 		return out * Math.signum( in ); //Re-add sign
 	}

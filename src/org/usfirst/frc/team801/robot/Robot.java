@@ -59,7 +59,7 @@ public class Robot extends IterativeRobot {
 	public static final DataWriter dataWriter = new DataWriter();
 	public static final SmartDashUpdater sdUpdater = new SmartDashUpdater();
 	public static final WriteData writeData = new WriteData();
-	public static Lift lift;
+//	public static Lift lift;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -74,7 +74,7 @@ public class Robot extends IterativeRobot {
 		elevator = new Elevator();
 		pinchers = new Pinchers();
 		arm = new Arm();
-		lift = new Lift();
+//		lift = new Lift();
 		winch = new Winch();
 		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 		// Set the resolution

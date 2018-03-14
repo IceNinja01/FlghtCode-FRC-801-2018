@@ -49,7 +49,7 @@ public class RobotMap {
 	
 	public static Team801TalonSRX arm = new Team801TalonSRX(9);
 	//Lift Motor 
-	public static Team801TalonSRX lift = new Team801TalonSRX(6);
+//	public static Team801TalonSRX lift = new Team801TalonSRX(6);
 	//Wench motor
 	public static Team801TalonSRX theWinchThatStoleChristmas = new Team801TalonSRX(13);
 
