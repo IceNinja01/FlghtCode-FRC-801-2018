@@ -69,6 +69,8 @@ public class Constants {
 	//Lift
 		public static double liftMotorBottomLimit = 0.0;//inches
 		public static double liftMotorTopLimit = 2;//inches
+
+		public static boolean LOGGING_ENABLE = false;
 	
 
 	
