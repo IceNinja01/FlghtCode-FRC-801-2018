@@ -1,25 +1,18 @@
-package org.usfirst.frc.team801.robot.commands.auto;
+package org.usfirst.frc.team801.robot.commands.pinchers;
 
-import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
-import org.usfirst.frc.team801.robot.commands.chassis.CMD_Angle_Drive;
+import org.usfirst.frc.team801.robot.commands.arm.ArmDown;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
  *
  */
-public class RightGo extends CommandGroup {
+public class PickUpBox extends CommandGroup {
 
-    public RightGo() {
-    	
-    	addSequential(new ArmUp());
-    	addSequential(new CMD_Angle_Drive(144.0, 90, 0.4));
-    	Timer.delay(0.5);
-    	addSequential(new CMD_Angle_Drive(10, 90, 0.01), 0.5);
-
+    public PickUpBox() {
         // Add Commands here:
-        // e.g. addSequential(new Command1());
+    	addParallel(new OpenPinchers());
+        addSequential(new ArmDown());
         //      addSequential(new Command2());
         // these will run in order.
 

@@ -30,6 +30,7 @@ import org.usfirst.frc.team801.robot.commands.lift.LiftMotorUp;
 import org.usfirst.frc.team801.robot.commands.lift.WinchUp;
 import org.usfirst.frc.team801.robot.commands.pinchers.ClosePinchers;
 import org.usfirst.frc.team801.robot.commands.pinchers.OpenPinchers;
+import org.usfirst.frc.team801.robot.commands.pinchers.PickUpBox;
 
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.buttons.Button;
@@ -103,7 +104,7 @@ public class OI {
 	    public Button turnLeft = new JoystickButton(driver,4);
 //	    public Button turnBack = new JoystickButton(driver,3);
 	    public Button toggleDriveOrientation = new JoystickButton(driver, 3);
-	    public Button openPinch = new JoystickButton(driver,6);
+	    public Button pickUpBox = new JoystickButton(driver,6);
 	    public Button closePinch = new JoystickButton(driver,8);
 	    public Button armDown = new JoystickButton(driver, 7);
 	    public Button armUp = new JoystickButton(driver, 5);
@@ -122,7 +123,7 @@ public class OI {
 //    	turnBack.whileHeld(new TurnBack());
     	turnRight.whileHeld(new TurnRight());
     	turnLeft.whileHeld(new TurnLeft());	
-    	openPinch.whenPressed(new OpenPinchers());
+    	pickUpBox.whenPressed(new PickUpBox());
     	closePinch.whenPressed(new ClosePinchers());
     	armDown.whenPressed(new ArmDown());
     	armUp.whenPressed(new ArmUp());

@@ -607,6 +607,17 @@ private void setupMotorSafety() {
 		   return degrees;
 	}
 	
+	public void getAmps() {
+			for(int i=0 ; i<4; i++) {
+
+		   SmartDashboard.putNumber("DriveAmps_"+motorName[i], driveMotors[i].getOutputCurrent());
+		   SmartDashboard.putNumber("DriveVolts_"+motorName[i], driveMotors[i].getMotorOutputVoltage());
+
+			}
+	}
+	
+	
+	
 	public double currentSpeed(Team801TalonSRX motor, int num){
 		double speed = motor.getSelectedSensorVelocity(0);
 		SmartDashboard.putNumber("Speed"+motorName[num], speed);

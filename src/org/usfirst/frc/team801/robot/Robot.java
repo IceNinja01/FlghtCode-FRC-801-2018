@@ -8,17 +8,21 @@
 package org.usfirst.frc.team801.robot;
 
 
+import edu.wpi.cscore.UsbCamera;
+import edu.wpi.cscore.VideoMode;
 import edu.wpi.first.wpilibj.CameraServer;
 import edu.wpi.first.wpilibj.DriverStation;
 
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Preferences;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team801.robot.Utilities.PathBuilder;
+import org.usfirst.frc.team801.robot.commands.auto.RightGo;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
 import org.usfirst.frc.team801.robot.subsystems.Arm;
@@ -45,7 +49,9 @@ public class Robot extends IterativeRobot {
 	public static Elevator elevator;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 	SendableChooser<Object> loc_chooser = new SendableChooser<>();
+	private CameraServer server;
 	public static Winch winch;
+	
 
 	public static Lift lift;
 
@@ -64,13 +70,15 @@ public class Robot extends IterativeRobot {
 		arm = new Arm();
 		lift = new Lift();
 		winch = new Winch();
-		CameraServer.getInstance().startAutomaticCapture();
+		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
+		// Set the resolution
+		camera.setResolution(640, 480);
 //		m_chooser.addDefault("Default Auto", new ExampleCommand());
 //		m_chooser.addObject("My Auto", new MyAutoCommand());
 		loc_chooser.addDefault("Center", Constants.CENTER);
 		loc_chooser.addObject("Location Left", Constants.LEFT);
 		loc_chooser.addObject("Location Right", Constants.RIGHT);
-		SmartDashboard.putData("Auto mode", m_chooser);
+		SmartDashboard.putData("Location", loc_chooser);
 		SmartDashboard.putData(Scheduler.getInstance());
 		SmartDashboard.putBoolean("Start Motion", false);
 		Robot.chassis.setMotionMagic();
@@ -95,7 +103,12 @@ public class Robot extends IterativeRobot {
 
 		Scheduler.getInstance().run();
 		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
-//		SmartDashboard.putNumber("ElevatorPos", lift.getCurrentPosition());
+		SmartDashboard.putNumber("Chassis Position", chassis.getChassisPosition());
+		SmartDashboard.putNumber("Chassis_Error", chassis.getChassisError());
+		chassis.getVolts();
+
+		SmartDashboard.putNumber("ElevatorPos", lift.getCurrentPosition());
+
 		Scheduler.getInstance().run();
 
 	}
@@ -113,13 +126,20 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		
+		//Gyro Start time
+		double a = Timer.getFPGATimestamp();
 		RobotMap.imu.reset();
-
+		double b = Timer.getFPGATimestamp();
+		SmartDashboard.putNumber("Reset Gyro Time", b-a);
 		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
-		PathBuilder logic = new PathBuilder((int) loc_chooser.getSelected(), fieldLayout);
 		
-		m_autonomousCommand = logic.getPath();;
+		//Switch Case Selector
+		a = Timer.getFPGATimestamp();
+		PathBuilder logic = new PathBuilder((int) loc_chooser.getSelected(), fieldLayout);
+		b = Timer.getFPGATimestamp();
+		SmartDashboard.putNumber("PathBuilder Time", b-a);
+
+		m_autonomousCommand = logic.getPath();
 
 
 		/*
@@ -160,6 +180,13 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void teleopPeriodic() {
+		Scheduler.getInstance().run();
+		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
+		SmartDashboard.putNumber("Chassis Position", chassis.getChassisPosition());
+		SmartDashboard.putNumber("Chassis_Error", chassis.getChassisError());
+		chassis.getVolts();
+
+		SmartDashboard.putNumber("ElevatorPos", lift.getCurrentPosition());
 		Scheduler.getInstance().run();
 	}
 
