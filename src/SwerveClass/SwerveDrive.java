@@ -34,13 +34,13 @@ public class SwerveDrive implements MotorSafety {
 	protected double R = Math.sqrt(L*L+W*W);
 	protected double kP = 0.005;
 	protected double kI = 0.00;
-	protected double kD = 0.0;
+	protected double kD = 0.005;
 	protected double timeUs;
 	private String motorName[] = {"FrontRight","FrontLeft","BackLeft","BackRight"};
 
 	private double[] oldAngle = {0,0,0,0};
 	private double maxDriveVoltage = 1.0;
-	private double maxTurnVoltage = 0.6;
+	private double maxTurnVoltage = 1.0;
 
 	private int deadBand = 1; //
 	private Team801TalonSRX[] driveMotors  = new Team801TalonSRX[4];

@@ -25,6 +25,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import org.usfirst.frc.team801.robot.Utilities.PathBuilder;
 import org.usfirst.frc.team801.robot.commands.UpdateSD;
 import org.usfirst.frc.team801.robot.commands.WriteData;
+import org.usfirst.frc.team801.robot.commands.auto.GoFwd;
+import org.usfirst.frc.team801.robot.commands.auto.LeftGoLeftSwitch;
+import org.usfirst.frc.team801.robot.commands.auto.MiddleGoLeftSwitch;
 import org.usfirst.frc.team801.robot.commands.auto.RightGo;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
@@ -59,7 +62,7 @@ public class Robot extends IterativeRobot {
 	public static final DataWriter dataWriter = new DataWriter();
 	public static final SmartDashUpdater sdUpdater = new SmartDashUpdater();
 	public static final WriteData writeData = new WriteData();
-//	public static Lift lift;
+	public static Lift lift;
 
 	/**
 	 * This function is run when the robot is first started up and should be
@@ -74,7 +77,7 @@ public class Robot extends IterativeRobot {
 		elevator = new Elevator();
 		pinchers = new Pinchers();
 		arm = new Arm();
-//		lift = new Lift();
+		lift = new Lift();
 		winch = new Winch();
 		UsbCamera camera = CameraServer.getInstance().startAutomaticCapture();
 		// Set the resolution
@@ -119,7 +122,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Chassis_Error", chassis.getChassisError());
 		chassis.getVolts();
 
-		SmartDashboard.putNumber("ElevatorPos", lift.getCurrentPosition());
+//		SmartDashboard.putNumber("ElevatorPos", lift.getCurrentPosition());
 
 		Scheduler.getInstance().run();
 
@@ -151,8 +154,8 @@ public class Robot extends IterativeRobot {
 		b = Timer.getFPGATimestamp();
 		SmartDashboard.putNumber("PathBuilder Time", b-a);
 
-		m_autonomousCommand = logic.getPath();
-
+//		m_autonomousCommand = logic.getPath();
+		m_autonomousCommand = new MiddleGoLeftSwitch();
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -198,7 +201,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("Chassis_Error", chassis.getChassisError());
 		chassis.getVolts();
 
-		SmartDashboard.putNumber("ElevatorPos", lift.getCurrentPosition());
+//		SmartDashboard.putNumber("ElevatorPos", lift.getCurrentPosition());
 		Scheduler.getInstance().run();
 	}
 

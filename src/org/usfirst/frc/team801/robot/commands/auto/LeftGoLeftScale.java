@@ -23,7 +23,7 @@ public class LeftGoLeftScale extends CommandGroup {
     	Timer.delay(0.5);
     	addSequential(new TurnRight(),2.0);
     	Timer.delay(0.1);
-    	addSequential(new CMD_Angle_Drive(36, 90, 0.2));
+    	addSequential(new CMD_Angle_Drive(36, 90, 0.4));
     	
     	addSequential(new ExtendLow());
     	

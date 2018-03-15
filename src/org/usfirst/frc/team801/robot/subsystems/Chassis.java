@@ -83,9 +83,9 @@ private boolean robotOrient = false;
 		
 		
 
-		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.01, 1.0);
-		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.01, 1.0);
-		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.01, 0.5);
+		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.1, 1.0);
+		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.1, 1.0);
+		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.1, 0.5);
 
 			chassisSwerveDrive.drive(x, y, z, angleCmd_Deg);
 		
@@ -93,8 +93,8 @@ private boolean robotOrient = false;
 	}
 
 	public void turnToHeading(double gyroCMD, double angleCmd) {
-		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(Hand.kLeft), 1.5), 0.01, 1.0);
-		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(Hand.kLeft), 1.5), 0.01, 1.0);
+		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(Hand.kLeft), 1.5), 0.1, 1.0);
+		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(Hand.kLeft), 1.5), 0.1, 1.0);
 		headingCMD = gyroCMD;
 		headingError = Robot.chassis.getGyroAngle() - headingCMD;
 		chassisSwerveDrive.drive(x, y, zRateCmd, angleCmd);
@@ -220,9 +220,9 @@ private boolean robotOrient = false;
 		
 		
 
-		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.01, 1.0);
-		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.01, 1.0);
-		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.01, 0.5);
+		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.1, 1.0);
+		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.1, 1.0);
+		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.1, 0.5);
 
 			chassisSwerveDrive.drive(x, y, z, 0);
 		

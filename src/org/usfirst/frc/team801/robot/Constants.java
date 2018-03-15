@@ -7,7 +7,7 @@ public class Constants {
 	public static double BackLeftBias = Robot.prefs.getDouble("BackLeftBias", 0.0);
 	public static double BackRightBias = Robot.prefs.getDouble("BackRightBias", 0.0);
 	*/
-	public static final double[] AngleBias = {276.0, 314.0, 344.8, 316.1};
+	public static final double[] AngleBias = {141.76, 345.7, 134.01, 91.5};
 	
 	/** which Talon on CANBus*/
 	public static final int kTalonID = 0;

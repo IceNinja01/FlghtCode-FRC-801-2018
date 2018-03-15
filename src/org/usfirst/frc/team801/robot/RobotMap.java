@@ -49,7 +49,7 @@ public class RobotMap {
 	
 	public static Team801TalonSRX arm = new Team801TalonSRX(9);
 	//Lift Motor 
-//	public static Team801TalonSRX lift = new Team801TalonSRX(6);
+	public static Team801TalonSRX lift = new Team801TalonSRX(6);
 	//Wench motor
 	public static Team801TalonSRX theWinchThatStoleChristmas = new Team801TalonSRX(13);
 
@@ -100,7 +100,7 @@ public class RobotMap {
 	private static BufferedWriterFRC createLogFile(File path)
 	{
 		LocalDateTime dateTime = LocalDateTime.now();
-		File outFile = new File(path.toString() + "/log_" + dateTime.format(DateTimeFormatter.ofPattern("uu_MM_dd_HH_mm_ss")) + ".txt");
+		File outFile = new File(path.toString() + "/log_practice_" + dateTime.format(DateTimeFormatter.ofPattern("uu_MM_dd_HH_mm_ss")) + ".txt");
 		try
 		{
 			BufferedWriterFRC w = new BufferedWriterFRC(new OutputStreamWriter(new FileOutputStream(outFile)));

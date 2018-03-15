@@ -17,21 +17,21 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class MiddleGoLeftSwitch extends CommandGroup {
 	
     public MiddleGoLeftSwitch() {
-    	addSequential(new ArmUp());
+//    	addSequential(new ArmUp());
 
     	addSequential(new CMD_Angle_Drive(18.0, 90, 0.4));
     	Timer.delay(0.5);
-    	addSequential(new CMD_Angle_Drive(70.0, 180, 0.4));
+    	addSequential(new CMD_Angle_Drive(70.0, 135, 0.4));
     	Timer.delay(0.5);
     	addSequential(new CMD_Angle_Drive(82, 90, 0.4));
     	Timer.delay(0.5);
     	addSequential(new CMD_Angle_Drive(6, 90, 0.1),0.5);
     	
-    	addSequential(new ExtendLow());
-    	
-    	addSequential(new ArmDown());
-    	Timer.delay(1.0);
-    	addSequential(new OpenPinchers());
+//    	addSequential(new ExtendLow());
+//    	
+//    	addSequential(new ArmDown());
+//    	Timer.delay(1.0);
+//    	addSequential(new OpenPinchers());
 //    	addSequential(new ArmUp());
 
         // Add Commands here:
