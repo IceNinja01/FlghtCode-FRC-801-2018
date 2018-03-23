@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team801.robot.Utilities.PathBuilder;
+import org.usfirst.frc.team801.robot.commands.TestDrive;
 import org.usfirst.frc.team801.robot.commands.UpdateSD;
 import org.usfirst.frc.team801.robot.commands.WriteData;
 import org.usfirst.frc.team801.robot.commands.auto.GoFwd;
@@ -143,7 +144,7 @@ public class Robot extends IterativeRobot {
 	public void autonomousInit() {
 		//Gyro Start time
 		double a = Timer.getFPGATimestamp();
-		RobotMap.imu.reset();
+		chassis.setGyroBias();
 		double b = Timer.getFPGATimestamp();
 		SmartDashboard.putNumber("Reset Gyro Time", b-a);
 		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
@@ -155,7 +156,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("PathBuilder Time", b-a);
 
 //		m_autonomousCommand = logic.getPath();
-		m_autonomousCommand = new MiddleGoLeftSwitch();
+		m_autonomousCommand = new TestDrive();
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
@@ -210,5 +211,11 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void testPeriodic() {
+		Scheduler.getInstance().run();
+
+	}
+	
+	public void testInit() {
+
 	}
 }

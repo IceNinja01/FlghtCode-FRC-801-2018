@@ -51,6 +51,7 @@ public class Chassis extends PIDSubsystem {
 	private double acceleration;
 private double elevatorHeight;
 private boolean robotOrient = false;
+private double biasAngle = 0.0;
 
 	public Chassis() {
 
@@ -133,7 +134,7 @@ private boolean robotOrient = false;
 	}
 
 	public double getGyroAngle() {
-		angle = Utils.wrapAngle0To360Deg(adis.getAngleZ());
+		angle = Utils.wrapAngle0To360Deg(adis.getAngleZ() - biasAngle );
 		SmartDashboard.putNumber("IMU", angle);
 		return angle;
 	}
@@ -232,6 +233,12 @@ private boolean robotOrient = false;
 	
 	public void getVolts() {
 		chassisSwerveDrive.getAmps();
+	}
+	
+	public void setGyroBias() {
+		
+		biasAngle = Utils.wrapAngle0To360Deg(adis.getAngleZ());
+		
 	}
 
 }

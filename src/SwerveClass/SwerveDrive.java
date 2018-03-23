@@ -167,7 +167,7 @@ public class SwerveDrive implements MotorSafety {
 			pidTurnController[i].setOutputRange(-maxTurnVoltage, maxTurnVoltage);
 			pidTurnController[i].enable();
 		}
-//		driveMotors[2].setInverted(true);
+		driveMotors[1].setInverted(true);
 
 		
 		// Initializes the _avg variables to size avgSize
