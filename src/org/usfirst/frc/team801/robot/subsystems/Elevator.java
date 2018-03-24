@@ -144,5 +144,13 @@ public class Elevator extends Subsystem {
 		elevaMotor.config_kD(0, 0.2, Constants.kTimeoutMs);
 
 	}
+
+
+	public void extendHook() {
+    	targetPosition = (int) Constants.elevatorMotorHookPos*rotPerinch*4096;
+    	elevaMotor.set(ControlMode.MotionMagic, targetPosition);
+    	getCurrentPosition();
+		
+	}
 }
 

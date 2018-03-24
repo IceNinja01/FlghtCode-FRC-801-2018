@@ -36,14 +36,13 @@ public class CMD_Drive extends Command {
     protected void initialize() {
 //    	Robot.chassis.pointWheels(0); //point wheels strait
 //    	Timer.delay(0.5);
-    	Robot.chassis.setMotionMagic();
     	distance += -Robot.chassis.getChassisPosition();
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
     	
-    	Robot.chassis.cmdDrive(x, -y, heading, Robot.chassis.getGyroAngle());
+    	Robot.chassis.cmdDrive(x, -y, heading, 0);
 //    	System.out.print("X: " + x_y[j][0]);
 //    	System.out.println("\tY: " + x_y[j][1]);
     	dist = -Robot.chassis.getChassisPosition();;
@@ -56,7 +55,7 @@ public class CMD_Drive extends Command {
 
     // Make this return true when this Command no longer needs to run execute()
     protected boolean isFinished() {
-        return (error < 1.5);
+        return (error < 2.0);
     }
 
     // Called once after isFinished returns true

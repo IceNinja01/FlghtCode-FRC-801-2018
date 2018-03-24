@@ -74,8 +74,8 @@ public class WriteData extends Command
     	DataWriter.logFile.writeNewLine();
     	//This is a hack to get the first HeaderLine to print towards the top not perfect but works
     	if(i==0){
-        	DataWriter.logFile.writeHeadLine1();
-        	DataWriter.logFile.writeNewLine();
+//        	DataWriter.logFile.writeHeadLine1();
+//        	DataWriter.logFile.writeNewLine();
         	DataWriter.logFile.writeGroupNum();
         	DataWriter.logFile.writeNewLine();
         	DataWriter.logFile.writeHeadLine2();

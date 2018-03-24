@@ -3,6 +3,10 @@ package org.usfirst.frc.team801.robot.commands.auto;
 import org.usfirst.frc.team801.robot.commands.arm.ArmDown;
 import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Angle_Drive;
+import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
+import org.usfirst.frc.team801.robot.commands.chassis.PointWheels;
+import org.usfirst.frc.team801.robot.commands.chassis.StopDrive;
+import org.usfirst.frc.team801.robot.commands.chassis.TurnCMD;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnRight;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
 import org.usfirst.frc.team801.robot.commands.pinchers.OpenPinchers;
@@ -18,11 +22,13 @@ public class LeftGoLeftSwitch extends CommandGroup {
     public LeftGoLeftSwitch() {
 //    	addSequential(new ArmUp());
 
-    	addSequential(new CMD_Angle_Drive(144.0, 0.0, 0.4));
+    	addSequential(new CMD_Angle_Drive(50.0, 90.0, 0.15));
     	Timer.delay(0.5);
-    	addSequential(new TurnRight(), 20.0);
+    	addSequential(new TurnCMD(90.0), 10.0);
     	Timer.delay(0.5);
-    	addSequential(new CMD_Angle_Drive(144, 0.0, 0.4));
+//    	addSequential(new PointWheels(0), 10.0);
+//    	Timer.delay(10.0);
+    	addSequential(new CMD_Drive(0.0, 0.15, 90, 144.0));
     	
 //    	addSequential(new ExtendLow());
 //    	

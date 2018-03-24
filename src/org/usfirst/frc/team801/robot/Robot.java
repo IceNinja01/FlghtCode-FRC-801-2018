@@ -156,7 +156,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putNumber("PathBuilder Time", b-a);
 
 //		m_autonomousCommand = logic.getPath();
-		m_autonomousCommand = new TestDrive();
+		m_autonomousCommand = new LeftGoLeftSwitch();
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",

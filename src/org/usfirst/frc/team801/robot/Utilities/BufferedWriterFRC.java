@@ -84,7 +84,6 @@ public class BufferedWriterFRC extends BufferedWriter
 		//TODO: why are we writing new format specs if the healine already contains the column?
 		if(printSpec)
 		{
-			formatSpec = "%f";
 			headLine1.add(formatSpec);
 			groupNumber.add(groupNum);
 		}
@@ -115,7 +114,6 @@ public class BufferedWriterFRC extends BufferedWriter
 	{
 		if(printSpec)
 		{
-			formatSpec = "%s";
 			headLine1.add(formatSpec);
 		}
 
@@ -148,7 +146,6 @@ public class BufferedWriterFRC extends BufferedWriter
 		//TODO: why are we writing new format specs if the healine already contains the column?
 		if(printSpec)
 		{
-			formatSpec = "%f";
 			headLine1.add(formatSpec);
 			groupNumber.add(groupNum);
 		}

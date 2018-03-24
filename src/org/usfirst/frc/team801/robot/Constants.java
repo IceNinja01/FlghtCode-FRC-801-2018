@@ -66,6 +66,7 @@ public class Constants {
 		public static double elevatorMotorLowPos = 24; //inches
 		public static double elevatorMotorMidPos = 56; //inches
 		public static double elevatorMotorTopPos = 72; //inches
+		public static double elevatorMotorHookPos = 64; //inches
 	//Lift
 		public static double liftMotorBottomLimit = 0.0;//inches
 		public static double liftMotorTopLimit = 2;//inches

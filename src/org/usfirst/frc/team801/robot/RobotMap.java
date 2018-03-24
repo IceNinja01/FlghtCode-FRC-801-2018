@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import org.usfirst.frc.team801.robot.Utilities.Adis16448_IMU;
+import org.usfirst.frc.team801.robot.Utilities.Adis16448_IMU_2018;
 import org.usfirst.frc.team801.robot.Utilities.BufferedWriterFRC;
 
 import SwerveClass.SwerveDrive;
@@ -56,7 +57,7 @@ public class RobotMap {
 	public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
 	
 	public static AnalogInput ultraSonic;
-	public static Adis16448_IMU imu;
+	public static Adis16448_IMU_2018 imu;
 	
 	public static SwerveDrive swerveDrive;
 	
@@ -68,7 +69,7 @@ public class RobotMap {
 	public static void init() 
 	{
 		//IMU setup
-		imu = new Adis16448_IMU();
+		imu = new Adis16448_IMU_2018();
 		imu.calibrate();
 		imu.reset();
 //		backLeftTurn.setInverted(true);

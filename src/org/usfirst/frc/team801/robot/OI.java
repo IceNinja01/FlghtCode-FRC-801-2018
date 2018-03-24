@@ -20,6 +20,7 @@ import org.usfirst.frc.team801.robot.commands.chassis.TurnFront;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnLeft;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnRight;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
+import org.usfirst.frc.team801.robot.commands.elevator.ExtendHook;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendMid;
 import org.usfirst.frc.team801.robot.commands.elevator.Shrink;
@@ -104,42 +105,39 @@ public class OI {
 	    public Button turnLeft = new JoystickButton(driver,4);
 //	    public Button turnBack = new JoystickButton(driver,3);
 	    public Button toggleDriveOrientation = new JoystickButton(driver, 3);
-	    public Button pickUpBox = new JoystickButton(driver,6);
-	    public Button closePinch = new JoystickButton(driver,8);
-	    public Button armDown = new JoystickButton(driver, 7);
-	    public Button armUp = new JoystickButton(driver, 5);
+
 	    
 	    public Button bottomElevator = new JoystickButton(manip, 3);
 	    public Button lowElevator = new JoystickButton(manip, 2);
 	    public Button midElevator = new JoystickButton(manip, 4);
 	    public Button highElevator = new JoystickButton(manip, 1);
-	    public Button winch = new JoystickButton(manip, 8);
-	    public Button liftUp = new JoystickButton(manip,5);
-	    public Button liftDown = new JoystickButton(manip,6);
-//	    public Button square = new JoystickButton(manip, 5);
+	    public Button closePinch = new JoystickButton(manip,5);
+	    public Button pickUpBox = new JoystickButton(manip,6);
+	    public Button extendHook = new JoystickButton(manip, 7);
+	    public Button armUp = new JoystickButton(manip, 8);
+	    public Button winch = new JoystickButton(manip, 10);
+	    
+	    //	    public Button square = new JoystickButton(manip, 5);
     
     public OI() {
     	turnFront.whileHeld(new TurnFront());
 //    	turnBack.whileHeld(new TurnBack());
     	turnRight.whileHeld(new TurnRight());
     	turnLeft.whileHeld(new TurnLeft());	
-    	pickUpBox.whenPressed(new PickUpBox());
-    	closePinch.whenPressed(new ClosePinchers());
-    	armDown.whenPressed(new ArmDown());
-    	armUp.whenPressed(new ArmUp());
     	toggleDriveOrientation.whileHeld(new ToggleDriveOrientation());
 
     	//    	liftUp.whenPressed(new LiftMotorExtend());
 //    	liftDown.whenPressed(new LiftMotorShrink());
 
-    	
+    	extendHook.whenPressed(new ExtendHook());
     	bottomElevator.whenPressed(new Shrink());
     	highElevator.whenPressed(new ExtendHigh());
     	midElevator.whenPressed(new ExtendMid());	
     	lowElevator.whenPressed(new ExtendLow());
-    	liftUp.whileHeld(new LiftMotorUp());
-    	liftDown.whileHeld(new LiftMotorDown());
+    	pickUpBox.whenPressed(new PickUpBox());
+    	closePinch.whenPressed(new ClosePinchers());
     	winch.whileHeld(new WinchUp());
+    	armUp.whenPressed(new ArmUp());
 //    	square.whenPressed(new Square());
 
 

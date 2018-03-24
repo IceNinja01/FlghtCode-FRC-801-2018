@@ -4,6 +4,8 @@ import org.usfirst.frc.team801.robot.Robot;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Command;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import org.usfirst.frc.team801.robot.Utilities.*;
 
 import MotionProfile.MotionProfile;
@@ -29,26 +31,28 @@ public class CMD_Angle_Drive extends Command {
     	this.distance = distance;
 //    	double angle = Utils.convertDegtoRad(heading);
     	double radians = heading *Math.PI/180.00;
-    	this.x = Math.cos(radians)*maxVel;
-    	this.y = Math.sin(radians)*maxVel;
+    	this.x = Utils.limitMagnitude(Math.cos(radians)*maxVel, 0.05, 1.0);
+    	this.y = Utils.limitMagnitude(Math.sin(radians)*maxVel, 0.05, 1.0);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
 //    	Robot.chassis.pointWheels(0); //point wheels strait
 //    	Timer.delay(0.3);
-    	Robot.chassis.setMotionMagic();
     	distance += Robot.chassis.getChassisPosition();
     	//Ramp up motors;
-    	for(int i = 0 ; i<50; i++) { //assuming cycle time is 50 ms, so a total of 500ms
-        	Robot.chassis.cmdDrive(x*i/50, -y*i/50, heading, Robot.chassis.getGyroAngle());
+    	for(int i = 0 ; i<100; i++) { //assuming cycle time is 50 ms, so a total of 500ms
+    		SmartDashboard.putNumber("joy X", x);
+    		SmartDashboard.putNumber("joy Y", y);
+        	Robot.chassis.cmdDrive(x*i/100, y*i/100, heading, Robot.chassis.getGyroAngle());
     	}
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	
-    	Robot.chassis.cmdDrive(x, -y, heading, Robot.chassis.getGyroAngle());
+		SmartDashboard.putNumber("joy X", x);
+		SmartDashboard.putNumber("joy Y", y);
+    	Robot.chassis.cmdDrive(x, y, heading, Robot.chassis.getGyroAngle());
 //    	System.out.print("X: " + x_y[j][0]);
 //    	System.out.println("\tY: " + x_y[j][1]);
     	dist = Robot.chassis.getChassisPosition();;

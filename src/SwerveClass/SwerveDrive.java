@@ -285,12 +285,14 @@ public class SwerveDrive implements MotorSafety {
 	}
 	
 	public void CMDdrive(double AxisX, double AxisY, double rotation, double gyroAngle){
-		
-		
+		xavg.add(AxisX);
+		yavg.add(AxisY);
+		zavg.add(rotation);
 		//Calculate Angles and Magnitudes for each motor
-		FWD = -AxisY;
-		STR = AxisX;
-		RCW = rotation;
+		FWD = yavg.getAverage();
+		STR = xavg.getAverage();
+		RCW = zavg.getAverage();
+
 		double radians = gyroAngle *Math.PI/180.00;
 		temp = FWD*Math.cos(radians) + STR*Math.sin(radians);
 		STR = -FWD*Math.sin(radians) + STR*Math.cos(radians);

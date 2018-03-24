@@ -4,6 +4,7 @@ import org.usfirst.frc.team801.robot.Constants;
 import org.usfirst.frc.team801.robot.Robot;
 import org.usfirst.frc.team801.robot.RobotMap;
 import org.usfirst.frc.team801.robot.Utilities.Adis16448_IMU;
+import org.usfirst.frc.team801.robot.Utilities.Adis16448_IMU_2018;
 import org.usfirst.frc.team801.robot.Utilities.Utils;
 import org.usfirst.frc.team801.robot.commands.DriveWithJoysticks;
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -19,7 +20,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  */
 @SuppressWarnings("unused")
 public class Chassis extends PIDSubsystem {
-	Adis16448_IMU adis = RobotMap.imu;
+	Adis16448_IMU_2018 adis = RobotMap.imu;
 //	AnalogInput ultraSonic = RobotMap.ultraSonic;
 //	public static PIDSource ultraPidSource;
 	// Put methods for controlling this subsystem
@@ -75,7 +76,7 @@ private double biasAngle = 0.0;
 		
 		if(elevatorHeight > 48.0) {
 			
-			chassisSwerveDrive.setMaxDriveVoltage(0.4);
+			chassisSwerveDrive.setMaxDriveVoltage(0.5);
 		}
 		else {
 			chassisSwerveDrive.setMaxDriveVoltage(1.0);
@@ -84,21 +85,32 @@ private double biasAngle = 0.0;
 		
 		
 
-		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.1, 1.0);
-		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.1, 1.0);
-		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.1, 0.5);
-
-			chassisSwerveDrive.drive(x, y, z, angleCmd_Deg);
+		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.05, 1.0);
+		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.05, 1.0);
+		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.05, 0.5);
+		SmartDashboard.putNumber("joy X", x);
+		SmartDashboard.putNumber("joy Y", y);
+		chassisSwerveDrive.drive(x, y, z, angleCmd_Deg);
 		
 		
 	}
 
 	public void turnToHeading(double gyroCMD, double angleCmd) {
-		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(Hand.kLeft), 1.5), 0.1, 1.0);
-		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(Hand.kLeft), 1.5), 0.1, 1.0);
+		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(Hand.kLeft), 1.5), 0.05, 1.0);
+		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(Hand.kLeft), 1.5), 0.05, 1.0);
 		headingCMD = gyroCMD;
 		headingError = Robot.chassis.getGyroAngle() - headingCMD;
 		chassisSwerveDrive.drive(x, y, zRateCmd, angleCmd);
+		SmartDashboard.putNumber("HeadingCMD", headingCMD);
+		SmartDashboard.putNumber("HeadingError", headingError);
+		SmartDashboard.putNumber("zRateCmd", zRateCmd);
+
+	}	
+	
+	public void cmdTurnToHeading(double gyroCMD, double angleCmd) {
+		headingCMD = gyroCMD;
+		headingError = Robot.chassis.getGyroAngle() - headingCMD;
+		chassisSwerveDrive.drive(0, 0, zRateCmd, angleCmd);
 		SmartDashboard.putNumber("HeadingCMD", headingCMD);
 		SmartDashboard.putNumber("HeadingError", headingError);
 		SmartDashboard.putNumber("zRateCmd", zRateCmd);
