@@ -25,6 +25,31 @@ public class Utils
 //		return err;
 	}
 	
+	public static double convertUnitDegtoHeadingDeg(double angle_deg) {
+		if(angle_deg > 0 && angle_deg < 90) {
+			angle_deg -= 90;
+			angle_deg *= -1;
+		}
+		if(angle_deg > 90 && angle_deg < 180) {
+			angle_deg -= 180;
+			angle_deg *= -1;
+			angle_deg += 270;
+		}
+		if(angle_deg > 180 && angle_deg < 270) {
+			angle_deg -= 270;
+			angle_deg *= -1;
+			angle_deg += 180;
+		}
+		if(angle_deg > 270 && angle_deg < 360) {
+			angle_deg -= 360;
+			angle_deg *= -1;
+			angle_deg += 90;
+		}
+		
+		
+		return angle_deg;
+	}
+	
 	public static double convertDegtoRad(double angle_deg) {
 		/*Command is used to convert from degrees to radians
 		 * First : degrees have to be converted to unit circle degrees instead of heading degrees

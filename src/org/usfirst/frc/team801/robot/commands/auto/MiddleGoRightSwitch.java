@@ -1,34 +1,35 @@
 package org.usfirst.frc.team801.robot.commands.auto;
 
+import org.usfirst.frc.team801.robot.Robot;
 import org.usfirst.frc.team801.robot.commands.arm.ArmDown;
 import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Angle_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.StopDrive;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
+import org.usfirst.frc.team801.robot.commands.pinchers.ClosePinchers;
 import org.usfirst.frc.team801.robot.commands.pinchers.OpenPinchers;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
+import edu.wpi.first.wpilibj.command.WaitCommand;
 
 /**
  *
  */
 public class MiddleGoRightSwitch extends CommandGroup {
 
-    public MiddleGoRightSwitch() {   	
-    	addSequential(new ArmUp());
+    public MiddleGoRightSwitch() { 
+ 
+    	requires(Robot.arm);
+    	requires(Robot.pinchers);
+    	requires(Robot.chassis);
+    	requires(Robot.elevator);
 
-    	addSequential(new CMD_Angle_Drive(18.0, 90, 0.4));
-    	Timer.delay(0.5);
-    	addSequential(new CMD_Angle_Drive(42.0, 0, 0.4));
-    	Timer.delay(0.5);
-    	addSequential(new CMD_Angle_Drive(82, 90, 0.4));
-    	Timer.delay(0.5);
-    	addSequential(new CMD_Angle_Drive(6, 90, 0.1),0.5);
-    	
-    	addSequential(new ExtendLow());
+
+    	addSequential(new ArmUp());
+    	addSequential(new ClosePinchers());
+    	addSequential(new Drive_And_Extend(108.0 - 30, 64.0, 0.5, 0, false));
     	addSequential(new ArmDown());
-    	Timer.delay(1.0);
     	addSequential(new OpenPinchers());
 
         // Add Commands here:

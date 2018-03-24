@@ -1,5 +1,6 @@
 package org.usfirst.frc.team801.robot.commands.auto;
 
+import org.usfirst.frc.team801.robot.Robot;
 import org.usfirst.frc.team801.robot.commands.arm.ArmDown;
 import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Angle_Drive;
@@ -17,22 +18,17 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class MiddleGoLeftSwitch extends CommandGroup {
 	
     public MiddleGoLeftSwitch() {
-//    	addSequential(new ArmUp());
+    	requires(Robot.arm);
+    	requires(Robot.pinchers);
+    	requires(Robot.chassis);
+    	requires(Robot.elevator);
 
-    	addSequential(new CMD_Angle_Drive(18.0, 90, 0.4));
-    	Timer.delay(0.5);
-    	addSequential(new CMD_Angle_Drive(70.0, 135, 0.4));
-    	Timer.delay(0.5);
-    	addSequential(new CMD_Angle_Drive(82, 90, 0.4));
-    	Timer.delay(0.5);
-    	addSequential(new CMD_Angle_Drive(6, 90, 0.1),0.5);
-    	
-//    	addSequential(new ExtendLow());
-//    	
-//    	addSequential(new ArmDown());
-//    	Timer.delay(1.0);
-//    	addSequential(new OpenPinchers());
-//    	addSequential(new ArmUp());
+
+    	addSequential(new ArmUp());
+    	addSequential(new ClosePinchers());
+    	addSequential(new Drive_And_Extend(93.0, 123.0, 0.5, 0, false));
+    	addSequential(new ArmDown());
+    	addSequential(new OpenPinchers());
 
         // Add Commands here:
         // e.g. addSequential(new Command1());

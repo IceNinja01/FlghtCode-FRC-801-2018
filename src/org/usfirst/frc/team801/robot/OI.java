@@ -23,6 +23,7 @@ import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendHook;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendMid;
+import org.usfirst.frc.team801.robot.commands.elevator.GrabHook;
 import org.usfirst.frc.team801.robot.commands.elevator.Shrink;
 import org.usfirst.frc.team801.robot.commands.lift.LiftMotorDown;
 import org.usfirst.frc.team801.robot.commands.lift.LiftMotorExtend;
@@ -105,16 +106,16 @@ public class OI {
 	    public Button turnLeft = new JoystickButton(driver,4);
 //	    public Button turnBack = new JoystickButton(driver,3);
 	    public Button toggleDriveOrientation = new JoystickButton(driver, 3);
+	    public Button closePinch = new JoystickButton(driver,8);
+	    public Button pickUpBox = new JoystickButton(driver,6);
+	    public Button armUp = new JoystickButton(driver, 5);
 
 	    
 	    public Button bottomElevator = new JoystickButton(manip, 3);
 	    public Button lowElevator = new JoystickButton(manip, 2);
 	    public Button midElevator = new JoystickButton(manip, 4);
 	    public Button highElevator = new JoystickButton(manip, 1);
-	    public Button closePinch = new JoystickButton(manip,5);
-	    public Button pickUpBox = new JoystickButton(manip,6);
-	    public Button extendHook = new JoystickButton(manip, 7);
-	    public Button armUp = new JoystickButton(manip, 8);
+	    public Button grabHook = new JoystickButton(manip, 7);
 	    public Button winch = new JoystickButton(manip, 10);
 	    
 	    //	    public Button square = new JoystickButton(manip, 5);
@@ -129,7 +130,7 @@ public class OI {
     	//    	liftUp.whenPressed(new LiftMotorExtend());
 //    	liftDown.whenPressed(new LiftMotorShrink());
 
-    	extendHook.whenPressed(new ExtendHook());
+    	grabHook.whenPressed(new GrabHook());
     	bottomElevator.whenPressed(new Shrink());
     	highElevator.whenPressed(new ExtendHigh());
     	midElevator.whenPressed(new ExtendMid());	

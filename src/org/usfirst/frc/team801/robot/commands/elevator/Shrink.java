@@ -21,13 +21,14 @@ public class Shrink extends Command {
     	Robot.elevator.getCurrentPosition();
     	Robot.elevator.coastMotor();
 		Robot.elevator.setShrink();
+    	Robot.elevator.shrink();
+
 
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 //    	Robot.elevator.getCurrentPosition();
-    	Robot.elevator.shrink();
     	error = Constants.elevatorMotorBottomPos - Robot.elevator.getCurrentPosition();
 
     }

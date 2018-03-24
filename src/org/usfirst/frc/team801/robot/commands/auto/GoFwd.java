@@ -14,7 +14,7 @@ public class GoFwd extends CommandGroup {
     public GoFwd() {
     	
 //    	addSequential(new ArmUp());
-    	addSequential(new CMD_Angle_Drive(48.0, 90, 0.4));
+    	addSequential(new CMD_Angle_Drive(48.0, 90, 0.4, 0));
     	Timer.delay(0.5);
 //    	addSequential(new CMD_Angle_Drive(10, 90, 0.01), 0.5);
 

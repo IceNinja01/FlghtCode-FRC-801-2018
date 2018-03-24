@@ -14,9 +14,9 @@ public class RightGo extends CommandGroup {
     public RightGo() {
     	
     	addSequential(new ArmUp());
-    	addSequential(new CMD_Angle_Drive(144.0, 90, 0.4));
+    	addSequential(new CMD_Angle_Drive(144.0, 90, 0.4, 0));
     	Timer.delay(0.5);
-    	addSequential(new CMD_Angle_Drive(10, 90, 0.01), 0.5);
+    	addSequential(new CMD_Angle_Drive(10, 90, 0.01, 0), 0.5);
 
         // Add Commands here:
         // e.g. addSequential(new Command1());

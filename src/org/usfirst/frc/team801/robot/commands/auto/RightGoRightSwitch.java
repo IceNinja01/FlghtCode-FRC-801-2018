@@ -19,11 +19,11 @@ public class RightGoRightSwitch extends CommandGroup {
     	
     	addSequential(new ArmUp());
 
-    	addSequential(new CMD_Angle_Drive(144.0, 90, 0.4));
+    	addSequential(new CMD_Angle_Drive(144.0, 90, 0.4, 0));
     	Timer.delay(0.5);
     	addSequential(new TurnLeft(),2.0);
     	Timer.delay(0.1);
-    	addSequential(new CMD_Angle_Drive(36, 90, 0.2));
+    	addSequential(new CMD_Angle_Drive(36, 90, 0.2 ,0));
     	
     	addSequential(new ExtendLow());
     	

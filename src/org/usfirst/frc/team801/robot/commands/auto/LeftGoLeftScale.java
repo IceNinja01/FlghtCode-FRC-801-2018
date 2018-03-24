@@ -3,6 +3,7 @@ package org.usfirst.frc.team801.robot.commands.auto;
 import org.usfirst.frc.team801.robot.commands.arm.ArmDown;
 import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Angle_Drive;
+import org.usfirst.frc.team801.robot.commands.chassis.TurnCMD;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnRight;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
@@ -17,19 +18,16 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class LeftGoLeftScale extends CommandGroup {
 
     public LeftGoLeftScale() {
+    	
     	addSequential(new ArmUp());
 
-    	addSequential(new CMD_Angle_Drive(144.0, 90, 0.4));
-    	Timer.delay(0.5);
-    	addSequential(new TurnRight(),2.0);
-    	Timer.delay(0.1);
-    	addSequential(new CMD_Angle_Drive(36, 90, 0.4));
-    	
-    	addSequential(new ExtendLow());
-    	
+       	addSequential(new Drive_And_Extend(288.0, 92, 0.6, 0, true));
+    	addSequential(new TurnCMD(90));
+    	addSequential(new CMD_Angle_Drive(10.0, 0, 0.4, 90));
     	addSequential(new ArmDown());
-    	Timer.delay(1.0);
     	addSequential(new OpenPinchers());
+    	addSequential(new CMD_Angle_Drive(20.0, 180, 0.4, 90));
+
 
         // Add Commands here:
         // e.g. addSequential(new Command1());

@@ -16,9 +16,9 @@ public class LeftGoRightScale extends CommandGroup {
 
     public LeftGoRightScale() {
     	addSequential(new ArmUp());
-    	addSequential(new CMD_Angle_Drive(240, 90, 0.2));
-    	addSequential(new CMD_Angle_Drive(160, 0, 0.2)); //strafe Right
-    	addSequential(new CMD_Angle_Drive(60, 90, 0.2));
+    	addSequential(new CMD_Angle_Drive(240, 90, 0.2, 0));
+    	addSequential(new CMD_Angle_Drive(160, 0, 0.2, 0)); //strafe Right
+    	addSequential(new CMD_Angle_Drive(60, 90, 0.2, 0));
     	addSequential(new ExtendHigh());
     	addSequential(new ArmDown());
     	addSequential(new OpenPinchers());

@@ -1,28 +1,17 @@
-package org.usfirst.frc.team801.robot.commands.auto;
+package org.usfirst.frc.team801.robot.commands.elevator;
 
 import org.usfirst.frc.team801.robot.commands.arm.ArmDown;
-import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
-import org.usfirst.frc.team801.robot.commands.chassis.CMD_Angle_Drive;
-import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
-import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
-import org.usfirst.frc.team801.robot.commands.pinchers.OpenPinchers;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
  *
  */
-public class RightGoLeftScale extends CommandGroup {
+public class GrabHook extends CommandGroup {
 
-    public RightGoLeftScale() {
-    	addSequential(new ArmUp());
-    	addSequential(new CMD_Angle_Drive(240, 90, 0.2, 0));
-    	addSequential(new CMD_Angle_Drive(160, 180, 0.2, 0)); //strafe Right
-    	addSequential(new CMD_Angle_Drive(60, 90, 0.2, 0));
-    	addSequential(new ExtendHigh());
+    public GrabHook() {
+    	addParallel(new ExtendHook());
     	addSequential(new ArmDown());
-    	addSequential(new OpenPinchers());
-    	addSequential(new ArmUp());
 
         // Add Commands here:
         // e.g. addSequential(new Command1());

@@ -23,7 +23,7 @@ public class Square extends CommandGroup {
 //    	addSequential(new CMD_Drive(0.0, -0.6, 180.0, 48.0));
 //    	addSequential(new CMD_Drive(-0.6, 0.0, 270.0, 36.0));
     	addSequential(new ArmUp());
-    	addSequential(new CMD_Angle_Drive(60.0, 90, 0.6));
+//    	addSequential(new CMD_Angle_Drive(60.0, 90, 0.6));
     	addSequential(new TurnRight());
     	addSequential(new ExtendLow());
     	addSequential(new ArmDown());

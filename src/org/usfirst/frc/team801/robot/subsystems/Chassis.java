@@ -56,8 +56,8 @@ private double biasAngle = 0.0;
 
 	public Chassis() {
 
-		super(Constants.ultrakP, Constants.ultrakI, Constants.ultrakD, 0.001);
-		getPIDController().setAbsoluteTolerance(1.0);
+		super(0.02, 0.0000001, 0.8, 0.001);
+		getPIDController().setAbsoluteTolerance(2.0);
 		getPIDController().setInputRange(0.0, 360.0);
 		getPIDController().setContinuous(true);
 		getPIDController().setOutputRange(-0.3, 0.3);
@@ -74,9 +74,9 @@ private double biasAngle = 0.0;
 	public void motorDrive(double angleCmd_Deg) {
 		elevatorHeight = Robot.elevator.getCurrentPosition();
 		
-		if(elevatorHeight > 48.0) {
+		if(elevatorHeight > Constants.elevatorMotorMidPos + 5) {
 			
-			chassisSwerveDrive.setMaxDriveVoltage(0.5);
+			chassisSwerveDrive.setMaxDriveVoltage(0.7);
 		}
 		else {
 			chassisSwerveDrive.setMaxDriveVoltage(1.0);
@@ -222,7 +222,7 @@ private double biasAngle = 0.0;
 		// TODO Auto-generated method stub
 		elevatorHeight = Robot.elevator.getCurrentPosition();
 		
-		if(elevatorHeight > 48.0) {
+		if(elevatorHeight > Constants.elevatorMotorMidPos + 5) {
 			
 			chassisSwerveDrive.setMaxDriveVoltage(0.5);
 		}
@@ -233,9 +233,9 @@ private double biasAngle = 0.0;
 		
 		
 
-		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.1, 1.0);
-		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.1, 1.0);
-		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.1, 0.5);
+		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.05, 1.0);
+		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.05, 1.0);
+		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.05, 0.5);
 
 			chassisSwerveDrive.drive(x, y, z, 0);
 		

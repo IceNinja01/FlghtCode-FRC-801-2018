@@ -22,8 +22,10 @@ public class Elevator extends Subsystem {
 	Team801TalonSRX elevaMotor= RobotMap.elevator;
 	private double rotPerinch = 0.5;
 
-	private int vel = 50;
-	private int acc = 25;
+	private int upVel = 100;
+	private int upAcc = 50;
+	private int downVel = 100;
+	private int downAcc = 25;
 	private double targetPosition;
 	
 	public Elevator() {
@@ -39,15 +41,15 @@ public class Elevator extends Subsystem {
     		elevaMotor.configNominalOutputReverse(0, Constants.kTimeoutMs);
     		elevaMotor.configPeakOutputForward(11, Constants.kTimeoutMs);
     		elevaMotor.configPeakOutputReverse(-11, Constants.kTimeoutMs);
-			
+			elevaMotor.enableVoltageCompensation(true);
 //    		elevaMotor.selectProfileSlot(0, 0);
     		elevaMotor.config_kF(0, 0.1, Constants.kTimeoutMs);
     		elevaMotor.config_kP(0, 1.0, Constants.kTimeoutMs);
     		elevaMotor.config_kI(0, 0, Constants.kTimeoutMs);
     		elevaMotor.config_kD(0, 0.2, Constants.kTimeoutMs);
 			/* set acceleration and vcruise velocity - see documentation */
-    		elevaMotor.configMotionCruiseVelocity((int) (4096*rotPerinch*vel/10) , Constants.kTimeoutMs);
-    		elevaMotor.configMotionAcceleration((int) (4096*rotPerinch*acc/10), Constants.kTimeoutMs);
+    		elevaMotor.configMotionCruiseVelocity((int) (4096*rotPerinch*upVel/10) , Constants.kTimeoutMs);
+    		elevaMotor.configMotionAcceleration((int) (4096*rotPerinch*upAcc/10), Constants.kTimeoutMs);
     		elevaMotor.setSelectedSensorPosition(0, Constants.kPIDLoopIdx, Constants.kTimeoutMs);
     	
     		setDriveCurrentLimit(25, 200, 25);
@@ -106,6 +108,7 @@ public class Elevator extends Subsystem {
     }
     
     public void stopMotor() {
+    	
     	elevaMotor.setNeutralMode(NeutralMode.Brake);
     }
     
@@ -151,6 +154,16 @@ public class Elevator extends Subsystem {
     	elevaMotor.set(ControlMode.MotionMagic, targetPosition);
     	getCurrentPosition();
 		
+	}
+	
+	public void setUpSpeed() {
+		elevaMotor.configMotionCruiseVelocity((int) (4096*rotPerinch*upVel/10) , Constants.kTimeoutMs);
+		elevaMotor.configMotionAcceleration((int) (4096*rotPerinch*upAcc/10), Constants.kTimeoutMs);
+	}
+	
+	public void setDownSpeed() {
+		elevaMotor.configMotionCruiseVelocity((int) (4096*rotPerinch*downVel/10) , Constants.kTimeoutMs);
+		elevaMotor.configMotionAcceleration((int) (4096*rotPerinch*downAcc/10), Constants.kTimeoutMs);
 	}
 }
 

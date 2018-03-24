@@ -56,13 +56,13 @@ public class Arm extends Subsystem {
     
     public void armDown() {
     	
-    	arm.set(ControlMode.PercentOutput, -0.3);    	
+    	arm.set(ControlMode.PercentOutput, -0.4);    	
     	
     }
     
     public void armUp() {
     	
-    	arm.set(ControlMode.PercentOutput, 0.6);    	
+    	arm.set(ControlMode.PercentOutput, 0.5);    	
     	
     }
     

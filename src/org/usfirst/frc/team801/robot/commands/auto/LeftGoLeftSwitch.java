@@ -22,11 +22,11 @@ public class LeftGoLeftSwitch extends CommandGroup {
     public LeftGoLeftSwitch() {
 //    	addSequential(new ArmUp());
 
-    	addSequential(new CMD_Angle_Drive(50.0, 90.0, 0.15));
+    	addSequential(new CMD_Angle_Drive(50.0, 90.0, 0.15, 0));
     	Timer.delay(0.5);
     	addSequential(new TurnCMD(90.0), 10.0);
     	Timer.delay(0.5);
-    	addSequential(new CMD_Angle_Drive(50.0, 0.0, 0.15));
+    	addSequential(new CMD_Angle_Drive(50.0, 0.0, 0.15, 90));
     	
 //    	addSequential(new ExtendLow());
 //    	

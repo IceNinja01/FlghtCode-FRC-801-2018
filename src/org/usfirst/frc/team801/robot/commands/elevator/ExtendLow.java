@@ -19,11 +19,14 @@ public class ExtendLow extends Command {
     	System.out.print("Extend:   ");
     	Robot.elevator.getCurrentPosition() ;
     	Robot.elevator.coastMotor();
+    	Robot.elevator.setDownSpeed();
+    	Robot.elevator.extendLow();
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.elevator.extendLow();
+//    	Robot.elevator.extendLow();
     	error = Constants.elevatorMotorLowPos - Robot.elevator.getCurrentPosition();
     }
 
@@ -35,8 +38,10 @@ public class ExtendLow extends Command {
     // Called once after isFinished returns true
     protected void end() {
     	System.out.print("  ");
-
+    	Robot.elevator.stopMotor();
     	Robot.elevator.getCurrentPosition();
+    	Robot.elevator.setUpSpeed();
+
     }
 
     // Called when another command which requires one or more of the same

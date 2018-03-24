@@ -530,7 +530,7 @@ public class SwerveDrive implements MotorSafety {
 		    }
 		    if (turnMotors[i] != null) {
 		      pidTurnController[i].disable();
-//		      turnMotors[i].set(ControlMode.PercentOutput, 0.0);
+		      turnMotors[i].set(ControlMode.PercentOutput, 0.0);
 
 		    }
 		}

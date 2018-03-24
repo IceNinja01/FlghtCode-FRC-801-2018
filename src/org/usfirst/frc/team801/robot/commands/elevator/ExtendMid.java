@@ -20,13 +20,14 @@ public class ExtendMid extends Command {
     	System.out.print("Extend:   ");
     	Robot.elevator.getCurrentPosition() ;
     	Robot.elevator.coastMotor();
+    	Robot.elevator.extendMid();
+
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
 
 //    	Robot.elevator.getCurrentPosition();
-    	Robot.elevator.extendMid();
     	error = Constants.elevatorMotorMidPos - Robot.elevator.getCurrentPosition();
 
     }

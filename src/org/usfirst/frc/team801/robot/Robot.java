@@ -27,8 +27,10 @@ import org.usfirst.frc.team801.robot.commands.TestDrive;
 import org.usfirst.frc.team801.robot.commands.UpdateSD;
 import org.usfirst.frc.team801.robot.commands.WriteData;
 import org.usfirst.frc.team801.robot.commands.auto.GoFwd;
+import org.usfirst.frc.team801.robot.commands.auto.LeftGoLeftScale;
 import org.usfirst.frc.team801.robot.commands.auto.LeftGoLeftSwitch;
 import org.usfirst.frc.team801.robot.commands.auto.MiddleGoLeftSwitch;
+import org.usfirst.frc.team801.robot.commands.auto.MiddleGoRightSwitch;
 import org.usfirst.frc.team801.robot.commands.auto.RightGo;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
@@ -145,18 +147,15 @@ public class Robot extends IterativeRobot {
 		//Gyro Start time
 		double a = Timer.getFPGATimestamp();
 		chassis.setGyroBias();
-		double b = Timer.getFPGATimestamp();
-		SmartDashboard.putNumber("Reset Gyro Time", b-a);
 		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
 		
 		//Switch Case Selector
-		a = Timer.getFPGATimestamp();
 		PathBuilder logic = new PathBuilder((int) loc_chooser.getSelected(), fieldLayout);
-		b = Timer.getFPGATimestamp();
-		SmartDashboard.putNumber("PathBuilder Time", b-a);
+		double b = Timer.getFPGATimestamp();
+		SmartDashboard.putNumber("Reset Gyro Time", b-a);
 
 //		m_autonomousCommand = logic.getPath();
-		m_autonomousCommand = new LeftGoLeftSwitch();
+		m_autonomousCommand = new LeftGoLeftScale();
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",
