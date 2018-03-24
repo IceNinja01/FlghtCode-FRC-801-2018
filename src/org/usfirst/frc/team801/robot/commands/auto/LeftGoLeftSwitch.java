@@ -26,9 +26,7 @@ public class LeftGoLeftSwitch extends CommandGroup {
     	Timer.delay(0.5);
     	addSequential(new TurnCMD(90.0), 10.0);
     	Timer.delay(0.5);
-//    	addSequential(new PointWheels(0), 10.0);
-//    	Timer.delay(10.0);
-    	addSequential(new CMD_Drive(0.0, 0.15, 90, 144.0));
+    	addSequential(new CMD_Angle_Drive(50.0, 0.0, 0.15));
     	
 //    	addSequential(new ExtendLow());
 //    	

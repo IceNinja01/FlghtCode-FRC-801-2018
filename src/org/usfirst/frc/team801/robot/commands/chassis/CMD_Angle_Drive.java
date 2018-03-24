@@ -27,9 +27,7 @@ public class CMD_Angle_Drive extends Command {
 	public CMD_Angle_Drive(double distance, double heading, double maxVel) {
         // Use requires() here to declare subsystem dependencies
         requires(Robot.chassis);
-//    	x_y = profile.XYCoord(distance, maxVel, accel, heading);
     	this.distance = distance;
-//    	double angle = Utils.convertDegtoRad(heading);
     	double radians = heading *Math.PI/180.00;
     	this.x = Utils.limitMagnitude(Math.cos(radians)*maxVel, 0.05, 1.0);
     	this.y = Utils.limitMagnitude(Math.sin(radians)*maxVel, 0.05, 1.0);
@@ -37,8 +35,6 @@ public class CMD_Angle_Drive extends Command {
 
     // Called just before this Command runs the first time
     protected void initialize() {
-//    	Robot.chassis.pointWheels(0); //point wheels strait
-//    	Timer.delay(0.3);
     	distance += Robot.chassis.getChassisPosition();
     	//Ramp up motors;
     	for(int i = 0 ; i<100; i++) { //assuming cycle time is 50 ms, so a total of 500ms
@@ -53,8 +49,6 @@ public class CMD_Angle_Drive extends Command {
 		SmartDashboard.putNumber("joy X", x);
 		SmartDashboard.putNumber("joy Y", y);
     	Robot.chassis.cmdDrive(x, y, heading, Robot.chassis.getGyroAngle());
-//    	System.out.print("X: " + x_y[j][0]);
-//    	System.out.println("\tY: " + x_y[j][1]);
     	dist = Robot.chassis.getChassisPosition();;
     	error = (distance-dist);
        	System.out.print("target:\t" + distance);

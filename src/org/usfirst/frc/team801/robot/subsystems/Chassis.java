@@ -110,7 +110,7 @@ private double biasAngle = 0.0;
 	public void cmdTurnToHeading(double gyroCMD, double angleCmd) {
 		headingCMD = gyroCMD;
 		headingError = Robot.chassis.getGyroAngle() - headingCMD;
-		chassisSwerveDrive.drive(0, 0, zRateCmd, angleCmd);
+		chassisSwerveDrive.CMDdrive(0, 0, zRateCmd, angleCmd);
 		SmartDashboard.putNumber("HeadingCMD", headingCMD);
 		SmartDashboard.putNumber("HeadingError", headingError);
 		SmartDashboard.putNumber("zRateCmd", zRateCmd);

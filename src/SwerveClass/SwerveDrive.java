@@ -248,7 +248,6 @@ public class SwerveDrive implements MotorSafety {
 
 			    if(Math.abs(angleJoyStickDiff[i]) > 90){ //new angle is greater than a 90degree turn, so find shortest path
 			    	//reverse translational motors 
-					driveMotors[i].selectProfileSlot(0, 0);
 			    	driveMotors[i].set(ControlMode.Velocity, maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);
 			    	
 			    	//find new angle
@@ -263,7 +262,6 @@ public class SwerveDrive implements MotorSafety {
 			    
 			    else
 			    {
-					driveMotors[i].selectProfileSlot(0, 0);
 			    	driveMotors[i].set(ControlMode.Velocity, -maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);
 			    }
 				//Turn Motors
@@ -338,14 +336,10 @@ public class SwerveDrive implements MotorSafety {
 		    for(int i=0;i<4;i++){
 		    	degs[i] = currentAngle(turnMotors[i],i);
 		    	pidTurnController[i].setSetpoint(wheelAngles[i]);
-		    }
-		    for(int i=0;i<4;i++){
-
-					driveMotors[i].selectProfileSlot(0, 0);
-
-			    	driveMotors[i].set(ControlMode.Velocity, -maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);			    
 		    
-			    	currentSpeed(driveMotors[i], i);
+			    driveMotors[i].set(ControlMode.Velocity, -maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);			    
+		    
+			    currentSpeed(driveMotors[i], i);
 		    
 		    }
 
@@ -535,7 +529,9 @@ public class SwerveDrive implements MotorSafety {
 		      driveMotors[i].set(ControlMode.Velocity, 0);
 		    }
 		    if (turnMotors[i] != null) {
-		      turnMotors[i].set(ControlMode.Position, 0);
+		      pidTurnController[i].disable();
+//		      turnMotors[i].set(ControlMode.PercentOutput, 0.0);
+
 		    }
 		}
 	    if (m_safetyHelper != null) {
@@ -549,8 +545,9 @@ public class SwerveDrive implements MotorSafety {
 		      driveMotors[i].neutralOutput();
 		    }
 		    if (turnMotors[i] != null) {
-		      turnMotors[i].setNeutralMode(NeutralMode.Brake);
-		      turnMotors[i].neutralOutput();
+			  pidTurnController[i].disable();
+//		      turnMotors[i].setNeutralMode(NeutralMode.Brake);
+//		      turnMotors[i].neutralOutput();
 		    }
 		}
 	    if (m_safetyHelper != null) {
@@ -564,8 +561,11 @@ public class SwerveDrive implements MotorSafety {
 			      driveMotors[i].set(ControlMode.Velocity, 0);
 			    }
 			    if (turnMotors[i] != null) {
-			      turnMotors[i].setNeutralMode(NeutralMode.Coast);
-			      turnMotors[i].set(ControlMode.Position, 0);
+				  pidTurnController[i].enable();
+
+//			      turnMotors[i].setNeutralMode(NeutralMode.Coast);
+//			      turnMotors[i].set(ControlMode.PercentOutput, 0.0);
+
 		    }
 		}
 	    if (m_safetyHelper != null) {
