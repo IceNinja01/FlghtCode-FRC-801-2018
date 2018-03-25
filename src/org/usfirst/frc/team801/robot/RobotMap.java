@@ -52,7 +52,10 @@ public class RobotMap {
 	//Lift Motor 
 	public static Team801TalonSRX lift = new Team801TalonSRX(6);
 	//Wench motor
-	public static Team801TalonSRX theWinchThatStoleChristmas = new Team801TalonSRX(13);
+	public static Team801TalonSRX theWinchThatStoleChristmas = new Team801TalonSRX(16);
+	
+	public static Team801TalonSRX gatherMotor1 = new Team801TalonSRX(6);
+	public static Team801TalonSRX gatherMotor2 = new Team801TalonSRX(13);
 
 	public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
 	

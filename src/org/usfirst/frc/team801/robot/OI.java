@@ -25,6 +25,10 @@ import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendMid;
 import org.usfirst.frc.team801.robot.commands.elevator.GrabHook;
 import org.usfirst.frc.team801.robot.commands.elevator.Shrink;
+import org.usfirst.frc.team801.robot.commands.gather.CloseGatherPinchers;
+import org.usfirst.frc.team801.robot.commands.gather.EjectBox;
+import org.usfirst.frc.team801.robot.commands.gather.GatherUp;
+import org.usfirst.frc.team801.robot.commands.gather.OpenGatherPinchers;
 import org.usfirst.frc.team801.robot.commands.lift.LiftMotorDown;
 import org.usfirst.frc.team801.robot.commands.lift.LiftMotorExtend;
 import org.usfirst.frc.team801.robot.commands.lift.LiftMotorShrink;
@@ -101,9 +105,10 @@ public class OI {
 //	    public XboxController manip = new XboxController(1);
 	    public XBOXJoystick manip = new XBOXJoystick(1);
 
-	    public Button turnFront = new JoystickButton(driver,1);
-	    public Button turnRight = new JoystickButton(driver,2);
-	    public Button turnLeft = new JoystickButton(driver,4);
+	    public Button openGatherPinchers = new JoystickButton(driver,2);
+	    public Button closeGatherPinchers = new JoystickButton(driver,1);
+	    public Button eject = new JoystickButton(driver,4);
+	    public Button gather = new JoystickButton(driver, 7);
 //	    public Button turnBack = new JoystickButton(driver,3);
 	    public Button toggleDriveOrientation = new JoystickButton(driver, 3);
 	    public Button closePinch = new JoystickButton(driver,8);
@@ -121,10 +126,10 @@ public class OI {
 	    //	    public Button square = new JoystickButton(manip, 5);
     
     public OI() {
-    	turnFront.whileHeld(new TurnFront());
+    //	turnFront.whileHeld(new TurnFront());
 //    	turnBack.whileHeld(new TurnBack());
-    	turnRight.whileHeld(new TurnRight());
-    	turnLeft.whileHeld(new TurnLeft());	
+  //  	turnRight.whileHeld(new TurnRight());
+//    	turnLeft.whileHeld(new TurnLeft());	
     	toggleDriveOrientation.whileHeld(new ToggleDriveOrientation());
 
     	//    	liftUp.whenPressed(new LiftMotorExtend());
@@ -139,6 +144,10 @@ public class OI {
     	closePinch.whenPressed(new ClosePinchers());
     	winch.whileHeld(new WinchUp());
     	armUp.whenPressed(new ArmUp());
+    	openGatherPinchers.whenPressed(new OpenGatherPinchers());
+    	closeGatherPinchers.whenPressed(new CloseGatherPinchers());
+    	eject.whileHeld(new EjectBox());
+    	gather.whileHeld(new GatherUp());
 //    	square.whenPressed(new Square());
 
 

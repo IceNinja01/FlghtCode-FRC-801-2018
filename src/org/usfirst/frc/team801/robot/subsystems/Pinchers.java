@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 
 public class Pinchers extends Subsystem {
 	
-	DoubleSolenoid pincher = new DoubleSolenoid(0,1); 
+	DoubleSolenoid pincher = new DoubleSolenoid(2,3); 
 
 	public Pinchers() {
 

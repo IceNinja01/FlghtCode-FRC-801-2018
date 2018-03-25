@@ -38,6 +38,8 @@ import org.usfirst.frc.team801.robot.subsystems.Arm;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.DataWriter;
 import org.usfirst.frc.team801.robot.subsystems.Elevator;
+import org.usfirst.frc.team801.robot.subsystems.GatherPinchers;
+import org.usfirst.frc.team801.robot.subsystems.Gatherer;
 import org.usfirst.frc.team801.robot.subsystems.Lift;
 import org.usfirst.frc.team801.robot.subsystems.Pinchers;
 import org.usfirst.frc.team801.robot.subsystems.SmartDashUpdater;
@@ -55,6 +57,8 @@ public class Robot extends IterativeRobot {
 	public static Object prefs;
 	public static Chassis chassis;
 	public static Pinchers pinchers;
+	public static GatherPinchers gatherPinchers;
+	public static Gatherer gatherer;
 	public static Arm arm;
 	Command m_autonomousCommand;
 	public static Elevator elevator;
@@ -79,6 +83,8 @@ public class Robot extends IterativeRobot {
 		chassis = new Chassis();
 		elevator = new Elevator();
 		pinchers = new Pinchers();
+		gatherPinchers = new GatherPinchers();
+		gatherer = new Gatherer();
 		arm = new Arm();
 		lift = new Lift();
 		winch = new Winch();

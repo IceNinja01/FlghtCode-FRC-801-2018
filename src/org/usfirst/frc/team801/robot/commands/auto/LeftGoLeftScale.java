@@ -21,7 +21,7 @@ public class LeftGoLeftScale extends CommandGroup {
     	
     	addSequential(new ArmUp());
 
-       	addSequential(new Drive_And_Extend(288.0, 92, 0.6, 0, true));
+       	addSequential(new Drive_And_Extend(288.0, 92, 0.8, 0, true));
     	addSequential(new TurnCMD(90));
     	addSequential(new CMD_Angle_Drive(10.0, 0, 0.4, 90));
     	addSequential(new ArmDown());

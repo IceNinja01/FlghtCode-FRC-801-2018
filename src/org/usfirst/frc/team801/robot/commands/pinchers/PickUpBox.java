@@ -1,6 +1,7 @@
 package org.usfirst.frc.team801.robot.commands.pinchers;
 
 import org.usfirst.frc.team801.robot.commands.arm.ArmDown;
+import org.usfirst.frc.team801.robot.commands.gather.OpenGatherPinchers;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -12,6 +13,7 @@ public class PickUpBox extends CommandGroup {
     public PickUpBox() {
         // Add Commands here:
     	addParallel(new OpenPinchers());
+    	addParallel(new OpenGatherPinchers());
         addSequential(new ArmDown());
         //      addSequential(new Command2());
         // these will run in order.
