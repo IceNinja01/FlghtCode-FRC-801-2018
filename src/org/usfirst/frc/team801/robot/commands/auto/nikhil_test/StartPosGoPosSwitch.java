@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 
 public class StartPosGoPosSwitch extends CommandGroup {
 	
-	public StartPosGoPosSwitch() {
+	public StartPosGoPosSwitch(int direction) {
 		addSequential(new ArmUp());
     	addSequential(new CMD_Angle_Drive(104, 90, 0.2));
     	addSequential(new ExtendLow());

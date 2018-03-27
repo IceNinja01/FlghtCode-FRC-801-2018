@@ -1,6 +1,7 @@
 package org.usfirst.frc.team801.robot.Utilities;
 
 import org.usfirst.frc.team801.robot.Constants;
+import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
 import org.usfirst.frc.team801.robot.commands.auto.MiddleGoLeftSwitch;
 import org.usfirst.frc.team801.robot.commands.auto.MiddleGoRightSwitch;
 import org.usfirst.frc.team801.robot.commands.auto.nikhil_test.StartPosGoPosSwitch;
@@ -30,16 +31,18 @@ public class PathBuilder {
 				sides[i] = Constants.RIGHT;
 				
 		// For the Switch
+		pathCommand.addParallel(new ArmUp());
 		if (location == sides[0]) {
 			//If the Switch is on the same side as the robot's starting position
 			//Go to Switch
-			pathCommand.addSequential(new StartPosGoPosSwitch());
+			pathCommand.addSequential(new StartPosGoPosSwitch(sides[0]));
 		} else if (location == Constants.CENTER) {
 			//If the robot starts in the center
 			//Move to the side with the Switch
+			
 			pathCommand.addSequential(new StartCenterGoPos(sides[0]));
 			//Go to Switch
-			pathCommand.addSequential(new StartPosGoPosSwitch());
+			pathCommand.addSequential(new StartPosGoPosSwitch(sides[0]));
 		} else {
 			
 		}
@@ -147,5 +150,14 @@ public class PathBuilder {
 
 	public Command getPath() {
 		return pathCommand;
+	}
+	
+	public static double reflectVertical(double deg) {
+		double temp = deg - 90;
+		temp *= -1;
+		temp += 90;;
+		return temp;
+		
+		
 	}
 }

@@ -1,6 +1,7 @@
 package org.usfirst.frc.team801.robot.commands.auto.nikhil_test;
 
 import org.usfirst.frc.team801.robot.Constants;
+import org.usfirst.frc.team801.robot.commands.chassis.CMD_Angle_Drive;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -13,12 +14,11 @@ public class StartPosGoPosScale extends CommandGroup {
 			throw new IllegalArgumentException("'position' must either be 'Constants.LEFT' or 'Constants.RIGHT,' not " + position);
 		}
 		this.position = position;
-		int dir = 1;
-		if (position == Constants.RIGHT)
-			dir = -1;
+		int dir = 0;
+		if (position == Constants.LEFT)
+			dir = 180;
 
-		//Insert drive code (DEFAULT is LEFT)
-		//Apply a multiplication by 'dir' to all angles that represent either left turn or right turn
+		addSequential(new CMD_Angle_Drive(104, dir, 0.2));
 	}
 
 }
