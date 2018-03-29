@@ -6,8 +6,8 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 public class GatherPinchers extends Subsystem{
 	
 	
-	DoubleSolenoid pincher1 = new DoubleSolenoid(0,1);  
-//	DoubleSolenoid pincher2 = new DoubleSolenoid(2,3);  
+	DoubleSolenoid pincher1 = new DoubleSolenoid(2,3);  
+	DoubleSolenoid pincher2 = new DoubleSolenoid(4,5);  
 
 
 	public GatherPinchers() {
@@ -33,5 +33,12 @@ public class GatherPinchers extends Subsystem{
 
 	}
 	
+	public void upGather() {
+		pincher2.set(DoubleSolenoid.Value.kForward);
+	}
+	
+	public void downGather() {
+		pincher2.set(DoubleSolenoid.Value.kReverse);
+	}
 	
 }

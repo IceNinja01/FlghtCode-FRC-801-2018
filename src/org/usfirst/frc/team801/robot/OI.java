@@ -25,10 +25,13 @@ import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendMid;
 import org.usfirst.frc.team801.robot.commands.elevator.GrabHook;
 import org.usfirst.frc.team801.robot.commands.elevator.Shrink;
+import org.usfirst.frc.team801.robot.commands.gather.BoxFromGather;
 import org.usfirst.frc.team801.robot.commands.gather.CloseGatherPinchers;
+import org.usfirst.frc.team801.robot.commands.gather.DownGather;
 import org.usfirst.frc.team801.robot.commands.gather.EjectBox;
 import org.usfirst.frc.team801.robot.commands.gather.GatherUp;
 import org.usfirst.frc.team801.robot.commands.gather.OpenGatherPinchers;
+import org.usfirst.frc.team801.robot.commands.gather.UpGather;
 import org.usfirst.frc.team801.robot.commands.lift.LiftMotorDown;
 import org.usfirst.frc.team801.robot.commands.lift.LiftMotorExtend;
 import org.usfirst.frc.team801.robot.commands.lift.LiftMotorShrink;
@@ -105,15 +108,17 @@ public class OI {
 //	    public XboxController manip = new XboxController(1);
 	    public XBOXJoystick manip = new XBOXJoystick(1);
 
-	    public Button openGatherPinchers = new JoystickButton(driver,2);
-	    public Button closeGatherPinchers = new JoystickButton(driver,1);
-	    public Button eject = new JoystickButton(driver,4);
+//	    public Button openGatherPinchers = new JoystickButton(driver,2);
+//	    public Button closeGatherPinchers = new JoystickButton(driver,1);
+	    public Button gatherUp = new JoystickButton(driver,5);
+	    public Button boxFromGather = new JoystickButton(driver,2);
+	    public Button eject = new JoystickButton(driver,8);
 	    public Button gather = new JoystickButton(driver, 7);
 //	    public Button turnBack = new JoystickButton(driver,3);
 	    public Button toggleDriveOrientation = new JoystickButton(driver, 3);
-	    public Button closePinch = new JoystickButton(driver,8);
-	    public Button pickUpBox = new JoystickButton(driver,6);
-	    public Button armUp = new JoystickButton(driver, 5);
+	    public Button openGatherPinchers = new JoystickButton(driver,6);
+	    public Button pickUpBox = new JoystickButton(driver,4);
+	    public Button armUp = new JoystickButton(driver, 1);
 
 	    
 	    public Button bottomElevator = new JoystickButton(manip, 3);
@@ -131,21 +136,21 @@ public class OI {
   //  	turnRight.whileHeld(new TurnRight());
 //    	turnLeft.whileHeld(new TurnLeft());	
     	toggleDriveOrientation.whileHeld(new ToggleDriveOrientation());
-
+    	openGatherPinchers.whileHeld(new OpenGatherPinchers());
     	//    	liftUp.whenPressed(new LiftMotorExtend());
 //    	liftDown.whenPressed(new LiftMotorShrink());
-
+    	boxFromGather.whenPressed(new BoxFromGather());
     	grabHook.whenPressed(new GrabHook());
     	bottomElevator.whenPressed(new Shrink());
     	highElevator.whenPressed(new ExtendHigh());
     	midElevator.whenPressed(new ExtendMid());	
     	lowElevator.whenPressed(new ExtendLow());
     	pickUpBox.whenPressed(new PickUpBox());
-    	closePinch.whenPressed(new ClosePinchers());
+//    	closePinch.whenPressed(new ClosePinchers());
     	winch.whileHeld(new WinchUp());
     	armUp.whenPressed(new ArmUp());
-    	openGatherPinchers.whenPressed(new OpenGatherPinchers());
-    	closeGatherPinchers.whenPressed(new CloseGatherPinchers());
+    	gatherUp.whileHeld(new UpGather());
+//    	gatherDown.whenPressed(new DownGather());
     	eject.whileHeld(new EjectBox());
     	gather.whileHeld(new GatherUp());
 //    	square.whenPressed(new Square());
