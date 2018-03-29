@@ -110,23 +110,24 @@ public class OI {
 
 //	    public Button openGatherPinchers = new JoystickButton(driver,2);
 //	    public Button closeGatherPinchers = new JoystickButton(driver,1);
-	    public Button gatherUp = new JoystickButton(driver,5);
-	    public Button boxFromGather = new JoystickButton(driver,2);
+	    public Button gatherDown = new JoystickButton(driver,6);
 	    public Button eject = new JoystickButton(driver,8);
 	    public Button gather = new JoystickButton(driver, 7);
 //	    public Button turnBack = new JoystickButton(driver,3);
 	    public Button toggleDriveOrientation = new JoystickButton(driver, 3);
-	    public Button openGatherPinchers = new JoystickButton(driver,6);
+	    public Button openGatherPinchers = new JoystickButton(driver,5);
 	    public Button pickUpBox = new JoystickButton(driver,4);
-	    public Button armUp = new JoystickButton(driver, 1);
+	    
 
 	    
 	    public Button bottomElevator = new JoystickButton(manip, 3);
 	    public Button lowElevator = new JoystickButton(manip, 2);
 	    public Button midElevator = new JoystickButton(manip, 4);
 	    public Button highElevator = new JoystickButton(manip, 1);
-	    public Button grabHook = new JoystickButton(manip, 7);
+	    public Button grabHook = new JoystickButton(manip, 5);
 	    public Button winch = new JoystickButton(manip, 10);
+	    public Button armUp = new JoystickButton(manip, 6);
+	    public Button boxFromGather = new JoystickButton(manip,8);
 	    
 	    //	    public Button square = new JoystickButton(manip, 5);
     
@@ -149,7 +150,7 @@ public class OI {
 //    	closePinch.whenPressed(new ClosePinchers());
     	winch.whileHeld(new WinchUp());
     	armUp.whenPressed(new ArmUp());
-    	gatherUp.whileHeld(new UpGather());
+    	gatherDown.whileHeld(new DownGather());
 //    	gatherDown.whenPressed(new DownGather());
     	eject.whileHeld(new EjectBox());
     	gather.whileHeld(new GatherUp());
