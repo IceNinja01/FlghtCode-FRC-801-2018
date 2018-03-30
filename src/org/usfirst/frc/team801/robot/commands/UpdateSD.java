@@ -28,8 +28,20 @@ public class UpdateSD extends Command {
     	SmartDashboard.putNumber("Chassis/Gyro X [deg]", Robot.chassis.getAngleX());
     	SmartDashboard.putNumber("Chassis/Gyro Y [deg]", Robot.chassis.getAngleY());
     	SmartDashboard.putNumber("Chassis/Gyro Z [deg]", Robot.chassis.getGyroAngle());
+    	
     	SmartDashboard.putNumber("FrontDist [inches]", Robot.chassis.getFrontDist());
     	SmartDashboard.putNumber("RevDist [inches]", Robot.chassis.getReverseDist());
+    	
+		SmartDashboard.putNumber("joy X", Robot.oi.driver.getX());
+		SmartDashboard.putNumber("joy Y", Robot.oi.driver.getY());
+		SmartDashboard.putNumber("joy Z", Robot.oi.driver.getRawAxis(4));
+		
+		SmartDashboard.putNumber("HeadingCMD", Robot.chassis.headingCMD);
+		SmartDashboard.putNumber("HeadingError", Robot.chassis.headingError);
+		SmartDashboard.putNumber("zRateCmd", Robot.chassis.zRateCmd);
+		
+		SmartDashboard.putBoolean("ArmUp", Robot.arm.getArmState());
+    	SmartDashboard.putNumber("ElevatorPos", Robot.elevator.getCurrentPosition());
 
 
     	

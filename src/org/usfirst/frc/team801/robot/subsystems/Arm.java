@@ -80,6 +80,15 @@ public class Arm extends Subsystem {
 //    	arm.setNeutralMode(NeutralMode.Brake);
     	
     }
+    public boolean getArmState() {
+
+    	if(isFwdLimit()) {
+    		return true;
+    	}
+    	else {
+    		return false;
+    	}
+    }
         
 }
 

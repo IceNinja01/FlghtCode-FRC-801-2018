@@ -23,30 +23,16 @@ public class LeftGoRightScale extends CommandGroup {
 
        	addSequential(new CMD_Angle_Drive(209.0, 90, 0.7, 0));
     	addSequential(new TurnCMD(270));
-//    	wallDistance =71.5 - (40 + Robot.chassis.getReverseDist());
-//    	wallDistance =10.0;
+//    	wallDistance = 71.5 - (40 + Robot.chassis.getReverseDist());
+//    	wallDistance = 10.0;
     	addSequential(new CMD_Angle_Drive(210, 0, 0.4, 270));
+//    	addSequential(new CMD_Angle_Drive_Ultra(48, 0, 0.4, 270);
 //    	addSequential(new Drive_And_ExtendHigh(70, 90, 0.4, 270)); 
 
 //    	addSequential(new ArmDown());
 //    	addSequential(new OpenPinchers());
 //    	addSequential(new CMD_Angle_Drive(20.0, 180, 0.4, 90));
 
-        // Add Commands here:
-        // e.g. addSequential(new Command1());
-        //      addSequential(new Command2());
-        // these will run in order.
-
-        // To run multiple commands at the same time,
-        // use addParallel()
-        // e.g. addParallel(new Command1());
-        //      addSequential(new Command2());
-        // Command1 and Command2 will run in parallel.
-
-        // A command group will require all of the subsystems that each member
-        // would require.
-        // e.g. if Command1 requires chassis, and Command2 requires arm,
-        // a CommandGroup containing them would require both the chassis and the
-        // arm.
+       
     }
 }

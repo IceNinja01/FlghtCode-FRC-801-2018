@@ -36,7 +36,7 @@ public class Chassis extends PIDSubsystem {
 	public double angle;
 	public double headingError;
 	public double headingCMD;
-	private double zRateCmd;
+	public double zRateCmd;
 //	public boolean gottaGoFast = false;
 	private double x;
 	private double y;
@@ -45,12 +45,6 @@ public class Chassis extends PIDSubsystem {
 	private double turnRadius = 3;
 	private double cruiseVelocity;
 
-//	private RollingAverage xAvg;
-//	private RollingAverage yAvg;
-//	private RollingAverage x_g;
-//	private RollingAverage y_g;
-//	private RollingAverage z_g;
-//	private RollingAverage tilt;
 
 	private double acceleration;
 private double elevatorHeight;
@@ -92,8 +86,7 @@ private double mmtoInches = 0.03937;
 		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.05, 1.0);
 		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.05, 1.0);
 		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.05, 0.5);
-		SmartDashboard.putNumber("joy X", x);
-		SmartDashboard.putNumber("joy Y", y);
+
 		chassisSwerveDrive.drive(x, y, z, angleCmd_Deg);
 		
 		
@@ -105,9 +98,7 @@ private double mmtoInches = 0.03937;
 		headingCMD = gyroCMD;
 		headingError = Robot.chassis.getGyroAngle() - headingCMD;
 		chassisSwerveDrive.drive(x, y, zRateCmd, angleCmd);
-		SmartDashboard.putNumber("HeadingCMD", headingCMD);
-		SmartDashboard.putNumber("HeadingError", headingError);
-		SmartDashboard.putNumber("zRateCmd", zRateCmd);
+
 
 	}	
 	
@@ -115,18 +106,14 @@ private double mmtoInches = 0.03937;
 		headingCMD = gyroCMD;
 		headingError = Robot.chassis.getGyroAngle() - headingCMD;
 		chassisSwerveDrive.CMDdrive(0, 0, zRateCmd, angleCmd);
-		SmartDashboard.putNumber("HeadingCMD", headingCMD);
-		SmartDashboard.putNumber("HeadingError", headingError);
-		SmartDashboard.putNumber("zRateCmd", zRateCmd);
+
 
 	}	
 	public void cmdDrive(double x, double y, double gyroCMD, double angleCmd) {
 		headingCMD = gyroCMD;
 		headingError = Robot.chassis.getGyroAngle() - headingCMD;
 		chassisSwerveDrive.CMDdrive(x, y, zRateCmd, angleCmd);
-		SmartDashboard.putNumber("HeadingCMD", headingCMD);
-		SmartDashboard.putNumber("HeadingError", headingError);
-		SmartDashboard.putNumber("zRateCmd", zRateCmd);
+
 
 	}
 	public void stop() {

@@ -121,7 +121,6 @@ public class Elevator extends Subsystem {
     	double pos = elevaMotor.getSelectedSensorPosition(0);
 
     	pos /= rotPerinch*4096;
-    	SmartDashboard.putNumber("ElevatorPos", pos);
     	return pos;
     }
     
