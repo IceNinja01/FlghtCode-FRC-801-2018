@@ -16,7 +16,7 @@ import edu.wpi.first.wpilibj.command.InstantCommand;
 	// Called once when the command executes
     protected void initialize() {
     	
-    	Robot.gatherPinchers.openGatherPinchers();
+    	Robot.gatherPinchers.setToggleElbow();
     	
     }
 }

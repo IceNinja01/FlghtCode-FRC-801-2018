@@ -4,17 +4,17 @@ import org.usfirst.frc.team801.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class EjectBox extends Command{
+public class EjectBoxGrab extends Command{
 
 
-	public EjectBox() {
+	public EjectBoxGrab() {
         // Use requires() here to declare subsystem dependencies
     	requires(Robot.gatherer);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.gatherer.eject();;
+    	Robot.gatherer.eject();
 
     }
 

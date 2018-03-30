@@ -1,22 +1,18 @@
-package org.usfirst.frc.team801.robot.commands.auto;
+package org.usfirst.frc.team801.robot.commands.elevator;
 
 import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
-import org.usfirst.frc.team801.robot.commands.chassis.CMD_Angle_Drive;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
 /**
  *
  */
-public class GoFwd extends CommandGroup {
+public class Shrink_ArmUp extends CommandGroup {
 
-    public GoFwd() {
+    public Shrink_ArmUp() {
     	
-//    	addSequential(new ArmUp());
-    	addSequential(new CMD_Angle_Drive(100.0, 90, 0.4, 0));
-//    	addSequential(new CMD_Angle_Drive(10, 90, 0.01), 0.5);
-
+    	addParallel(new ArmUp());
+    	addSequential(new Shrink());
         // Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

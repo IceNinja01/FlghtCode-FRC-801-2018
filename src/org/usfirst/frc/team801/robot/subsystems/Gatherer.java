@@ -25,6 +25,8 @@ public class Gatherer extends Subsystem{
 		gatherMotor2.configNominalOutputReverse(0, Constants.kTimeoutMs);
 		gatherMotor2.configPeakOutputForward(11, Constants.kTimeoutMs);
 		gatherMotor2.configPeakOutputReverse(-11, Constants.kTimeoutMs);
+		gatherMotor1.enableVoltageCompensation(true);
+		gatherMotor2.enableVoltageCompensation(true);
 	}
 	
     public void initDefaultCommand() {
@@ -36,8 +38,8 @@ public class Gatherer extends Subsystem{
     public void gatherUp() {
     	
 
-    	gatherMotor1.set(ControlMode.PercentOutput, 0.6);
-    	gatherMotor2.set(ControlMode.PercentOutput, 0.6);
+    	gatherMotor1.set(ControlMode.PercentOutput, 0.7);
+    	gatherMotor2.set(ControlMode.PercentOutput, 0.7);
     }
     
     public void eject() {
@@ -50,5 +52,11 @@ public class Gatherer extends Subsystem{
 		gatherMotor1.set(ControlMode.PercentOutput, 0.0);
 		gatherMotor2.set(ControlMode.PercentOutput, 0.0);
 
+	}
+
+	public void ejectGrab() {
+
+    	gatherMotor1.set(ControlMode.PercentOutput, -0.1);
+    	gatherMotor2.set(ControlMode.PercentOutput, -0.1);		
 	}
 }

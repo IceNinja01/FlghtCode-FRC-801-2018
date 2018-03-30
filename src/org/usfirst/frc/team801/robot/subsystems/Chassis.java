@@ -10,6 +10,7 @@ import org.usfirst.frc.team801.robot.commands.DriveWithJoysticks;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import SwerveClass.SwerveDrive;
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -28,6 +29,8 @@ public class Chassis extends PIDSubsystem {
 
 	// private SwerveDriveTwoMotors chassisSwerveDrive =
 	// RobotMap.swerveDriveTwoMotors;
+	AnalogInput ultraFwd = RobotMap.ultraSonicFront;
+	AnalogInput ultraRev = RobotMap.ultraSonicReverse;
 	public SwerveDrive chassisSwerveDrive = RobotMap.swerveDrive;
 //	public double distance;
 	public double angle;
@@ -53,6 +56,7 @@ public class Chassis extends PIDSubsystem {
 private double elevatorHeight;
 private boolean robotOrient = false;
 private double biasAngle = 0.0;
+private double mmtoInches = 0.03937;
 
 	public Chassis() {
 
@@ -147,7 +151,7 @@ private double biasAngle = 0.0;
 
 	public double getGyroAngle() {
 		angle = Utils.wrapAngle0To360Deg(adis.getAngleZ() - biasAngle );
-		SmartDashboard.putNumber("IMU", angle);
+		
 		return angle;
 	}
 	
@@ -251,6 +255,14 @@ private double biasAngle = 0.0;
 		
 		biasAngle = Utils.wrapAngle0To360Deg(adis.getAngleZ());
 		
+	}
+	
+	public double getFrontDist() {
+		return ultraFwd.getVoltage()*0.00977*mmtoInches;
+	}
+	
+	public double getReverseDist() {
+		return ultraRev.getVoltage()*0.00977*mmtoInches;
 	}
 
 }

@@ -12,8 +12,7 @@ public class PickUpBox extends CommandGroup {
 
     public PickUpBox() {
         // Add Commands here:
-    	addParallel(new OpenPinchers());
-    	addParallel(new OpenGatherPinchers());
+    	addSequential(new OpenPinchers());
         addSequential(new ArmDown());
         //      addSequential(new Command2());
         // these will run in order.

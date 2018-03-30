@@ -52,14 +52,16 @@ public class RobotMap {
 	//Lift Motor 
 	public static Team801TalonSRX lift = new Team801TalonSRX(6);
 	//Wench motor
-	public static Team801TalonSRX theWinchThatStoleChristmas = new Team801TalonSRX(16);
+	public static Team801TalonSRX theWinchThatStoleChristmas = new Team801TalonSRX(13);
 	
 	public static Team801TalonSRX gatherMotor1 = new Team801TalonSRX(6);
-	public static Team801TalonSRX gatherMotor2 = new Team801TalonSRX(13);
+	public static Team801TalonSRX gatherMotor2 = new Team801TalonSRX(8);
 
 	public static final PowerDistributionPanel pdp = new PowerDistributionPanel();
 	
-	public static AnalogInput ultraSonic;
+	public static AnalogInput ultraSonicFront = new AnalogInput(0);
+	public static AnalogInput ultraSonicReverse = new AnalogInput(1);
+
 	public static Adis16448_IMU_2018 imu;
 	
 	public static SwerveDrive swerveDrive;

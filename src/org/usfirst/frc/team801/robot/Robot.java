@@ -64,6 +64,8 @@ public class Robot extends IterativeRobot {
 	public static Elevator elevator;
 	SendableChooser<Command> m_chooser = new SendableChooser<>();
 	SendableChooser<Object> loc_chooser = new SendableChooser<>();
+	SendableChooser<Object> priority_chooser = new SendableChooser<>();
+
 	private CameraServer server;
 	public static Winch winch;
 	public static final DataWriter dataWriter = new DataWriter();
@@ -96,7 +98,11 @@ public class Robot extends IterativeRobot {
 		loc_chooser.addDefault("Center", Constants.CENTER);
 		loc_chooser.addObject("Location Left", Constants.LEFT);
 		loc_chooser.addObject("Location Right", Constants.RIGHT);
+		priority_chooser.addDefault("Switch", 0);
+		priority_chooser.addObject("Scale", 1);
 		SmartDashboard.putData("Location", loc_chooser);
+		SmartDashboard.putData("Priority", priority_chooser);
+
 		SmartDashboard.putData(Scheduler.getInstance());
 		SmartDashboard.putBoolean("Start Motion", false);
 		Robot.chassis.setMotionMagic();
@@ -150,18 +156,14 @@ public class Robot extends IterativeRobot {
 	 */
 	@Override
 	public void autonomousInit() {
-		//Gyro Start time
-		double a = Timer.getFPGATimestamp();
 		chassis.setGyroBias();
 		String fieldLayout = DriverStation.getInstance().getGameSpecificMessage();
 		
 		//Switch Case Selector
-		PathBuilder logic = new PathBuilder((int) loc_chooser.getSelected(), fieldLayout);
-		double b = Timer.getFPGATimestamp();
-		SmartDashboard.putNumber("Reset Gyro Time", b-a);
+		PathBuilder logic = new PathBuilder((int) loc_chooser.getSelected(), fieldLayout, (int) priority_chooser.getSelected());
 
-//		m_autonomousCommand = logic.getPath();
-		m_autonomousCommand = new LeftGoLeftScale();
+		m_autonomousCommand = logic.getPath();
+//		m_autonomousCommand = new LeftGoLeftScale();
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",

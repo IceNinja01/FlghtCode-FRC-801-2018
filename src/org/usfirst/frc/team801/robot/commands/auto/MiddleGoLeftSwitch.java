@@ -26,7 +26,7 @@ public class MiddleGoLeftSwitch extends CommandGroup {
 
     	addSequential(new ArmUp());
     	addSequential(new ClosePinchers());
-    	addSequential(new Drive_And_Extend(93.0, 123.0, 0.5, 0, false));
+    	addSequential(new Drive_And_ExtendLow(93.0, 123.0, 0.5, 0));
     	addSequential(new ArmDown());
     	addSequential(new OpenPinchers());
 

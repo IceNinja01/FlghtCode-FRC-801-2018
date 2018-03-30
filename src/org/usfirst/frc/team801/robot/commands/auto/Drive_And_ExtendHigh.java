@@ -8,17 +8,12 @@ import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.WaitCommand;
 
-public class Drive_And_Extend extends CommandGroup {
+public class Drive_And_ExtendHigh extends CommandGroup {
 
-	public Drive_And_Extend(double distance, double angle, double speed, double gyro, boolean up) {
+	public Drive_And_ExtendHigh(double distance, double angle, double speed, double gyro) {
     	addParallel(new CMD_Angle_Drive(distance, angle, speed, gyro));
-    	if(up=false) {
-    		addSequential(new ExtendLow());
-    	}
-    	else {
-        	addSequential(new ExtendHigh());
+    	addSequential(new ExtendHigh());
 
-    	}
 	}
 	
 

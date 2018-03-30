@@ -1,6 +1,7 @@
 package org.usfirst.frc.team801.robot.commands.elevator;
 
 import org.usfirst.frc.team801.robot.commands.arm.ArmDown;
+import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -10,8 +11,10 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class GrabHook extends CommandGroup {
 
     public GrabHook() {
-    	addParallel(new ExtendHook());
+    	addSequential(new ExtendLow());
     	addSequential(new ArmDown());
+    	addSequential(new ExtendHook());
+    	
 
         // Add Commands here:
         // e.g. addSequential(new Command1());

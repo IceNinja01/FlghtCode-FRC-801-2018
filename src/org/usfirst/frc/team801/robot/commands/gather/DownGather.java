@@ -10,12 +10,12 @@ public class DownGather extends InstantCommand{
 		public DownGather() {
         // Use requires() here to declare subsystem dependencies
 		requires(Robot.gatherPinchers);
+			
     }
 
 	// Called once when the command executes
     protected void initialize() {
-    	
-    	Robot.gatherPinchers.downGather();
+    	Robot.gatherPinchers.setToggle();
     	
     }
 

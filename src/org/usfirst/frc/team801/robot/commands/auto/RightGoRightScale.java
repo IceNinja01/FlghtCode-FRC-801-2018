@@ -1,8 +1,10 @@
 package org.usfirst.frc.team801.robot.commands.auto;
 
+import org.usfirst.frc.team801.robot.Robot;
 import org.usfirst.frc.team801.robot.commands.arm.ArmDown;
 import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Angle_Drive;
+import org.usfirst.frc.team801.robot.commands.chassis.TurnCMD;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnLeft;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnRight;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
@@ -17,35 +19,19 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
  */
 public class RightGoRightScale extends CommandGroup {
 
-    public RightGoRightScale() {
+    private double wallDistance;
+
+	public RightGoRightScale() {
     	addSequential(new ArmUp());
 
-    	addSequential(new CMD_Angle_Drive(144.0, 90, 0.4, 0));
-    	Timer.delay(0.5);
-    	addSequential(new TurnLeft(),2.0);
-    	Timer.delay(0.1);
-    	addSequential(new CMD_Angle_Drive(36, 90, 0.2, 0));
-    	
-    	addSequential(new ExtendLow());
-    	
+       	addSequential(new Drive_And_ExtendHigh(288.0, 88, 0.7, 0));
+    	addSequential(new TurnCMD(270));
+    	wallDistance =71.5 - (40 + Robot.chassis.getReverseDist());
+    	wallDistance = 10.0;
+    	addSequential(new CMD_Angle_Drive(wallDistance, 180, 0.4, 270));
     	addSequential(new ArmDown());
-    	Timer.delay(1.0);
     	addSequential(new OpenPinchers());
-        // Add Commands here:
-        // e.g. addSequential(new Command1());
-        //      addSequential(new Command2());
-        // these will run in order.
-
-        // To run multiple commands at the same time,
-        // use addParallel()
-        // e.g. addParallel(new Command1());
-        //      addSequential(new Command2());
-        // Command1 and Command2 will run in parallel.
-
-        // A command group will require all of the subsystems that each member
-        // would require.
-        // e.g. if Command1 requires chassis, and Command2 requires arm,
-        // a CommandGroup containing them would require both the chassis and the
-        // arm.
+    	addSequential(new CMD_Angle_Drive(20.0, 0, 0.4, 270));
+    	
     }
 }

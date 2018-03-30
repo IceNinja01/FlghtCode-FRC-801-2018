@@ -40,16 +40,14 @@ public class CMD_Angle_Drive extends Command {
     	distance += Robot.chassis.getChassisPosition();
     	//Ramp up motors;
     	for(int i = 0 ; i<100; i++) { //assuming cycle time is 50 ms, so a total of 500ms
-    		SmartDashboard.putNumber("joy X", x);
-    		SmartDashboard.putNumber("joy Y", y);
+
         	Robot.chassis.cmdDrive(x*i/100, y*i/100, gyro, Robot.chassis.getGyroAngle());
     	}
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-		SmartDashboard.putNumber("joy X", x);
-		SmartDashboard.putNumber("joy Y", y);
+
     	Robot.chassis.cmdDrive(x, y, gyro, Robot.chassis.getGyroAngle());
     	dist = Robot.chassis.getChassisPosition();;
     	error = (distance-dist);

@@ -20,13 +20,14 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class LeftGoLeftSwitch extends CommandGroup {
 
     public LeftGoLeftSwitch() {
-//    	addSequential(new ArmUp());
+       	addSequential(new ArmUp());
 
-    	addSequential(new CMD_Angle_Drive(50.0, 90.0, 0.15, 0));
-    	Timer.delay(0.5);
-    	addSequential(new TurnCMD(90.0), 10.0);
-    	Timer.delay(0.5);
-    	addSequential(new CMD_Angle_Drive(50.0, 0.0, 0.15, 90));
+    	addSequential(new CMD_Angle_Drive(144.0, 90, 0.4, 0));
+    	addSequential(new TurnCMD(90));
+    	addSequential(new Drive_And_ExtendLow(36, 0, 0.3, 90));
+    	
+    	addSequential(new ArmDown());
+    	addSequential(new OpenPinchers());
     	
 //    	addSequential(new ExtendLow());
 //    	

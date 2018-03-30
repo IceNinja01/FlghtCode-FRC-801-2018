@@ -1,31 +1,19 @@
-package org.usfirst.frc.team801.robot.commands.gather;
-
-import java.sql.Time;
+package org.usfirst.frc.team801.robot.commands.lift;
 
 import org.usfirst.frc.team801.robot.commands.arm.ArmDown;
-import org.usfirst.frc.team801.robot.commands.gather.OpenGatherPinchers;
-import org.usfirst.frc.team801.robot.commands.pinchers.ClosePinchers;
-import org.usfirst.frc.team801.robot.commands.pinchers.OpenPinchers;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
-import edu.wpi.first.wpilibj.command.WaitCommand;
 
 /**
  *
  */
-public class BoxFromGather extends CommandGroup {
+public class WinchUp_ArmDown extends CommandGroup {
 
-    public BoxFromGather() {
+    public WinchUp_ArmDown() {
+    	addParallel(new WinchUp());
+    	addSequential(new ArmDown());
         // Add Commands here:
-    	addSequential(new OpenPinchers());
-    	addSequential(new UpGather());
-    	addSequential(new WaitCommand(1.0));
-//    	addParallel(new EjectBox(), 0.5);
-    	addSequential(new ClosePinchers());
-    	addSequential(new OpenGatherPinchers());
-    	end();
-        
+        // e.g. addSequential(new Command1());
         //      addSequential(new Command2());
         // these will run in order.
 

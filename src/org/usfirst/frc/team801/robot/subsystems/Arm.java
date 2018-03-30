@@ -32,7 +32,6 @@ public class Arm extends Subsystem {
 //		arm.enableVoltageCompensation(true); 
 		arm.configForwardLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
 		arm.configReverseLimitSwitchSource(LimitSwitchSource.FeedbackConnector, LimitSwitchNormal.NormallyOpen, 0);
-		arm.setInverted(true);
 	}
 
     public void initDefaultCommand() {
