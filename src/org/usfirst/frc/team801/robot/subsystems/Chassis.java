@@ -5,12 +5,17 @@ import org.usfirst.frc.team801.robot.Robot;
 import org.usfirst.frc.team801.robot.RobotMap;
 import org.usfirst.frc.team801.robot.Utilities.Adis16448_IMU;
 import org.usfirst.frc.team801.robot.Utilities.Adis16448_IMU_2018;
+import org.usfirst.frc.team801.robot.Utilities.RollingAverage;
 import org.usfirst.frc.team801.robot.Utilities.Utils;
 import org.usfirst.frc.team801.robot.commands.DriveWithJoysticks;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import SwerveClass.SwerveDrive;
 import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.PIDController;
+import edu.wpi.first.wpilibj.PIDOutput;
+import edu.wpi.first.wpilibj.PIDSource;
+import edu.wpi.first.wpilibj.PIDSourceType;
 import edu.wpi.first.wpilibj.GenericHID.Hand;
 import edu.wpi.first.wpilibj.command.PIDSubsystem;
 import edu.wpi.first.wpilibj.command.Subsystem;
@@ -18,9 +23,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Controls the movement of the robot
+ * @param <ultraCMD>
  */
 @SuppressWarnings("unused")
-public class Chassis extends PIDSubsystem {
+public class Chassis<ultraCMD> extends PIDSubsystem {
 	Adis16448_IMU_2018 adis = RobotMap.imu;
 //	AnalogInput ultraSonic = RobotMap.ultraSonic;
 //	public static PIDSource ultraPidSource;
@@ -46,11 +52,28 @@ public class Chassis extends PIDSubsystem {
 	private double cruiseVelocity;
 
 
+
 	private double acceleration;
 private double elevatorHeight;
 private boolean robotOrient = false;
 private double biasAngle = 0.0;
 private double mmtoInches = 0.03937;
+private PIDSource pidUltraSource;
+private PIDController pidUltraController;
+
+private double ultraCMD;
+
+private double ultraError;
+
+private double strafeOut;
+
+private double ultra_ki = 0.0001;
+
+private double ultra_kd = 0.001;
+
+private double ultra_kp = 0.01;
+
+private RollingAverage integral = new RollingAverage((int) (1/ultra_ki));
 
 	public Chassis() {
 
@@ -60,6 +83,27 @@ private double mmtoInches = 0.03937;
 		getPIDController().setContinuous(true);
 		getPIDController().setOutputRange(-0.3, 0.3);
 		enable();
+		
+//		pidUltraSource = new PIDSource() {				
+//			@Override
+//			public void setPIDSourceType(PIDSourceType pidSource) {				
+//			}
+//			@Override
+//			public double pidGet() {
+//				return getReverseDist();
+//			}				
+//			@Override
+//			public PIDSourceType getPIDSourceType() {
+//				return PIDSourceType.kDisplacement;
+//			}
+//		};
+//		
+//		pidUltraController = new PIDController(.002, 0.000001, 0.001, pidUltraSource, ultraPID);
+//		pidUltraController.setAbsoluteTolerance(2);
+//		pidUltraController.setInputRange(0, 360);
+//		pidUltraController.setContinuous(false);
+//		pidUltraController.setOutputRange(-0.5, 0.5);
+//		pidUltraController.enable();
 
 	}
 
@@ -114,8 +158,18 @@ private double mmtoInches = 0.03937;
 		headingError = Robot.chassis.getGyroAngle() - headingCMD;
 		chassisSwerveDrive.CMDdrive(x, y, zRateCmd, angleCmd);
 
-
 	}
+	
+	public void cmdUltraStrafeFwd(double x, double y, double gyroCMD, double angleCmd, double ultraCMD) {
+		headingCMD = gyroCMD;
+		headingError = Robot.chassis.getGyroAngle() - headingCMD;
+		this.ultraCMD = ultraCMD;
+		ultraError = getReverseDist() - ultraCMD;
+		getUltraDriveError(ultraError);
+		chassisSwerveDrive.CMDdrive(strafeOut, y, zRateCmd, angleCmd);
+		
+	}
+	
 	public void stop() {
 		chassisSwerveDrive.stopMotor();
 	}
@@ -245,11 +299,27 @@ private double mmtoInches = 0.03937;
 	}
 	
 	public double getFrontDist() {
-		return ultraFwd.getVoltage()*0.00977*mmtoInches;
+		return ultraFwd.getVoltage()*(1000 / 0.977)*mmtoInches;
 	}
 	
 	public double getReverseDist() {
-		return ultraRev.getVoltage()*0.00977*mmtoInches;
+		return ultraRev.getVoltage()*(1000 / 9.8);
+//				*0.00098*mmtoInches;
+	}
+	
+	public double getUltraDriveError(double error) {
+		double dt = 0.01;
+		double previous_error = 0;
+		
+		double derivative=0;
+		
+		integral.add(integral.getAverage() + error*dt);
+		derivative =(error - previous_error) / dt;
+		
+		strafeOut = ultra_kp*error + ultra_ki*integral.getAverage() + ultra_kd*derivative;
+		previous_error = error;
+		strafeOut = Utils.limitMagnitude(strafeOut, 0.05, 1.0);
+		return strafeOut;
 	}
 
 }

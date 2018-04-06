@@ -23,7 +23,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import org.usfirst.frc.team801.robot.Utilities.PathBuilder;
-import org.usfirst.frc.team801.robot.commands.TestDrive;
 import org.usfirst.frc.team801.robot.commands.UpdateSD;
 import org.usfirst.frc.team801.robot.commands.WriteData;
 import org.usfirst.frc.team801.robot.commands.auto.GoFwd;
@@ -32,8 +31,10 @@ import org.usfirst.frc.team801.robot.commands.auto.LeftGoLeftSwitch;
 import org.usfirst.frc.team801.robot.commands.auto.MiddleGoLeftSwitch;
 import org.usfirst.frc.team801.robot.commands.auto.MiddleGoRightSwitch;
 import org.usfirst.frc.team801.robot.commands.auto.RightGo;
+import org.usfirst.frc.team801.robot.commands.auto.RightGoLeftScale;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.MotionMagicDrive;
+import org.usfirst.frc.team801.robot.commands.chassis.TestDrive;
 import org.usfirst.frc.team801.robot.subsystems.Arm;
 import org.usfirst.frc.team801.robot.subsystems.Chassis;
 import org.usfirst.frc.team801.robot.subsystems.DataWriter;
@@ -163,7 +164,7 @@ public class Robot extends IterativeRobot {
 		PathBuilder logic = new PathBuilder((int) loc_chooser.getSelected(), fieldLayout, (int) priority_chooser.getSelected());
 
 		m_autonomousCommand = logic.getPath();
-//		m_autonomousCommand = new LeftGoLeftScale();
+//		m_autonomousCommand = new RightGoLeftScale();
 
 		/*
 		 * String autoSelected = SmartDashboard.getString("Auto Selector",

@@ -1,7 +1,4 @@
-package org.usfirst.frc.team801.robot.commands;
-
-import org.usfirst.frc.team801.robot.commands.chassis.CMD_Angle_Drive;
-import org.usfirst.frc.team801.robot.commands.chassis.TurnCMD;
+package org.usfirst.frc.team801.robot.commands.chassis;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 
@@ -11,13 +8,8 @@ import edu.wpi.first.wpilibj.command.CommandGroup;
 public class TestDrive extends CommandGroup {
 
     public TestDrive() {
-        
-    	addSequential(new CMD_Angle_Drive(48.0, 90, 0.4, 0));
-    	addSequential(new TurnCMD(90));
-    	addSequential(new CMD_Angle_Drive(48.0, 0, 0.4, 90));
-//    	addSequential(new CMD_Angle_Drive(144.0, 270, 0.7));
-//    	addSequential(new CMD_Angle_Drive(50.0, 180, 0.4));
-
+        addSequential(new CMD_Angle_Drive_Ultra(12.0, 180.0, 0.7, 90.0));
+    	
     	// Add Commands here:
         // e.g. addSequential(new Command1());
         //      addSequential(new Command2());

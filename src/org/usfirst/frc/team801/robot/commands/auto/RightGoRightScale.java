@@ -27,7 +27,6 @@ public class RightGoRightScale extends CommandGroup {
        	addSequential(new Drive_And_ExtendHigh(288.0, 88, 0.7, 0));
     	addSequential(new TurnCMD(270));
     	wallDistance =71.5 - (40 + Robot.chassis.getReverseDist());
-    	wallDistance = 10.0;
     	addSequential(new CMD_Angle_Drive(wallDistance, 180, 0.4, 270));
     	addSequential(new ArmDown());
     	addSequential(new OpenPinchers());

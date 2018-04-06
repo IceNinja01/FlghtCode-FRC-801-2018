@@ -127,7 +127,7 @@ public class OI {
 	    public Button midElevator = new JoystickButton(manip, 4);
 	    public Button highElevator = new JoystickButton(manip, 1);
 	    public Button grabHook = new JoystickButton(manip, 5);
-	    public Button winch = new JoystickButton(manip, 10);
+	    public Button winch = new JoystickButton(driver, 10);
 	    public Button armUp = new JoystickButton(manip, 6);
 	    public Button boxFromGather = new JoystickButton(manip,8);
 	    
