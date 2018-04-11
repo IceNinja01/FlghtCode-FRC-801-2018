@@ -10,6 +10,7 @@ import org.usfirst.frc.team801.robot.Utilities.Utils;
 import org.usfirst.frc.team801.robot.commands.DriveWithJoysticks;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
+import MotionProfile.DistanceFollower;
 import SwerveClass.SwerveDrive;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PIDController;
@@ -50,6 +51,8 @@ public class Chassis<ultraCMD> extends PIDSubsystem {
 	private double[] turnDistance;
 	private double turnRadius = 3;
 	private double cruiseVelocity;
+	private DistanceFollower dist_fw[] = new DistanceFollower[4];
+
 
 
 
@@ -83,6 +86,9 @@ private RollingAverage integral = new RollingAverage((int) (1/ultra_ki));
 		getPIDController().setContinuous(true);
 		getPIDController().setOutputRange(-0.3, 0.3);
 		enable();
+    	for(int i = 0; i<4; i++) {
+    		dist_fw[i] = new DistanceFollower(null, i);
+    	}
 		
 //		pidUltraSource = new PIDSource() {				
 //			@Override
@@ -116,23 +122,17 @@ private RollingAverage integral = new RollingAverage((int) (1/ultra_ki));
 	public void motorDrive(double angleCmd_Deg) {
 		elevatorHeight = Robot.elevator.getCurrentPosition();
 		
-		if(elevatorHeight > Constants.elevatorMotorMidPos + 5) {
-			
+		if(elevatorHeight > Constants.elevatorMotorMidPos + 5) {		
 			chassisSwerveDrive.setMaxDriveVoltage(0.7);
 		}
 		else {
 			chassisSwerveDrive.setMaxDriveVoltage(1.0);
-
 		}
-		
-		
-
 		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.05, 1.0);
 		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.05, 1.0);
 		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.05, 0.5);
 
 		chassisSwerveDrive.drive(x, y, z, angleCmd_Deg);
-		
 		
 	}
 
@@ -143,14 +143,12 @@ private RollingAverage integral = new RollingAverage((int) (1/ultra_ki));
 		headingError = Robot.chassis.getGyroAngle() - headingCMD;
 		chassisSwerveDrive.drive(x, y, zRateCmd, angleCmd);
 
-
 	}	
 	
 	public void cmdTurnToHeading(double gyroCMD, double angleCmd) {
 		headingCMD = gyroCMD;
 		headingError = Robot.chassis.getGyroAngle() - headingCMD;
 		chassisSwerveDrive.CMDdrive(0, 0, zRateCmd, angleCmd);
-
 
 	}	
 	public void cmdDrive(double x, double y, double gyroCMD, double angleCmd) {
@@ -225,30 +223,17 @@ private RollingAverage integral = new RollingAverage((int) (1/ultra_ki));
 		return headingCMD;
 	}
 	
-	public void driveInit() {
-		chassisSwerveDrive.driveInit();
-	}
-	
-	public void setMotionMagic() {
-		chassisSwerveDrive.motionMagicInit();
-	}
-	
 	public void resetEnocdersPosition() {
 		
 	}
-	
-	public void driveMotionMagic(double distance, double angle) {
-		chassisSwerveDrive.motionMagicDrive(distance, angle);
-	}
-
 	
 	public double getChassisPosition() {
 		return chassisSwerveDrive.getTraveledDistance();
 		
 	}
 	
-	public double getChassisError() {
-		return chassisSwerveDrive.getPositionErrorDrive();
+	public double[] getChassisError() {
+		return chassisSwerveDrive.getXY_Position();
 	}
 	
 	public void toggleFieldOrient() {
@@ -275,17 +260,11 @@ private RollingAverage integral = new RollingAverage((int) (1/ultra_ki));
 			chassisSwerveDrive.setMaxDriveVoltage(1.0);
 
 		}
-		
-		
-
 		x = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getX(), 1.5), 0.05, 1.0);
 		y = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getY(), 1.5), 0.05, 1.0);
 		z = Utils.limitMagnitude(Utils.joyExpo(Robot.oi.driver.getRawAxis(4), 1.5), 0.05, 0.5);
 
 			chassisSwerveDrive.drive(x, y, z, 0);
-		
-		
-	
 	}
 	
 	public void getVolts() {
@@ -321,30 +300,53 @@ private RollingAverage integral = new RollingAverage((int) (1/ultra_ki));
 		strafeOut = Utils.limitMagnitude(strafeOut, 0.05, 1.0);
 		return strafeOut;
 	}
+	
+	public void initFollowers(double[] dist, double maxVel, double maxAccel) {
+    	for(int i = 0; i<4; i++) {
+    		dist_fw[i].setTrajectory(dist,i);
+    		dist_fw[i].configureSpeed(maxVel, maxAccel);
+    		dist_fw[i].configurePIDVA(0.5, 0, .01, 1/maxVel , 0.01);
+    	}
+	}
+	
+	public void setFollowers(double gyroCMD) {
+		double[] speed = new double[4];
+		headingCMD = gyroCMD;
+		headingError = Robot.chassis.getGyroAngle() - headingCMD;		
+    	for(int i = 0; i<4; i++) {
+    		speed[i] = dist_fw[i].calculate(getChassisError(), getGyroAngle(), zRateCmd);
+    	}
+    	//Normalize wheelSpeeds
+	    //determine max motor speed
+	    double max = speed[0]; 
+	    if(speed[1]>max){
+	    	max=speed[1]; 
+	    }
+	    if(speed[2]>max){
+	    	max=speed[2]; 
+	    }
+	    if(speed[3]>max){
+	    	max=speed[3];
+	    }
+	    //Divide by max motor speeds
+	    if(max>1){
+	    	speed[0]/=max; 
+	    	speed[1]/=max; 
+	    	speed[2]/=max; 
+	    	speed[3]/=max;
+	    }
+	    
+	    for(int i = 0; i<4; i++) {
+	    	chassisSwerveDrive.turnMotorsDrive(dist_fw[i].getHeading(), speed[i]);
+	    }
+	    	    
+	}
+	
+	public double[] getServeModuleError(int i) {
+		
+		double[] array = new double[2];
+		array = chassisSwerveDrive.getPOD_XY_Position(i);
+		return array ;
+	}
 
 }
-
-
-//public void getTilt() {
-//	x_g.add(adis.getAccelX());
-//	y_g.add(adis.getAccelY());
-//	z_g.add(-adis.getAccelZ());
-//	SmartDashboard.putNumber("x_g", x_g.getAverage());
-//	SmartDashboard.putNumber("y_g", y_g.getAverage());
-//	SmartDashboard.putNumber("z_g", z_g.getAverage());
-//	tilt.add(Math.atan2(z_g.getAverage(),
-//			(Math.sqrt(y_g.getAverage() * y_g.getAverage() + x_g.getAverage() * x_g.getAverage()))) * 180
-//			/ Math.PI);
-//	SmartDashboard.putNumber("tilt", tilt.getAverage());
-//
-//}
-
-
-//
-//public double getUltraDistance() {
-//	distance = ultraSonic.getVoltage() * (1000 / 9.8); // 9.8mv/inch*1000
-//	SmartDashboard.putNumber("UltraSonic", distance);
-//	return distance;
-//}
-//
-

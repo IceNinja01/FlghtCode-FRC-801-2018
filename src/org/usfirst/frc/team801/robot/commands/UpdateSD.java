@@ -43,7 +43,8 @@ public class UpdateSD extends Command {
 		SmartDashboard.putBoolean("ArmUp", Robot.arm.getArmState());
     	SmartDashboard.putNumber("ElevatorPos", Robot.elevator.getCurrentPosition());
 
-
+		SmartDashboard.putNumber("Chassis Position", Robot.chassis.getChassisPosition());
+		SmartDashboard.putNumberArray("Chassis_Error", Robot.chassis.getChassisError());
     	
     }
 

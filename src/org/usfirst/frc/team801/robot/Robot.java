@@ -106,7 +106,6 @@ public class Robot extends IterativeRobot {
 
 		SmartDashboard.putData(Scheduler.getInstance());
 		SmartDashboard.putBoolean("Start Motion", false);
-		Robot.chassis.setMotionMagic();
 
 		oi = new OI();
 		
@@ -133,9 +132,7 @@ public class Robot extends IterativeRobot {
 		SmartDashboard.putBoolean("Start Motion", false);
 
 		Scheduler.getInstance().run();
-		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
-		SmartDashboard.putNumber("Chassis Position", chassis.getChassisPosition());
-		SmartDashboard.putNumber("Chassis_Error", chassis.getChassisError());
+
 		chassis.getVolts();
 
 //		SmartDashboard.putNumber("ElevatorPos", lift.getCurrentPosition());
@@ -205,9 +202,7 @@ public class Robot extends IterativeRobot {
 	@Override
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
-		SmartDashboard.putNumber("Gyro Angle", chassis.getGyroAngle());
-		SmartDashboard.putNumber("Chassis Position", chassis.getChassisPosition());
-		SmartDashboard.putNumber("Chassis_Error", chassis.getChassisError());
+
 		chassis.getVolts();
 
 //		SmartDashboard.putNumber("ElevatorPos", lift.getCurrentPosition());

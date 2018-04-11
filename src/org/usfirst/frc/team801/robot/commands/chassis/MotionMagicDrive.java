@@ -45,7 +45,6 @@ public class MotionMagicDrive extends Command {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-    	Robot.chassis.driveMotionMagic(distance, turnAngle);
     	dist = Robot.chassis.getChassisPosition();;
     	error = -distance - dist;
     	System.out.print("target:\t" + -distance);

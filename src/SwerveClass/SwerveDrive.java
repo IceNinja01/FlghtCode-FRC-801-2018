@@ -57,7 +57,6 @@ public class SwerveDrive implements MotorSafety {
 	private int accel = (int) ((Constants.chassisAcceleration*Constants.wheelRotPerInch*4096)/10);
 	private int distance;
 	private int targetPosition;
-	private double[] error = new double[4];
 
 	
 	
@@ -112,9 +111,7 @@ public class SwerveDrive implements MotorSafety {
 		drive.**/
 		turnMotors[i].setSensorPhase(false); 
 
-		
-		
-		
+
 		driveMotors[i].configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
 		/* set the peak and nominal outputs, 12V means full */
 		driveMotors[i].configNominalOutputForward(0, Constants.kTimeoutMs);
@@ -213,7 +210,6 @@ public class SwerveDrive implements MotorSafety {
 	    wheelSpeeds[2] = Math.sqrt(A*A + D*D);
 	    wheelSpeeds[3] = Math.sqrt(A*A + C*C);
 	    
-	    //TODO threshold the arctan2 function inputs
 	    wheelAngles[0] = Utils.wrapAngle0To360Deg(Math.atan2(B,C)*180/Math.PI);
 	    wheelAngles[1] = Utils.wrapAngle0To360Deg(Math.atan2(B,D)*180/Math.PI);
 	    wheelAngles[2] = Utils.wrapAngle0To360Deg(Math.atan2(A,D)*180/Math.PI);
@@ -306,7 +302,6 @@ public class SwerveDrive implements MotorSafety {
 	    wheelSpeeds[2] = Math.sqrt(A*A + D*D);
 	    wheelSpeeds[3] = Math.sqrt(A*A + C*C);
 	    
-	    //TODO threshold the arctan2 function inputs
 	    wheelAngles[0] = Utils.wrapAngle0To360Deg(Math.atan2(B,C)*180/Math.PI);
 	    wheelAngles[1] = Utils.wrapAngle0To360Deg(Math.atan2(B,D)*180/Math.PI);
 	    wheelAngles[2] = Utils.wrapAngle0To360Deg(Math.atan2(A,D)*180/Math.PI);
@@ -351,106 +346,6 @@ public class SwerveDrive implements MotorSafety {
 
 	}
 	
-	public void drive2(double AxisX1, double AxisY1, double rotation1, double gyroAngle, 
-			double AxisX2, double AxisY2, double rotation2){
-		xavg.add(AxisX1);
-		yavg.add(AxisY1);
-		zavg.add(rotation1);
-		//Calculate Angles and Magnitudes for each motor
-		double FWD1 = -yavg.getAverage();
-		double STR1 = xavg.getAverage();
-		RCW = zavg.getAverage() + rotation2;
-		double FWD2 = -AxisY2;
-		double STR2 = AxisX2;
-		double radians = gyroAngle*Math.PI/180.00;
-		
-		temp = FWD1*Math.cos(radians) + STR1*Math.sin(radians); //drivers field oriented
-		temp += FWD2*Math.cos(0.0) + STR2*Math.sin(0.0); //manipulators robot oriented
-		STR = -FWD1*Math.sin(radians) + STR1*Math.cos(radians);//drivers field oriented
-		STR += -FWD2*Math.sin(0.0) + STR2*Math.cos(0.0);//manipulators robot oriented
-		FWD = temp;
-		//Perform the following calculations for each new set of FWD, STR, and RCW commands:
-		A = STR - RCW*(L/R);
-		B = STR + RCW*(L/R);
-		C = FWD - RCW*(W/R);
-		D = FWD + RCW*(W/R);
-		
-	    wheelSpeeds[0] = Math.sqrt(B*B + C*C);
-	    wheelSpeeds[1] = Math.sqrt(B*B + D*D);
-	    wheelSpeeds[2] = Math.sqrt(A*A + D*D);
-	    wheelSpeeds[3] = Math.sqrt(A*A + C*C);
-	    
-	    //TODO threshold the arctan2 function inputs
-	    wheelAngles[0] = Utils.wrapAngle0To360Deg(Math.atan2(B,C)*180/Math.PI);
-	    wheelAngles[1] = Utils.wrapAngle0To360Deg(Math.atan2(B,D)*180/Math.PI);
-	    wheelAngles[2] = Utils.wrapAngle0To360Deg(Math.atan2(A,D)*180/Math.PI);
-	    wheelAngles[3] = Utils.wrapAngle0To360Deg(Math.atan2(A,C)*180/Math.PI);
-		
-	    //Normalize wheelSpeeds
-	    //determine max motor speed
-	    max=wheelSpeeds[0]; 
-	    if(wheelSpeeds[1]>max){
-	    	max=wheelSpeeds[1]; 
-	    }
-	    if(wheelSpeeds[2]>max){
-	    	max=wheelSpeeds[2]; 
-	    }
-	    if(wheelSpeeds[3]>max){
-	    	max=wheelSpeeds[3];
-	    }
-	    //Divide by max motor speeds
-	    if(max>1){
-	    	wheelSpeeds[0]/=max; 
-	    	wheelSpeeds[1]/=max; 
-	    	wheelSpeeds[2]/=max; 
-	    	wheelSpeeds[3]/=max;
-	    }
-
-	    	double[] degs = new double[4];
-		    for(int i=0;i<4;i++){
-		    	degs[i] = currentAngle(turnMotors[i],i);
-		    	
-		    	angleJoyStickDiff[i]= wheelAngles[i]- oldAngle[i];
-		    	angleError[i] = wheelAngles[i] - degs[i];
-
-			    if(Math.abs(angleJoyStickDiff[i]) > 90){ //new angle is greater than a 90degree turn, so find shortest path
-			    	//reverse translational motors 
-					driveMotors[i].selectProfileSlot(0, 0);
-			    	driveMotors[i].set(ControlMode.Velocity, maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);
-			    	
-			    	//find new angle
-			    	wheelAngles[i] -= 180.0; //subtract 180 degrees
-			    	if(wheelAngles[i] < 0){ //wrap to new angle between 0-360
-			    		wheelAngles[i] += 360.0;
-			    	}
-			    	//now the angle is set to move to the shortest path, which is just 180 degrees 
-			    	//from the current heading
-			    	
-			    }    
-			    
-			    else
-			    {
-					driveMotors[i].selectProfileSlot(0, 0);
-			    	driveMotors[i].set(ControlMode.Velocity, -maxDriveVoltage*wheelSpeeds[i]*4800*4096/600);
-			    }
-				//Turn Motors
-			    if(wheelSpeeds[i]>0.1){
-			    	pidTurnController[i].setSetpoint(wheelAngles[i]);
-			    	oldAngle[i] = wheelAngles[i];
-			    }
-		    
-		    currentSpeed(driveMotors[i], i);
-		    
-	    }
-
-	    	SmartDashboard.putNumber("Angle", angleJoyStickDiff[0]);
-
-		if (m_safetyHelper != null) {
-			m_safetyHelper.feed();
-      	}
-
-	}
-	
 	public void turnMotors(double angle_CMD){
 	    for(int i=0;i<4;i++){
 	    	pidTurnController[i].setSetpoint(angle_CMD);
@@ -460,55 +355,13 @@ public class SwerveDrive implements MotorSafety {
 	public void turnMotorsDrive(double angle_CMD , double speed){
 	    for(int i=0;i<4;i++){
 	    	pidTurnController[i].setSetpoint(angle_CMD);
-	    	driveMotors[i].set(ControlMode.Velocity, maxDriveVoltage*speed*4800*4096/600);
+	    	driveMotors[i].set(ControlMode.Velocity, -maxDriveVoltage*speed*4800*4096/600);
 	    }
 		
 	}
-	public void turnMotorsDriveAndRotateAndGyro(double angle_CMD , double AxisY, double rotation, double gyroAngle){
-	//Calculate Angles and Magnitudes for each motor
-			FWD = -AxisY;
-			STR = 0.0;
-			RCW = rotation;
-			temp = FWD*Math.cos(gyroAngle) + STR*Math.sin(gyroAngle);
-			STR = -FWD*Math.sin(gyroAngle) + STR*Math.cos(gyroAngle);
-			FWD = temp;
-			//Perform the following calculations for each new set of FWD, STR, and RCW commands:
-			A = STR - RCW*(L/R);
-			B = STR + RCW*(L/R);
-			C = FWD - RCW*(W/R);
-			D = FWD + RCW*(W/R);
-			
-		    wheelSpeeds[0] = Math.sqrt(B*B + C*C);
-		    wheelSpeeds[1] = Math.sqrt(B*B + D*D);
-		    wheelSpeeds[2] = Math.sqrt(A*A + D*D);
-		    wheelSpeeds[3] = Math.sqrt(A*A + C*C);
-		    //Normalize wheelSpeeds
-		    //determine max motor speed
-		    max=wheelSpeeds[0]; 
-		    if(wheelSpeeds[1]>max){
-		    	max=wheelSpeeds[1]; 
-		    }
-		    if(wheelSpeeds[2]>max){
-		    	max=wheelSpeeds[2]; 
-		    }
-		    if(wheelSpeeds[3]>max){
-		    	max=wheelSpeeds[3];
-		    }
-		    //Divide by max motor speeds
-		    if(max>1){
-		    	wheelSpeeds[0]/=max; 
-		    	wheelSpeeds[1]/=max; 
-		    	wheelSpeeds[2]/=max; 
-		    	wheelSpeeds[3]/=max;
-		    }
-		    
-		    for(int i=0;i<4;i++){
-		    	driveMotors[i].set(ControlMode.Velocity, wheelSpeeds[i] * 4800 * 4096/600);
-		    }
-	}
+	
 	@Override
 	public void setExpiration(double timeout) {
-		// TODO Auto-generated method stub
 		m_safetyHelper.setExpiration(timeout);
 	}
 
@@ -588,8 +441,8 @@ public class SwerveDrive implements MotorSafety {
 		return "Swerve Drive";
 	}
 	
-  @SuppressWarnings("unused")
-private void setupMotorSafety() {
+//  @SuppressWarnings("unused")
+  private void setupMotorSafety() {
 	    m_safetyHelper = new MotorSafetyHelper(this);
 	    m_safetyHelper.setExpiration(kDefaultExpirationTime);
 	    m_safetyHelper.setSafetyEnabled(true);
@@ -610,15 +463,11 @@ private void setupMotorSafety() {
 	}
 	
 	public void getAmps() {
-			for(int i=0 ; i<4; i++) {
-
+		for(int i=0 ; i<4; i++) {
 		   SmartDashboard.putNumber("DriveAmps_"+motorName[i], driveMotors[i].getOutputCurrent());
 		   SmartDashboard.putNumber("DriveVolts_"+motorName[i], driveMotors[i].getMotorOutputVoltage());
-
-			}
+		}
 	}
-	
-	
 	
 	public double currentSpeed(Team801TalonSRX motor, int num){
 		double speed = motor.getSelectedSensorVelocity(0);
@@ -629,6 +478,14 @@ private void setupMotorSafety() {
 	
 	public void setMaxDriveVoltage(double setVoltage){
 		this.maxDriveVoltage = setVoltage;
+	}
+	
+	public double getLR() {
+		return L/R;
+	}
+	
+	public double getWR() {
+		return W/R;
 	}
 	
 	public void setDriveCurrentLimit(int peakAmps, int durationMs, int continousAmps) {
@@ -643,87 +500,7 @@ private void setupMotorSafety() {
 		}
 	}
 	
-	public void driveInit(){
-		/*This is called one time during to setup motion magic on the drive motors.
-		 */
-		for(int i=0;i>4;i++){
-//			driveMotors[i].selectProfileSlot(1, 0);
-			driveMotors[i].clearMotionProfileHasUnderrun(Constants.kTimeoutMs);
-			driveMotors[i].clearMotionProfileTrajectories();
-			/* Set the motors PIDF constants**/
-			//index 0
-			driveMotors[i].config_kF(0, .026, Constants.kTimeoutMs);
-			driveMotors[i].config_kP(0, .051, Constants.kTimeoutMs);
-			driveMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
-			driveMotors[i].config_kD(0, 1.0, Constants.kTimeoutMs);
-			driveMotors[i].setSelectedSensorPosition(0, 0, Constants.kTimeoutMs);
-		}
-	}
-	
-	public void motionMagicInit(){
-		/*This is called one time during to setup motion magic on the drive motors.
-		 */
-		for(int i=0;i>4;i++){
-//			driveMotors[i].selectProfileSlot(1, 0);
-			driveMotors[i].clearMotionProfileHasUnderrun(Constants.kTimeoutMs);
-			driveMotors[i].clearMotionProfileTrajectories();
-			/* Set the motors PIDF constants**/
-			//index 0
-			driveMotors[i].config_kF(0, .05, Constants.kTimeoutMs);
-			driveMotors[i].config_kP(0, 0.5 , Constants.kTimeoutMs);
-			driveMotors[i].config_kI(0, 0.0, Constants.kTimeoutMs);
-			driveMotors[i].config_kD(0, 0.6, Constants.kTimeoutMs);
-			driveMotors[i].setSelectedSensorPosition(0, 0, Constants.kTimeoutMs);
-		}
-	}
-	
-	public void motionMagicDrive(double distance, double angle) {
-		/*
-		 * This is used after the motionMagicInit is called
-		 */
-		//convert distance to shaft rotations, drive inches to shaft rotations is 7.5 shaftRotations / 1 wheel rotation ~ 12.5inches
-		targetPosition = (int) (distance*Constants.wheelRotPerInch*4096);
-		double[] degs = new double[4];
-		double[] angleDiff = new double[4];
-		double[] oldAngle = new double[4];		
-		//
-		wheelAngles[0] = angle;
-	    wheelAngles[1] = angle;
-	    wheelAngles[2] = angle;
-	    wheelAngles[3] = angle;
-	    
-		SmartDashboard.putNumber("Target", targetPosition);
-		for(int i=0; i<4 ;i++){
-//			driveMotors[i].selectProfileSlot(1, 0);
-			
-			degs[i] = currentAngle(turnMotors[i],i);
-	    		    	
-			angleDiff[i]= wheelAngles[i]- oldAngle[i];
-	    	angleError[i] = wheelAngles[i] - degs[i];
-
-		    if(Math.abs(angleDiff[i]) > 90){ //new angle is greater than a 90degree turn, so find shortest path
-		    	//reverse translational motors 
-		    	
-		    	//find new angle
-		    	wheelAngles[i] -= 180.0; //subtract 180 degrees
-		    	
-		    	if(wheelAngles[i] < 0){ //wrap to new angle between 0-360
-		    		wheelAngles[i] += 360.0;
-		    	}
-		    }
-		    pidTurnController[i].setSetpoint(wheelAngles[i]);
-	    	oldAngle[i] = wheelAngles[i];
-			driveMotors[i].set(ControlMode.MotionMagic, targetPosition);
-
-	    	//now the angle is set to move to the shortest path, which is just 180 degrees 
-	    	//from the current heading
-		    	
-		 }    
-		
-	}
-	
 	public double getTraveledDistance() {
-		//Used during Motion Magic Profile to find the robots distance traveled
 		double dist = 0;
 		for(int i=0;i<4;i++){
 			dist += driveMotors[i].getSelectedSensorPosition(0);
@@ -735,26 +512,51 @@ private void setupMotorSafety() {
 		return -dist;
 
 	}
-	public int getPositionErrorDrive() {
-		//Used during Motion Magic Profile to find the robots distance traveled
-		
+	
+	public double[] getXY_Position() {
+		double[] dist = new double[4];
+		double[] angle = new double[4];
+		double[] arrayOut = new double[2];
+		double radians=0;
+		double x_dist=0, y_dist=0, x_temp=0, y_temp = 0;
 		System.out.print("\ttarget" + targetPosition + " ");
-		int err =0;
 		for(int i=0;i<4;i++){
-			error[i] += Math.abs(driveMotors[i].getSelectedSensorPosition(0));
-//			error[i] *= 12.5/(7.5*4096); //convert to inches
-			SmartDashboard.putNumber("Drive Motor Position Error", error[i]);
-//			System.out.print("error " + i + " " + error[i] + "\t");
-			err +=error[i];
+			dist[i] += driveMotors[i].getSelectedSensorPosition(0);
+			dist[i] *= 12.5/(7.5*4096); //convert to inches
+			angle[i] = pidTurnController[i].get();
+			radians = angle[i]*Math.PI/180.00;
+			x_temp = dist[i]*Math.cos(radians);
+			x_dist += x_temp;
+			y_temp = dist[i]*Math.sin(radians);
+			y_dist += y_temp;
 		}
-		err /= 4;
-		
-		err /= 4096;
-		
-		System.out.print(err);
-		
+		x_dist /= 4;
+		y_dist /= 4;
+		System.out.print(x_dist);
+		arrayOut[0] = x_dist;
+		arrayOut[1] = y_dist;
+		return arrayOut;
 
-		return err;
+	}
+	
+	public double[] getPOD_XY_Position(int i) {
+		double[] dist = new double[4];
+		double[] angle = new double[4];
+		double[] arrayOut = new double[2];
+		double radians=0;
+		double x_dist=0, y_dist=0, x_temp=0, y_temp = 0;
+			dist[i] += driveMotors[i].getSelectedSensorPosition(0);
+			dist[i] *= 12.5/(7.5*4096); //convert to inches
+			angle[i] = pidTurnController[i].get();
+			radians = angle[i]*Math.PI/180.00;
+			x_temp = dist[i]*Math.cos(radians);
+			x_dist += x_temp;
+			y_temp = dist[i]*Math.sin(radians);
+			y_dist += y_temp;
+		
+		arrayOut[0] = x_dist;
+		arrayOut[1] = y_dist;
+		return arrayOut;
 
 	}
 	
