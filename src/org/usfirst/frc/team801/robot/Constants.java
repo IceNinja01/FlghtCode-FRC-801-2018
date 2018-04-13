@@ -57,7 +57,7 @@ public class Constants {
 	public static double chassisAcceleration = 100;		//acceleration slope inches/sec
 	public static double chassisVelocity = 100;			//Max Velocity inches/sec
 	public static double wheelRotPerInch = 0.6;	//Sensor Shaft revolutions per wheel turn in inch
-	
+	public static double ftpersec = 4800*12.5/60/7.5/12;
 	//AutoSelector Constants
 		public static final int LEFT = 0, CENTER = 1, RIGHT = 2;
 		public static final int LOCATION = LEFT;

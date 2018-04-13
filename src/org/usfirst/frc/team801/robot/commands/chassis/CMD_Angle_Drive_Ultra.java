@@ -34,7 +34,7 @@ public class CMD_Angle_Drive_Ultra extends Command {
     // Called just before this Command runs the first time
     protected void initialize() {
     	//Ramp up motors;
-    	for(int i = 0 ; i<100; i++) { //assuming cycle time is 50 ms, so a total of 500ms
+    	for(int i = 0 ; i<50; i++) { //assuming cycle time is 50 ms, so a total of 500ms
 
         	Robot.chassis.cmdDrive(x*i/100, y*i/100, gyro, Robot.chassis.getGyroAngle());
     	}
@@ -45,6 +45,7 @@ public class CMD_Angle_Drive_Ultra extends Command {
 
     	Robot.chassis.cmdDrive(x, y, gyro, Robot.chassis.getGyroAngle());
     	dist = Robot.chassis.getReverseDist();
+    
     }
 
     // Make this return true when this Command no longer needs to run execute()

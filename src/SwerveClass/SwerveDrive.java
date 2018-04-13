@@ -532,7 +532,6 @@ public class SwerveDrive implements MotorSafety {
 		}
 		x_dist /= 4;
 		y_dist /= 4;
-		System.out.print(x_dist);
 		arrayOut[0] = x_dist;
 		arrayOut[1] = y_dist;
 		return arrayOut;
