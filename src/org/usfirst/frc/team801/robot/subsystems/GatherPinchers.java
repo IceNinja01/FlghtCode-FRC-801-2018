@@ -52,7 +52,7 @@ public class GatherPinchers extends Subsystem{
 		
 	    switch (state2) {
 	      case kOff:
-		  		pincher2.set(DoubleSolenoid.Value.kReverse);
+		  		pincher2.set(DoubleSolenoid.Value.kForward);
 
 	  		SmartDashboard.putString("Toggle", "stateOff");
 	        break;
@@ -76,7 +76,7 @@ public class GatherPinchers extends Subsystem{
 		
 	    switch (state1) {
 	      case kOff:
-		  		pincher1.set(DoubleSolenoid.Value.kReverse);
+		  		pincher1.set(DoubleSolenoid.Value.kForward);
 
 //	  		SmartDashboard.putString("Toggle", "stateOff");
 	        break;

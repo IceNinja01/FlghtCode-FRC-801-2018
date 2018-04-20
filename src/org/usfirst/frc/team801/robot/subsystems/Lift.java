@@ -103,9 +103,9 @@ public Lift(){
     }
     
     public double getCurrentPosition() {
-    	System.out.print(liftMotor.getSelectedSensorPosition(0));
-    	System.out.print("\terr:");
-    	System.out.println(liftMotor.getClosedLoopError(0));
+//    	System.out.print(liftMotor.getSelectedSensorPosition(0));
+//    	System.out.print("\terr:");
+//    	System.out.println(liftMotor.getClosedLoopError(0));
     	return liftMotor.getClosedLoopError(0);
     	
     }

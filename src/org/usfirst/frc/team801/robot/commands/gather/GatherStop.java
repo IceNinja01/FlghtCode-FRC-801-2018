@@ -4,16 +4,16 @@ import org.usfirst.frc.team801.robot.Robot;
 
 import edu.wpi.first.wpilibj.command.Command;
 
-public class GatherUp extends Command{
+public class GatherStop extends Command{
 
-	public GatherUp() {
+	public GatherStop() {
         // Use requires() here to declare subsystem dependencies
     	requires(Robot.gatherer);
     }
 
     // Called just before this Command runs the first time
     protected void initialize() {
-    	Robot.gatherer.gatherUp();
+    	Robot.gatherer.stopGather();
 
     }
 

@@ -101,8 +101,9 @@ public class Robot extends IterativeRobot {
 		loc_chooser.addObject("Location Right", Constants.RIGHT);
 		priority_chooser.addDefault("Switch", 0);
 		priority_chooser.addObject("Scale", 1);
-		SmartDashboard.putData("Location", loc_chooser);
-		SmartDashboard.putData("Priority", priority_chooser);
+		priority_chooser.addObject("Left/Right", 2);
+		SmartDashboard.putData("Location", loc_chooser);  //Field location of Robot, left, center, right
+		SmartDashboard.putData("Priority", priority_chooser); //Switch or scale
 
 		SmartDashboard.putData(Scheduler.getInstance());
 		SmartDashboard.putBoolean("Start Motion", false);
@@ -133,7 +134,7 @@ public class Robot extends IterativeRobot {
 
 		Scheduler.getInstance().run();
 
-		chassis.getVolts();
+//		chassis.getVolts();
 
 //		SmartDashboard.putNumber("ElevatorPos", lift.getCurrentPosition());
 
@@ -161,6 +162,8 @@ public class Robot extends IterativeRobot {
 		PathBuilder logic = new PathBuilder((int) loc_chooser.getSelected(), fieldLayout, (int) priority_chooser.getSelected());
 
 		m_autonomousCommand = logic.getPath();
+		DriverStation.reportError("AutoCommand: \t" + m_autonomousCommand.getName(), false);
+
 //		m_autonomousCommand = new RightGoLeftScale();
 
 		/*
@@ -203,7 +206,7 @@ public class Robot extends IterativeRobot {
 	public void teleopPeriodic() {
 		Scheduler.getInstance().run();
 
-		chassis.getVolts();
+//		chassis.getVolts();
 
 //		SmartDashboard.putNumber("ElevatorPos", lift.getCurrentPosition());
 		Scheduler.getInstance().run();

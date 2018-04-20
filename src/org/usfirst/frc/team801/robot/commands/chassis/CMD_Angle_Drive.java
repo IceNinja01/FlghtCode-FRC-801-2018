@@ -18,7 +18,7 @@ public class CMD_Angle_Drive extends Command {
 	private int j=0;
     private MotionProfile profile = new MotionProfile();
 	private double distance;
-	private double accel = 0.5;
+	private double accel = 0.01;
 	private double heading;
 	private double dist;
 	private double error;
@@ -53,12 +53,12 @@ public class CMD_Angle_Drive extends Command {
     	
     	initial_dt = Timer.getFPGATimestamp();
     	distance += Robot.chassis.getChassisPosition();
-//    	//Ramp up motors;
-//    	for(int i = 0 ; i<100; i++) { //assuming cycle time is 50 ms, so a total of 500ms
-//
-//        	Robot.chassis.cmdDrive(x*i/100, y*i/100, gyro, Robot.chassis.getGyroAngle());
-//    	
-//    	}
+    	//Ramp up motors;
+    	for(int i = 0 ; i<100; i++) { //assuming cycle time is 50 ms, so a total of 500ms
+
+        	Robot.chassis.cmdDrive(max_x*i/100, max_y*i/100, gyro, Robot.chassis.getGyroAngle());
+    	
+    	}
     	i=0;
     }
 
@@ -75,21 +75,22 @@ public class CMD_Angle_Drive extends Command {
        	System.out.print("target:\t" + distance);
     	System.out.print("\tpos:\t" + dist);
     	System.out.println("\terror:\t" + error);
-    	if(error > distance - accelDist) { //accelerate
-    		i += accel*dt;
-    		x = max_x*i;
-    		y = max_y*i;
-    	}
-    	if(error <= accelDist) {//deaccelerate
-    		i -= accel*dt;
-    		x = max_x*i;
-    		y = max_y*i;
-    	}
-    	else {//maxVelocity
-    		x = max_x;
-    		y = max_y;
-    	}
-    	Robot.chassis.cmdDrive(x, y, gyro, Robot.chassis.getGyroAngle());
+//    	if(error > distance - accelDist) { //accelerate
+//    		i += accel*dt;
+//    		x = max_x*i;
+//    		y = max_y*i;
+//    	}
+//    	if(error <= accelDist) {//deaccelerate
+//    		i -= accel*dt;
+//    		x = max_x - max_x*i;
+//    		y = max_y - max_y*i;
+//    	}
+//    	else {//maxVelocity
+//    		x = max_x;
+//    		y = max_y;
+//    		i= 0;
+//    	}
+    	Robot.chassis.cmdDrive(max_x, max_y, gyro, Robot.chassis.getGyroAngle());
 
     }
 

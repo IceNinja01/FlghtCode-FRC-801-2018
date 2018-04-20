@@ -519,7 +519,7 @@ public class SwerveDrive implements MotorSafety {
 		double[] arrayOut = new double[2];
 		double radians=0;
 		double x_dist=0, y_dist=0, x_temp=0, y_temp = 0;
-		System.out.print("\ttarget" + targetPosition + " ");
+//		System.out.print("\ttarget" + targetPosition + " ");
 		for(int i=0;i<4;i++){
 			dist[i] += driveMotors[i].getSelectedSensorPosition(0);
 			dist[i] *= 12.5/(7.5*4096); //convert to inches

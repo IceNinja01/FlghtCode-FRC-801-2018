@@ -7,9 +7,11 @@ import org.usfirst.frc.team801.robot.Robot;
 import org.usfirst.frc.team801.robot.commands.auto.GoFwd;
 import org.usfirst.frc.team801.robot.commands.auto.LeftGoLeftScale;
 import org.usfirst.frc.team801.robot.commands.auto.LeftGoLeftSwitch;
+import org.usfirst.frc.team801.robot.commands.auto.LeftGoRight;
 import org.usfirst.frc.team801.robot.commands.auto.LeftGoRightScale;
 import org.usfirst.frc.team801.robot.commands.auto.MiddleGoLeftSwitch;
 import org.usfirst.frc.team801.robot.commands.auto.MiddleGoRightSwitch;
+import org.usfirst.frc.team801.robot.commands.auto.RightGoLeft;
 import org.usfirst.frc.team801.robot.commands.auto.RightGoLeftScale;
 import org.usfirst.frc.team801.robot.commands.auto.RightGoRightScale;
 import org.usfirst.frc.team801.robot.commands.auto.RightGoRightSwitch;
@@ -95,6 +97,57 @@ public class PathBuilder {
 						//Go forward
 						pathCommand = new LeftGoRightScale();
 						break;
+					case Constants.CENTER:
+						//Go right then forward
+						pathCommand = new GoFwd();
+						break;
+					case Constants.RIGHT:
+						//Go forward
+					pathCommand = new RightGoRightScale();
+					break;
+				}
+			location = Constants.RIGHT;
+			break;
+			
+			}//End Scale
+			
+		case 2:  //Priority Left/Right
+			switch (sides[1]) {  //scale
+			case "L":
+				switch(location) {
+					case Constants.LEFT:
+						//Go forward
+						pathCommand = new LeftGoLeftScale();
+						break;
+					case Constants.CENTER:
+						//Go forward
+						pathCommand = new GoFwd();
+						break;
+					case Constants.RIGHT:
+//						switch(sides[0]) {
+//							case "R":
+//								pathCommand = new RightGoRightSwitch();
+//								break;
+//							case "L":
+								pathCommand = new RightGoLeft();
+//								break;
+//						};
+					break;
+					}
+					location = Constants.LEFT;
+					break;
+				case "R":
+				switch(location) {
+					case Constants.LEFT:
+//						switch(sides[0]) {
+//						case "L": //switch is on the left
+//							pathCommand = new LeftGoLeftSwitch();
+//						break;
+//						case "R":
+							pathCommand = new LeftGoRight();	
+//						break;
+//						}
+					break;
 					case Constants.CENTER:
 						//Go right then forward
 						pathCommand = new GoFwd();

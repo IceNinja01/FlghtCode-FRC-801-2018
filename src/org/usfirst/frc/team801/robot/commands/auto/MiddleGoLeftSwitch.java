@@ -6,6 +6,14 @@ import org.usfirst.frc.team801.robot.commands.arm.ArmUp;
 import org.usfirst.frc.team801.robot.commands.chassis.CMD_Angle_Drive;
 import org.usfirst.frc.team801.robot.commands.chassis.StopDrive;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
+import org.usfirst.frc.team801.robot.commands.elevator.Shrink_ArmUp;
+import org.usfirst.frc.team801.robot.commands.gather.BoxFromGather;
+import org.usfirst.frc.team801.robot.commands.gather.CloseGatherPinchers;
+import org.usfirst.frc.team801.robot.commands.gather.DownGather;
+import org.usfirst.frc.team801.robot.commands.gather.EjectBox;
+import org.usfirst.frc.team801.robot.commands.gather.GatherUp;
+import org.usfirst.frc.team801.robot.commands.gather.OpenGatherPinchers;
+import org.usfirst.frc.team801.robot.commands.gather.UpGather;
 import org.usfirst.frc.team801.robot.commands.pinchers.ClosePinchers;
 import org.usfirst.frc.team801.robot.commands.pinchers.OpenPinchers;
 
@@ -23,12 +31,28 @@ public class MiddleGoLeftSwitch extends CommandGroup {
     	requires(Robot.chassis);
     	requires(Robot.elevator);
 
-
+    	//Box 1
     	addSequential(new ArmUp());
     	addSequential(new ClosePinchers());
-    	addSequential(new Drive_And_ExtendLow(93.0, 123.0, 0.5, 0));
+    	addSequential(new Drive_And_ExtendLow(93.0, 125.0, 0.5, 0));
     	addSequential(new ArmDown());
     	addSequential(new OpenPinchers());
+
+    	//Box2
+       	addSequential(new CMD_Angle_Drive(75, 305, 0.5, 0));
+       	addSequential(new ArmUp());
+    	addSequential(new OpenPinchers());
+       	addSequential(new DownGather(),1);
+       	addSequential(new OpenGatherPinchers());
+       	addSequential(new CMD_Angle_Drive(24.0, 90, 0.4, 0));
+       	addSequential(new OpenGatherPinchers());
+       	addSequential(new GatherUp(),1);
+       	addSequential(new CMD_Angle_Drive(40.0, 190, 0.6, 0));
+       	addSequential(new UpGather());
+
+       	addSequential(new CMD_Angle_Drive(36.0, 90, 0.6, 0));
+       	addSequential(new EjectBox(), 3);
+
 
         // Add Commands here:
         // e.g. addSequential(new Command1());

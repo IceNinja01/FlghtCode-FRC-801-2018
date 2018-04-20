@@ -38,8 +38,8 @@ public class Gatherer extends Subsystem{
     public void gatherUp() {
     	
 
-    	gatherMotor1.set(ControlMode.PercentOutput, 0.7);
-    	gatherMotor2.set(ControlMode.PercentOutput, 0.7);
+    	gatherMotor1.set(ControlMode.PercentOutput, 0.8);
+    	gatherMotor2.set(ControlMode.PercentOutput, 0.8);
     }
     
     public void eject() {

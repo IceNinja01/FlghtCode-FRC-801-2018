@@ -111,7 +111,7 @@ public class OI {
 	    public XBOXJoystick manip = new XBOXJoystick(1);
 
 //	    public Button openGatherPinchers = new JoystickButton(driver,2);
-//	    public Button closeGatherPinchers = new JoystickButton(driver,1);
+	    public Button driverArmUp = new JoystickButton(driver,1);
 	    public Button gatherDown = new JoystickButton(driver,6);
 	    public Button eject = new JoystickButton(driver,8);
 	    public Button gather = new JoystickButton(driver, 7);
@@ -138,6 +138,7 @@ public class OI {
 //    	turnBack.whileHeld(new TurnBack());
   //  	turnRight.whileHeld(new TurnRight());
 //    	turnLeft.whileHeld(new TurnLeft());	
+    	driverArmUp.whenPressed(new ArmUp());
     	toggleDriveOrientation.whileHeld(new ToggleDriveOrientation());
     	openGatherPinchers.whenPressed(new OpenGatherPinchers());
     	//    	liftUp.whenPressed(new LiftMotorExtend());
