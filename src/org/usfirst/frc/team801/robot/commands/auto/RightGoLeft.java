@@ -25,14 +25,14 @@ public class RightGoLeft extends CommandGroup {
        	addSequential(new CMD_Angle_Drive(203.0, 90, 0.9, 0));
     	addSequential(new TurnCMD(90));
     	addSequential(new CMD_Angle_Drive(12, 180, 0.3, 90));
-    	addSequential(new CMD_Angle_Drive(170, 180, 0.8, 90));
-    	addSequential(new CMD_Angle_Drive_Ultra(40.0, 180, 0.5, 90));
-    	addSequential(new TurnCMD(0));
-    	addSequential(new ExtendHigh());
-       	addSequential(new CMD_Angle_Drive(20.0, 90, 0.4, 0));
-     	addSequential(new ArmDown());
-    	addSequential(new OpenPinchers());
-    	addSequential(new CMD_Angle_Drive(20, 180, 0.4, 90));
+    	addSequential(new CMD_Angle_Drive(120, 180, 0.8, 90));
+//    	addSequential(new CMD_Angle_Drive_Ultra(40.0, 180, 0.5, 90));
+//    	addSequential(new TurnCMD(0));
+//    	addSequential(new ExtendHigh());
+//       	addSequential(new CMD_Angle_Drive(20.0, 90, 0.4, 0));
+//     	addSequential(new ArmDown());
+//    	addSequential(new OpenPinchers());
+//    	addSequential(new CMD_Angle_Drive(20, 180, 0.4, 90));
 
 
 

@@ -110,7 +110,7 @@ public class Robot extends IterativeRobot {
 
 		oi = new OI();
 		
-		new UpdateSD().start();	//Start SD updater after initialization of all subsystems
+//		new UpdateSD().start();	//Start SD updater after initialization of all subsystems
         if(DataWriter.logFile != null)
         {
         	writeData.start();

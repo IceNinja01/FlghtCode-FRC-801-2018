@@ -17,16 +17,16 @@ public class Gatherer extends Subsystem{
 	private double x;
 	//Gather Motors
 	public Gatherer() {
-		gatherMotor1.configNominalOutputForward(0, Constants.kTimeoutMs);
-		gatherMotor1.configNominalOutputReverse(0, Constants.kTimeoutMs);
-		gatherMotor1.configPeakOutputForward(11, Constants.kTimeoutMs);
-		gatherMotor1.configPeakOutputReverse(-11, Constants.kTimeoutMs);
-		gatherMotor2.configNominalOutputForward(0, Constants.kTimeoutMs);
-		gatherMotor2.configNominalOutputReverse(0, Constants.kTimeoutMs);
-		gatherMotor2.configPeakOutputForward(11, Constants.kTimeoutMs);
-		gatherMotor2.configPeakOutputReverse(-11, Constants.kTimeoutMs);
-		gatherMotor1.enableVoltageCompensation(true);
-		gatherMotor2.enableVoltageCompensation(true);
+//		gatherMotor1.configNominalOutputForward(0, Constants.kTimeoutMs);
+//		gatherMotor1.configNominalOutputReverse(0, Constants.kTimeoutMs);
+//		gatherMotor1.configPeakOutputForward(11, Constants.kTimeoutMs);
+//		gatherMotor1.configPeakOutputReverse(-11, Constants.kTimeoutMs);
+//		gatherMotor2.configNominalOutputForward(0, Constants.kTimeoutMs);
+//		gatherMotor2.configNominalOutputReverse(0, Constants.kTimeoutMs);
+//		gatherMotor2.configPeakOutputForward(11, Constants.kTimeoutMs);
+//		gatherMotor2.configPeakOutputReverse(-11, Constants.kTimeoutMs);
+//		gatherMotor1.enableVoltageCompensation(true);
+//		gatherMotor2.enableVoltageCompensation(true);
 	}
 	
     public void initDefaultCommand() {

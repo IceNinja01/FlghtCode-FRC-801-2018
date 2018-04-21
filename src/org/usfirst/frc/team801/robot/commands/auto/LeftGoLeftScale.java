@@ -8,6 +8,8 @@ import org.usfirst.frc.team801.robot.commands.chassis.TurnCMD;
 import org.usfirst.frc.team801.robot.commands.chassis.TurnRight;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendHigh;
 import org.usfirst.frc.team801.robot.commands.elevator.ExtendLow;
+import org.usfirst.frc.team801.robot.commands.elevator.Shrink;
+import org.usfirst.frc.team801.robot.commands.elevator.Shrink_ArmUp;
 import org.usfirst.frc.team801.robot.commands.pinchers.OpenPinchers;
 
 import edu.wpi.first.wpilibj.Timer;
@@ -30,6 +32,10 @@ public class LeftGoLeftScale extends CommandGroup {
     	addSequential(new ArmDown());
     	addSequential(new OpenPinchers());
     	addSequential(new CMD_Angle_Drive(20.0, 180, 0.4, 90));
+    	addSequential(new ArmUp());
+    	addSequential(new Shrink());
 
+//    	addSequential(new Drive_And_ExtendLow(36.0, 270, 0.4, 90));
+    	
     }
 }

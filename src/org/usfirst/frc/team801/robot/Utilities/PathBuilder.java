@@ -103,14 +103,14 @@ public class PathBuilder {
 						break;
 					case Constants.RIGHT:
 						//Go forward
-					pathCommand = new RightGoRightScale();
-					break;
+						pathCommand = new RightGoRightScale();
+						break;
 				}
-			location = Constants.RIGHT;
-			break;
+					location = Constants.RIGHT;
+					break;
 			
 			}//End Scale
-			
+			break;
 		case 2:  //Priority Left/Right
 			switch (sides[1]) {  //scale
 			case "L":
@@ -161,6 +161,7 @@ public class PathBuilder {
 			break;
 			
 			}//End Scale
+			break;
 		}
 	}
 		//End Switch

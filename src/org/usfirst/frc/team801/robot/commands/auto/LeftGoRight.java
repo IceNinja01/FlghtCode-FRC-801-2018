@@ -25,14 +25,14 @@ public class LeftGoRight extends CommandGroup {
        	addSequential(new CMD_Angle_Drive(203.0, 90, 0.9, 0));
     	addSequential(new TurnCMD(270));
     	addSequential(new CMD_Angle_Drive(12, 0, 0.3, 270));
-    	addSequential(new CMD_Angle_Drive(170, 0, 0.8, 270));
-    	addSequential(new CMD_Angle_Drive_Ultra(40.0, 0, 0.5, 270));
-    	addSequential(new TurnCMD(0));
-    	addSequential(new ExtendHigh());
-       	addSequential(new CMD_Angle_Drive(20.0, 90, 0.4, 0));
-     	addSequential(new ArmDown());
-    	addSequential(new OpenPinchers());
-    	addSequential(new CMD_Angle_Drive(20, 180, 0.4, 90));
+    	addSequential(new CMD_Angle_Drive(120, 0, 0.8, 270));
+//    	addSequential(new CMD_Angle_Drive_Ultra(40.0, 0, 0.5, 270));
+//    	addSequential(new TurnCMD(0));
+//    	addSequential(new ExtendHigh());
+//       	addSequential(new CMD_Angle_Drive(20.0, 90, 0.4, 0));
+//     	addSequential(new ArmDown());
+//    	addSequential(new OpenPinchers());
+//    	addSequential(new CMD_Angle_Drive(20, 180, 0.4, 90));
        
     }
 }
