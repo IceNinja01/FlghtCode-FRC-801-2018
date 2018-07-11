@@ -19,6 +19,7 @@ import org.usfirst.frc.team801.robot.Utilities.Adis16448_IMU_2018;
 import org.usfirst.frc.team801.robot.Utilities.BufferedWriterFRC;
 
 import SwerveClass.SwerveDrive;
+import SwerveClass.SwervePOD;
 import SwerveClass.Team801TalonSRX;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.PowerDistributionPanel;
@@ -31,6 +32,8 @@ import edu.wpi.first.wpilibj.internal.HardwareTimer;
  * floating around.
  */
 public class RobotMap {
+	
+	public static SwervePOD frontRight = new SwervePOD(1, 5, 0);
 	
 	//Make all the swerve drive talons here
 	public static Team801TalonSRX frontRightDrive = new Team801TalonSRX(1);
